@@ -18,7 +18,7 @@ Source code front-end for client site
    `git clone https://github.com/CAPSTONE-PROJECT-SPRING24-G47/capstone-project-client-site-fe.git` 
     
 2.  Move to the project folder:
-    `cd capstone-project-adminstrator-site-fe` 
+    `cd capstone-project-client-site-fe` 
     
 3.  Install all dependencies project needs:
     `npm install`
