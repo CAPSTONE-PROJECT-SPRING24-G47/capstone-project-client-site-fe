@@ -8,7 +8,7 @@ export default {
         'bg-color': '#F1FBF3',
         'primary-color': '#48C75E',
         'secondary-color': '#8DCADC',
-        'accent-color': '#7398',
+        'accent-color': '#7398D5',
       },
     },
   },

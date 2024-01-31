@@ -5,10 +5,11 @@ const Navbar = () => {
   const { handlePopUp, handleIsLogin, handleIsSignUp } = useContext(NavContext);
 
   return (
-    <>
-      <div>VJIT</div>
+    <div className="fixed left-0 right-0 top-0 flex justify-between px-5 py-4">
+      <div className="text-4xl font-bold text-bg-color">VJIT</div>
       <div>
         <button
+          className="mr-3 rounded-lg   border border-accent-color px-4 py-2"
           onClick={() => {
             handlePopUp(), handleIsLogin();
           }}
@@ -16,6 +17,7 @@ const Navbar = () => {
           Đăng nhập
         </button>
         <button
+          className="rounded-lg bg-bg-color px-4 py-2"
           onClick={() => {
             handlePopUp(), handleIsSignUp();
           }}
@@ -23,7 +25,7 @@ const Navbar = () => {
           Đăng ký
         </button>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -6,7 +6,7 @@ export const NavProvider = ({ children }) => {
   const [isLogin, setIsLogin] = useState(false);
 
   const handlePopUp = () => {
-    setIsPopUp(true);
+    setIsPopUp((isPopUp) => !isPopUp);
   };
   const handleIsLogin = () => {
     setIsLogin(true);
@@ -14,6 +14,7 @@ export const NavProvider = ({ children }) => {
   const handleIsSignUp = () => {
     setIsLogin(false);
   };
+
   const value = {
     isPopUp,
     isLogin,

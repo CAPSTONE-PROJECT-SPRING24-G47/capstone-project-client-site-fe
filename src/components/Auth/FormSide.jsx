@@ -1,14 +1,27 @@
-import React from 'react'
+import React, { useContext } from 'react';
+import { NavContext } from '../../Contexts/NavContext';
 
 const FormSide = () => {
+  const { isLogin } = useContext(NavContext);
   return (
-    <div className='text-center'>
-      <div>Chào mừng quay trở lại</div>
-      <div>Đăng nhập để tiếp tục</div>
-      <div>Chưa có tài khoản? Đăng ký tại đây</div>
-      <button>Đăng ký</button>
-    </div>
-  )
-}
+    <div className=" flex w-[440px] flex-1 flex-col items-center justify-center  bg-[#8DCADC] bg-opacity-10 px-6 text-bg-color backdrop-blur-[20px]">
+      <div className="mb-6 mt-3 text-4xl font-semibold">
+        {isLogin ? 'Chào mừng quay trở lại' : 'Chào mừng bạn'}
+      </div>
 
-export default FormSide
+      <div className="mt-3 h-20 text-3xl font-light">
+        {isLogin ? 'Đăng nhập để tiếp tục' : 'Đăng ký để khám phá'}
+      </div>
+      <div className="mt-4 text-2xl font-light">
+        {isLogin
+          ? 'Chưa có tài khoản? Đăng ký tại đây'
+          : 'Đã có tài khoản? Đăng nhập tại đây'}
+      </div>
+      <button className="mt-6 h-10 w-1/2 rounded-2xl bg-bg-color font-semibold text-accent-color">
+        {`${isLogin ? 'Đăng ký' : 'Đăng nhập'} `}
+      </button>
+    </div>
+  );
+};
+
+export default FormSide;
