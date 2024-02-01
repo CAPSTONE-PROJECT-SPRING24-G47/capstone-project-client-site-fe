@@ -7,10 +7,9 @@ function App() {
   const { isPopUp } = useContext(NavContext);
   return (
     <div
-      className={`relative flex h-screen items-center justify-center bg-red-200 ${isPopUp ? 'bg-opacity-90' : ''} bg-[url('./assets/2_rx7.jpg')]`}
+      className={`relative flex h-screen items-center justify-center bg-bg-color ${isPopUp ? 'bg-opacity-90' : ''} bg-[url('./assets/fuji.jpg')]`}
     >
       <Navbar />
-
       <Wrapper />
     </div>
   );

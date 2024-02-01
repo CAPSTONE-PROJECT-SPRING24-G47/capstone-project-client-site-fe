@@ -9,7 +9,7 @@ const Navbar = () => {
       <div className="text-4xl font-bold text-bg-color">VJIT</div>
       <div>
         <button
-          className="mr-3 rounded-lg   border border-accent-color px-4 py-2"
+          className="mr-3 rounded-lg   border border-[#7398D5] px-4 py-2"
           onClick={() => {
             handlePopUp(), handleIsLogin();
           }}

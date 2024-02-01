@@ -1,13 +1,14 @@
 import React, { useContext } from 'react';
 import { NavContext } from '../../Contexts/NavContext';
 
-const AuthForm = ({}) => {
+const AuthForm = () => {
   const { isLogin } = useContext(NavContext);
   return (
     <form className="w-[440px] flex-1 bg-bg-color px-6 py-10 text-center">
       <h1 className="mb-2 p-4 text-4xl font-semibold">
         {isLogin ? 'Đăng nhập' : 'Đăng ký tài khoản'}
       </h1>
+
       <div className="flex flex-col gap-4 py-2">
         {!isLogin && (
           <div>
