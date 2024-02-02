@@ -1,7 +1,16 @@
+import { useContext } from 'react';
+import { Wrapper } from './components/Auth';
+import Navbar from './components/Navbar';
+import { NavContext } from './Contexts/NavContext';
+
 function App() {
+  const { isPopUp } = useContext(NavContext);
   return (
-    <div className="m-1 p-2 text-center text-3xl font-bold text-cyan-500">
-      Client Site Front-end
+    <div
+      className={`relative flex h-screen items-center justify-center bg-bg-color ${isPopUp ? 'bg-opacity-90' : ''} bg-[url('./assets/fuji.jpg')]`}
+    >
+      <Navbar />
+      <Wrapper />
     </div>
   );
 }
