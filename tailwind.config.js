@@ -10,6 +10,9 @@ export default {
         'secondary-color': '#8DCADC',
         'accent-color': '#7398D5',
       },
+      fontFamily: {
+        sans: ['QuickSand', 'sans-serif'],
+      },
     },
   },
   plugins: [],

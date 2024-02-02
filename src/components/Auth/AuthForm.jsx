@@ -5,7 +5,7 @@ const AuthForm = () => {
   const { isLogin } = useContext(NavContext);
   return (
     <form className="w-[440px] flex-1 bg-bg-color px-6 py-10 text-center">
-      <h1 className="mb-2 p-4 text-4xl font-semibold">
+      <h1 className="mb-2 p-4 text-4xl font-bold">
         {isLogin ? 'Đăng nhập' : 'Đăng ký tài khoản'}
       </h1>
 
@@ -28,7 +28,7 @@ const AuthForm = () => {
         </div>
         <div>
           <input
-            className={`bg-bg-color ${isLogin ? '' : 'mb-10'} h-12  w-full rounded-md border-2  border-secondary-color px-2`}
+            className={`bg-bg-color ${isLogin ? '' : 'mb-10'} h-12 w-full rounded-md border-2 border-secondary-color  px-2 focus:placeholder:-translate-y-6`}
             type="password"
             placeholder="Password"
           />
@@ -45,16 +45,22 @@ const AuthForm = () => {
         </div>
       )}
 
-      <button className="my-4 h-11 w-full rounded-2xl bg-secondary-color font-semibold text-bg-color opacity-90">
+      <button className="hover:scale-10 my-4 h-11 w-full rounded-2xl bg-secondary-color font-semibold text-bg-color hover:opacity-85">
         {isLogin ? 'Đăng nhập' : 'Đăng ký'}
       </button>
-      {isLogin && <div className="mb-4 font-light">Quên mật khẩu?</div>}
+      {isLogin && (
+        <button className="mb-4 font-light hover:text-secondary-color">
+          Quên mật khẩu?
+        </button>
+      )}
       <div className="mb-2 flex items-center justify-center gap-1">
         <div className="h-px w-full bg-text-color"></div>
         <div className="font-light">Hoặc</div>
         <div className="h-px w-full bg-text-color"></div>
       </div>
-      <div className="">Google</div>
+      <button className="hover:-translate-y-110 rounded-lg transition delay-150 duration-200 ease-in-out hover:shadow-lg">
+        Google
+      </button>
     </form>
   );
 };
