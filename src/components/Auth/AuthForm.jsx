@@ -25,7 +25,7 @@ const AuthForm = () => {
             required
           />
           <span
-            className={`absolute left-3 ${isFocused || inputValue ? 'bottom-[22px]' : 'bottom-[0.1px]'} bg-bg-color text-gray-400 transition-all duration-150 ease-in-out`}
+            className={`absolute left-3 ${isFocused || inputValue ? 'bottom-[22px]' : 'bottom-[0.1px]'} bg-bg-color px-px text-text-color transition-all duration-150 ease-in-out`}
           >
             {label}
           </span>
@@ -91,7 +91,7 @@ const AuthForm = () => {
           </>
         )}
         <FloatingLabelInput
-          label={'Username'}
+          label={'Tên đăng nhập'}
           type={'text'}
           svg={
             <svg
@@ -109,7 +109,7 @@ const AuthForm = () => {
           }
         />
         <FloatingLabelInput
-          label={'Password'}
+          label={'Mật khẩu'}
           type={'password'}
           svg={
             <svg
@@ -142,7 +142,10 @@ const AuthForm = () => {
         {isLogin ? 'Đăng nhập' : 'Đăng ký'}
       </button>
       {isLogin && (
-        <button className="mb-4 font-light hover:text-secondary-color">
+        <button
+          type="button"
+          className="mb-4 font-light hover:text-secondary-color"
+        >
           Quên mật khẩu?
         </button>
       )}
@@ -151,7 +154,10 @@ const AuthForm = () => {
         <div className="font-light">Hoặc</div>
         <div className="h-px w-full bg-text-color"></div>
       </div>
-      <button className="hover:-translate-y-110 rounded-lg transition ease-in-out hover:shadow-lg">
+      <button
+        type="button"
+        className="hover:-translate-y-110 rounded-lg transition ease-in-out hover:shadow-lg"
+      >
         Google
       </button>
     </form>

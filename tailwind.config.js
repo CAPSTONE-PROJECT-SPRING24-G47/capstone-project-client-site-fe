@@ -9,6 +9,7 @@ export default {
         'primary-color': '#48C75E',
         'secondary-color': '#8DCADC',
         'accent-color': '#7398D5',
+        'sub-color': '#DB2731',
       },
       fontFamily: {
         sans: ['QuickSand', 'sans-serif'],
