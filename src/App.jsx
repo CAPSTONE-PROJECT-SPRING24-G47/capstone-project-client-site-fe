@@ -6,12 +6,12 @@ import { NavContext } from './Contexts/NavContext';
 function App() {
   const { isPopUp } = useContext(NavContext);
   return (
-    <div
+    <main
       className={`relative flex h-screen items-center justify-center bg-bg-color ${isPopUp ? 'bg-opacity-90' : ''} bg-[url('./assets/fuji.jpg')]`}
     >
       <Navbar />
       <Wrapper />
-    </div>
+    </main>
   );
 }
 
