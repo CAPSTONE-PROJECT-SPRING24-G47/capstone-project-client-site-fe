@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import { NavContext } from '../../Contexts/NavContext';
 
 //name: only alphabet character
-const NAME_REGEX = /^[a-zA-Z]{3,20}$/;
+const NAME_REGEX = /^[a-zA-Z ]{3,20}$/;
 //pwd: at least 6 characters, at least one uppercase letter, at least one lowercase letter, at least one digit and at least 1 special character
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{6,}$/;
 //email: example: abc@abc.com
@@ -34,7 +34,7 @@ const Input = ({
   };
 
   const validateInput = () => {
-    let validationFunction;
+    let validationFunction = '';
 
     if (id === 'lastName') {
       validationFunction = validateName;
@@ -47,8 +47,19 @@ const Input = ({
     } else if (id === 'confirmPassword') {
       validationFunction = validateConfirmPassword;
     }
-
-    setError(validationFunction(value) ? '' : `${label} không hợp lệ`);
+    console.log(isLogin);
+    if (validationFunction !== '') {
+      // if (id === 'password') {
+      //   setError(
+      //     validationFunction(value)
+      //       ? ''
+      //       : `${label} cần phải có ít nhất một ký tự viết hoa, viết thường, số, ký tự đặc biệt và phải trên 6 ký tự`
+      //   );
+      // }
+      if (id === 'confirmPassword')
+        setError(validationFunction(value) ? '' : `${label} không khớp`);
+      else setError(validationFunction(value) ? '' : `${label} không hợp lệ`);
+    }
   };
 
   const validateName = (name) => NAME_REGEX.test(name);
@@ -62,7 +73,8 @@ const Input = ({
         <input
           id={id}
           value={value}
-          className={`h-12 w-full ${error ? 'mt-4 border-sub-color' : ''} rounded-md border-2 border-secondary-color bg-bg-color px-2`}
+          autoComplete={id == 'confirmPassword' ? { originalPassword } : ''}
+          className={` h-12 w-full ${error ? 'mt-5 border-sub-color' : ''} rounded-md border-2 border-secondary-color bg-bg-color px-2`}
           type={isPasswordVisible ? 'text' : type}
           onFocus={() => setIsFocused(true)}
           onBlur={() => {

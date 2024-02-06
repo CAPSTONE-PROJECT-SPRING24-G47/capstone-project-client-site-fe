@@ -3,15 +3,7 @@ import React, { useContext } from 'react';
 import { NavContext } from '../../Contexts/NavContext';
 
 const FormSide = () => {
-  const { isLogin, handleIsLogin, handleIsSignUp } = useContext(NavContext);
-
-  const handleChangeForm = () => {
-    if (isLogin) {
-      handleIsSignUp();
-    } else {
-      handleIsLogin();
-    }
-  };
+  const { isLogin, handleChangeForm } = useContext(NavContext);
 
   return (
     <div className=" flex h-full w-[440px] flex-1 flex-col items-center justify-center  bg-[#8DCADC] bg-opacity-10 px-6 text-bg-color backdrop-blur-[20px]">

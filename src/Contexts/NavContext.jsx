@@ -15,12 +15,20 @@ export const NavProvider = ({ children }) => {
     setIsLogin(false);
   };
 
+  const handleChangeForm = () => {
+    if (isLogin) {
+      handleIsSignUp();
+    } else {
+      handleIsLogin();
+    }
+  };
   const value = {
     isPopUp,
     isLogin,
     handlePopUp,
     handleIsLogin,
     handleIsSignUp,
+    handleChangeForm,
   };
   return <NavContext.Provider value={value}>{children}</NavContext.Provider>;
 };

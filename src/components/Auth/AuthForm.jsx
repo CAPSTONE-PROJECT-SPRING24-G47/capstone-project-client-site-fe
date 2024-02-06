@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { NavContext } from '../../Contexts/NavContext';
-import { performSignIn, performSignUp } from '../../api';
+import { performSignIn, performSignUp } from '../../api/AuthService';
 import Input from './Input';
 
 const AuthForm = () => {
-  const { isLogin } = useContext(NavContext);
+  const { isLogin, handleChangeForm } = useContext(NavContext);
 
   const [lastName, setLastName] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -19,8 +19,12 @@ const AuthForm = () => {
 
   const handleFirstNameChange = (e) => setFirstName(e.target.value);
   const handleLastNameChange = (e) => setLastName(e.target.value);
-  const handleEmailChange = (e) => setEmail(e.target.value);
-  const handlePasswordChange = (e) => setPassword(e.target.value);
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
   const handleConfirmPasswordChange = (e) => setConfirmPassword(e.target.value);
 
   const [signInData, setSignInData] = useState({
@@ -42,13 +46,15 @@ const AuthForm = () => {
 
   async function handleSignUp(e) {
     e.preventDefault();
-    handleSubmitSignUpData;
+    handleSubmitSignUpData();
+    console.log(signUpData);
     await performSignUp(signUpData);
   }
 
   async function handleSignIn(e) {
     e.preventDefault();
-    handleSubmitSignInData;
+    handleSubmitSignInData();
+    console.log(signInData);
     await performSignIn(signInData);
   }
   const handleSubmitSignInData = (e) => {
