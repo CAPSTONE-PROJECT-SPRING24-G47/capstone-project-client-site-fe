@@ -1,8 +1,8 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { NavContext } from '../../Contexts/NavContext';
 
 //name: only alphabet character
-const NAME_REGEX = /^[a-zA-Z]{3,20}$/;
+const NAME_REGEX = /^[a-zA-Z ]{3,20}$/;
 //pwd: at least 6 characters, at least one uppercase letter, at least one lowercase letter, at least one digit and at least 1 special character
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{6,}$/;
 //email: example: abc@abc.com
@@ -18,7 +18,7 @@ const Input = ({
   checkIsError,
   originalPassword,
 }) => {
-  const { isLogin } = useContext(NavContext);
+  const { isLogin, handleChangeForm } = useContext(NavContext);
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [error, setError] = useState('');
@@ -26,7 +26,9 @@ const Input = ({
   const handleIsError = (e) => {
     checkIsError(e);
   };
-
+  useEffect(() => {
+    setError('');
+  }, [handleChangeForm]);
   error ? handleIsError(true) : handleIsError(false);
 
   const togglePasswordVisible = () => {
@@ -34,21 +36,30 @@ const Input = ({
   };
 
   const validateInput = () => {
-    let validationFunction;
+    let validationFunction = '';
 
     if (id === 'lastName') {
       validationFunction = validateName;
     } else if (id === 'firstName') {
       validationFunction = validateName;
-    } else if (id === 'email') {
+    } else if (id === 'email' && !isLogin) {
       validationFunction = validateEmail;
     } else if (id === 'password' && !isLogin) {
       validationFunction = validatePassword;
     } else if (id === 'confirmPassword') {
       validationFunction = validateConfirmPassword;
     }
-
-    setError(validationFunction(value) ? '' : `${label} không hợp lệ`);
+    if (validationFunction !== '') {
+      if (id === 'password') {
+        setError(
+          validationFunction(value)
+            ? ''
+            : `${label} cần phải có ít nhất một ký tự viết hoa, viết thường, số, ký tự đặc biệt và phải trên 6 ký tự`
+        );
+      } else if (id === 'confirmPassword')
+        setError(validationFunction(value) ? '' : `${label} không khớp`);
+      else setError(validationFunction(value) ? '' : `${label} không hợp lệ. `);
+    }
   };
 
   const validateName = (name) => NAME_REGEX.test(name);
@@ -62,7 +73,8 @@ const Input = ({
         <input
           id={id}
           value={value}
-          className={`h-12 w-full ${error ? 'mt-4 border-sub-color' : ''} rounded-md border-2 border-secondary-color bg-bg-color px-2`}
+          autoComplete={id == 'confirmPassword' ? { originalPassword } : ''}
+          className={` h-12 w-full ${error ? 'mt-6 border-sub-color' : ''} rounded-md border-2 border-secondary-color bg-bg-color px-2`}
           type={isPasswordVisible ? 'text' : type}
           onFocus={() => setIsFocused(true)}
           onBlur={() => {
@@ -72,9 +84,26 @@ const Input = ({
           onChange={onChange}
         />
         {error && (
-          <span className="absolute bottom-10 right-2 text-xs text-sub-color">
-            {error}
-          </span>
+          <div className="group absolute bottom-11 right-1 flex items-end ">
+            <span className="z-[99] rounded-md bg-red-100 px-1 pt-1 text-sm text-sub-color opacity-0 transition-all duration-75 hover:opacity-100 group-hover:opacity-100">
+              {error}
+            </span>
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                className="h-5 w-5 self-end stroke-sub-color"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
+                />
+              </svg>
+            </span>
+          </div>
         )}
         <span
           className={`absolute left-3 ${isFocused || value ? 'bottom-[22px]' : 'bottom-[0.1px]'} bg-bg-color px-px text-text-color transition-all duration-150 ease-in-out`}
