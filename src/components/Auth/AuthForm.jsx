@@ -55,6 +55,7 @@ const AuthForm = () => {
       lastName,
       email,
       password,
+      googleToken: null,
     });
   };
 
