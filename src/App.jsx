@@ -1,17 +1,13 @@
-import { useContext } from 'react';
-import { Wrapper } from './components/Auth';
-import Navbar from './components/Navbar';
-import { NavContext } from './Contexts/NavContext';
+import { Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import UserProfile from './pages/UserProfile';
 
 function App() {
-  const { isPopUp } = useContext(NavContext);
   return (
-    <main
-      className={`relative flex h-screen items-center justify-center bg-bg-color ${isPopUp ? 'bg-opacity-90' : ''} bg-[url('./assets/fuji.jpg')]`}
-    >
-      <Navbar />
-      <Wrapper />
-    </main>
+    <Routes>
+      <Route path="/" element={<HomePage />}></Route>
+      <Route path="/up" element={<UserProfile />}></Route>
+    </Routes>
   );
 }
 

@@ -9,6 +9,7 @@ export default {
         'primary-color': '#48C75E',
         'secondary-color': '#8DCADC',
         'accent-color': '#7398D5',
+        'bg-secondary-color': '#E8F3EA',
         'sub-color': '#DB2731',
       },
       fontFamily: {
