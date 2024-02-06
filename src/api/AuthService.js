@@ -2,8 +2,8 @@ import { signUp, signIn } from './index';
 
 export async function performSignUp(signUpData) {
   try {
-    await signUp(signUpData);
-    console.log('Sign-up successful');
+    const res = await signUp(signUpData);
+    console.log('Sign-up successful ', res.data);
   } catch (error) {
     console.error(
       'Sign-up failed:',
@@ -14,8 +14,8 @@ export async function performSignUp(signUpData) {
 
 export async function performSignIn(signInData) {
   try {
-    await signIn(signInData);
-    console.log('Sign-in successful');
+    const res = await signIn(signInData);
+    console.log('Sign-in successful ', res.data);
   } catch (error) {
     console.error(
       'Sign-in failed:',

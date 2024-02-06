@@ -16,7 +16,10 @@ const AuthForm = () => {
   const checkIsError = (newError) => {
     setIsError(newError);
   };
-
+  useEffect(() => {
+    setEmail('');
+    setPassword('');
+  }, [handleChangeForm]);
   const handleFirstNameChange = (e) => setFirstName(e.target.value);
   const handleLastNameChange = (e) => setLastName(e.target.value);
   const handleEmailChange = (e) => {
@@ -39,33 +42,13 @@ const AuthForm = () => {
     password: '',
     googleToken: null,
   });
-
-  const show = () => {
-    console.log(isLogin ? signInData : signUpData);
-  };
-
-  async function handleSignUp(e) {
-    e.preventDefault();
-    handleSubmitSignUpData();
-    console.log(signUpData);
-    await performSignUp(signUpData);
-  }
-
-  async function handleSignIn(e) {
-    e.preventDefault();
-    handleSubmitSignInData();
-    console.log(signInData);
-    await performSignIn(signInData);
-  }
-  const handleSubmitSignInData = (e) => {
-    // e.preventDefault();
+  const handleSubmitSignInData = () => {
     setSignInData({
       email,
       password,
     });
   };
-  const handleSubmitSignUpData = (e) => {
-    // e.preventDefault();
+  const handleSubmitSignUpData = () => {
     setSignUpData({
       firstName,
       lastName,
@@ -73,8 +56,34 @@ const AuthForm = () => {
       password,
     });
   };
+  async function handleSignUp() {
+    await handleSubmitSignUpData();
+    await performSignUp(signUpData);
+  }
 
-  // show();
+  async function handleSignIn(e) {
+    await handleSubmitSignInData();
+    await performSignIn(signInData);
+  }
+
+  function handleSubmitClick(e) {
+    e.preventDefault();
+    isLogin ? handleSignIn() : handleSignUp();
+  }
+  console.log(signUpData);
+  // useEffect(() => {
+  //   // API call when signUpData changes
+  //   if (signUpData) {
+  //     console.log(signUpData);
+  //   }
+  // }, [signUpData]);
+
+  // useEffect(() => {
+  //   // API call when signInData changes
+  //   if (signInData) {
+  //     console.log(signInData);
+  //   }
+  // }, [signInData]);
   return (
     <form className="w-[440px] flex-1 bg-bg-color px-6 py-10 text-center">
       <h1 className="mb-2 p-4 text-4xl font-bold">
@@ -92,7 +101,6 @@ const AuthForm = () => {
                 value={lastName}
                 onChange={handleLastNameChange}
                 checkIsError={checkIsError}
-                svg={null}
               />
               <Input
                 id={'firstName'}
@@ -101,7 +109,6 @@ const AuthForm = () => {
                 value={firstName}
                 onChange={handleFirstNameChange}
                 checkIsError={checkIsError}
-                svg={null}
               />
             </div>
           </>
@@ -154,7 +161,7 @@ const AuthForm = () => {
         {!isLogin && (
           <Input
             id={'confirmPassword'}
-            label={'Xác nhận mật khẩu'}
+            label={'Nhập lại mật khẩu'}
             type={'password'}
             value={confirmPassword}
             onChange={handleConfirmPasswordChange}
@@ -189,7 +196,7 @@ const AuthForm = () => {
       )}
 
       <button
-        onClick={isLogin ? handleSignIn : handleSignUp}
+        onClick={handleSubmitClick}
         disabled={
           isError ||
           (isLogin
@@ -209,7 +216,6 @@ const AuthForm = () => {
       {isLogin && (
         <button
           type="button"
-          onClick={show}
           className="mb-4 font-light hover:text-secondary-color"
         >
           Quên mật khẩu?
