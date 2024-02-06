@@ -1,7 +1,9 @@
+import Wrapper from '../components/UserProfile/Wrapper';
+
 const UserProfile = () => {
   return (
-    <div>
-      <h1>Kaizokuou</h1>
+    <div className="">
+      <Wrapper />
     </div>
   );
 };
