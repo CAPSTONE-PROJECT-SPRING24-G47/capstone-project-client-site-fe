@@ -18,13 +18,11 @@ const useInputValidation = (
 ) => {
   const [error, setError] = useState('');
 
-  const handleIsError = (e) => {
-    checkIsError(e);
-  };
   useEffect(() => {
     setError('');
   }, [handleChangeForm]);
-  error ? handleIsError(true) : handleIsError(false);
+
+  error ? checkIsError : !checkIsError;
 
   const validateInput = () => {
     let validationFunction = '';

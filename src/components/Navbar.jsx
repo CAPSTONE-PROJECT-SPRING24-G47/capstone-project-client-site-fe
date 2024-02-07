@@ -35,7 +35,7 @@ const Navbar = () => {
       </div>
       <div>
         <button
-          className="mr-4 rounded-3xl border-[2px] border-accent-color px-4 py-1 font-semibold text-bg-color shadow-xl hover:opacity-80"
+          className="mr-4 rounded-xl px-4 py-1 font-semibold text-bg-color shadow-xl ring-1 ring-inset ring-accent-color hover:opacity-80 hover:ring-2 active:right-2"
           onClick={() => {
             handlePopUp(), handleIsLogin();
           }}
@@ -43,7 +43,7 @@ const Navbar = () => {
           Đăng nhập
         </button>
         <button
-          className="rounded-3xl border-[2px] border-bg-color bg-bg-color px-4 py-1 font-semibold text-accent-color shadow-xl hover:opacity-80"
+          className="rounded-xl bg-bg-color px-4 py-1 font-semibold text-accent-color shadow-xl hover:opacity-80"
           onClick={() => {
             handlePopUp(), handleIsSignUp();
           }}

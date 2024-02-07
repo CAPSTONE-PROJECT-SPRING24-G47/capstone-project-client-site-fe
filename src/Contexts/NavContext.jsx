@@ -13,6 +13,7 @@ export const NavProvider = ({ children }) => {
     setIsLogin(true);
   };
   const handleIsSignUp = () => {
+    setIsVerify(false);
     setIsLogin(false);
   };
   const handleIsVerify = () => {
@@ -20,6 +21,7 @@ export const NavProvider = ({ children }) => {
   };
 
   const handleChangeForm = () => {
+    setIsVerify(false);
     if (isLogin) {
       handleIsSignUp();
     } else {
