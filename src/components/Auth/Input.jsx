@@ -13,7 +13,7 @@ const Input = ({
   checkIsError,
   originalPassword,
 }) => {
-  const { isLogin, handleChangeForm } = useContext(NavContext);
+  const { isLogin, handleChangeForm, isVerify } = useContext(NavContext);
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [error, validateInput] = useInputValidation(
@@ -45,6 +45,7 @@ const Input = ({
             validateInput();
           }}
           onChange={onChange}
+          maxLength={isVerify ? '7' : ''}
         />
         {error && (
           <div className="group absolute bottom-11 right-1 flex items-end ">
