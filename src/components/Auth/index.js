@@ -1,3 +1,10 @@
 export { default as FormSide } from './FormSide';
 export { default as AuthForm } from './AuthForm';
 export { default as Wrapper } from './Wrapper';
+export { default as Input } from './Input';
+export { default as EyeCloseIcon } from './Icons/EyeCloseIcon';
+export { default as EyeOpenIcon } from './Icons/EyeOpenIcon';
+export { default as UserIcon } from './Icons/UserIcon';
+export { default as ErrorIcon } from './Icons/ErrorIcon';
+export { default as ArrowDownIcon } from './Icons/ArrowDownIcon';
+export { default as CloseIcon } from './Icons/CloseIcon';

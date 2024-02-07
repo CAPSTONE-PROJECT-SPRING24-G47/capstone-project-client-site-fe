@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 // import { motion, AnimatePresence } from 'framer-motion';
 import { NavContext } from '../../Contexts/NavContext';
+import { ArrowDownIcon } from './index';
 
 const FormSide = () => {
   const { isLogin, handleChangeForm } = useContext(NavContext);
@@ -19,18 +20,7 @@ const FormSide = () => {
           ? 'Chưa có tài khoản? Đăng ký tại đây'
           : 'Đã có tài khoản? Đăng nhập tại đây'}
       </div>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        class="h-8 w-8"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M12 2.25a.75.75 0 0 1 .75.75v16.19l2.47-2.47a.75.75 0 1 1 1.06 1.06l-3.75 3.75a.75.75 0 0 1-1.06 0l-3.75-3.75a.75.75 0 1 1 1.06-1.06l2.47 2.47V3a.75.75 0 0 1 .75-.75Z"
-          clip-rule="evenodd"
-        />
-      </svg>
+      <ArrowDownIcon />
 
       <button
         onClick={handleChangeForm}
