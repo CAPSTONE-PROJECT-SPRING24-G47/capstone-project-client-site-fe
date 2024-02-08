@@ -189,12 +189,20 @@ const AuthForm = () => {
         )}
       </div>
       {isLogin && (
-        <div className="py-2 text-start text-xs">
-          <input
-            type="checkbox"
-            className=" mr-1 rounded-2xl accent-secondary-color"
-          />
-          <span>Ghi nhớ đăng nhập</span>
+        <div className="text-md flex justify-between py-0 text-start text-secondary-color">
+          <div className="group">
+            <input
+              type="checkbox"
+              className="mr-1 rounded-2xl accent-accent-color"
+            />
+            <span className="">Ghi nhớ đăng nhập</span>
+          </div>
+          <button
+            type="button"
+            className="rounded-lg px-1 hover:bg-secondary-color/20"
+          >
+            Quên mật khẩu?
+          </button>
         </div>
       )}
 
@@ -215,18 +223,11 @@ const AuthForm = () => {
             ? true
             : false
         }
-        className={`hover:scale-10 my-4 h-11 w-full rounded-2xl bg-secondary-color font-semibold text-bg-color hover:bg-gradient-to-b hover:from-secondary-color hover:to-accent-color disabled:bg-secondary-color/70 disabled:hover:bg-none`}
+        className={`hover:scale-10 my-2 h-11 w-full rounded-2xl bg-secondary-color font-semibold text-bg-color hover:bg-gradient-to-b hover:from-secondary-color hover:to-accent-color disabled:bg-secondary-color/70 disabled:hover:bg-none`}
       >
         {!isVerify ? (isLogin ? 'Đăng nhập' : 'Đăng ký') : 'Xác nhận'}
       </button>
-      {isLogin && (
-        <button
-          type="button"
-          className="mb-4 font-light hover:text-secondary-color"
-        >
-          Quên mật khẩu?
-        </button>
-      )}
+
       {!isVerify && (
         <>
           <div className="mb-2 flex items-center justify-center gap-1">
@@ -238,7 +239,6 @@ const AuthForm = () => {
           <button
             type="button"
             className="rounded-full transition ease-in-out hover:shadow-lg"
-            onClick={handleIsVerify}
           >
             <svg
               width="51"
