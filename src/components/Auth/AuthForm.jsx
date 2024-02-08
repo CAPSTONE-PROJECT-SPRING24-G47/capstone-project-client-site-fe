@@ -4,12 +4,20 @@ import {
   performSignIn,
   performSignUp,
   sendVerifyData,
+  sendEmail,
 } from '../../api/AuthService';
-import { EyeOpenIcon, UserIcon, Input } from './index';
+import { EyeOpenIcon, EmailIcon, Input } from './index';
 
 const AuthForm = () => {
-  const { isLogin, handleIsVerify, isVerify, handleIsSignUp } =
-    useContext(NavContext);
+  const {
+    isLogin,
+    handleIsVerify,
+    isVerify,
+    handleIsResetPwdVerify,
+    isResetPwdVerify,
+    isResetPwd,
+    handleIsResetPwd,
+  } = useContext(NavContext);
 
   const [lastName, setLastName] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -100,21 +108,39 @@ const AuthForm = () => {
     if (verifyData) sendVerifyData(verifyData);
   }, [verifyData]);
 
+  // useEffect(() => {
+  //   if (email) sendVerifyData(email);
+  // }, [isResetPwdVerify]);
+
   function handleSendCodeAgain(e) {
     e.preventDefault();
     handleSubmitSignUpData();
   }
   return (
     <form
-      className={`w-[440px] flex-1 bg-bg-color px-6 py-10 text-center ${isVerify ? 'py-28' : ''}`}
+      className={`w-[440px] flex-1 bg-bg-color px-6 py-10 text-center ${isVerify || isResetPwdVerify ? 'py-28' : isLogin ? 'py-14' : ''}`}
     >
       <h1 className={`${isVerify ? 'pb-0' : 'mb-2'} p-4 text-4xl font-bold`}>
-        {!isVerify ? (isLogin ? 'Đăng nhập' : 'Đăng ký') : 'Mã Xác nhận'}
+        {!isResetPwdVerify || isResetPwd
+          ? !isVerify
+            ? isLogin
+              ? 'Đăng nhập'
+              : 'Đăng ký'
+            : 'Mã Xác nhận'
+          : 'Quên mật khẩu'}
       </h1>
-      {isVerify && (
+      {(isVerify || isResetPwdVerify || isResetPwd) && (
         <div className="font-semibold">
-          <h2 className="pb-8">đã được gửi tới {email}</h2>
-          <p className="text-start">Nhập mã xác nhận để hoàn tất đăng ký</p>
+          {!isResetPwdVerify && !isResetPwd && (
+            <h2 className="pb-8">đã được gửi tới {email}</h2>
+          )}
+          <p className="text-start">
+            {!isResetPwd
+              ? !isResetPwdVerify
+                ? 'Nhập mã xác nhận để hoàn tất đăng ký'
+                : 'Nhập email để thiết lập lại mật khẩu'
+              : `Nhập mã xác nhận vừa được gửi tới ${email}`}
+          </p>
         </div>
       )}
 
@@ -161,34 +187,40 @@ const AuthForm = () => {
               value={email}
               onChange={handleEmailChange}
               checkIsError={checkIsError}
-              svg={<UserIcon />}
+              svg={<EmailIcon />}
             />
-            <Input
-              id={'password'}
-              label={'Mật khẩu'}
-              type={'password'}
-              value={password}
-              onChange={handlePasswordChange}
-              checkIsError={checkIsError}
-              svg={<EyeOpenIcon />}
-            />
+            <>
+              {!isResetPwdVerify && (
+                <>
+                  <Input
+                    id={'password'}
+                    label={'Mật khẩu'}
+                    type={'password'}
+                    value={password}
+                    onChange={handlePasswordChange}
+                    checkIsError={checkIsError}
+                    svg={<EyeOpenIcon />}
+                  />
 
-            {!isLogin && (
-              <Input
-                id={'confirmPassword'}
-                label={'Nhập lại mật khẩu'}
-                type={'password'}
-                value={confirmPassword}
-                onChange={handleConfirmPasswordChange}
-                checkIsError={checkIsError}
-                originalPassword={password}
-                svg={<EyeOpenIcon />}
-              />
-            )}
+                  {!isLogin && (
+                    <Input
+                      id={'confirmPassword'}
+                      label={'Nhập lại mật khẩu'}
+                      type={'password'}
+                      value={confirmPassword}
+                      onChange={handleConfirmPasswordChange}
+                      checkIsError={checkIsError}
+                      originalPassword={password}
+                      svg={<EyeOpenIcon />}
+                    />
+                  )}
+                </>
+              )}
+            </>
           </>
         )}
       </div>
-      {isLogin && (
+      {isLogin && !isResetPwdVerify && (
         <div className="text-md flex justify-between py-0 text-start text-secondary-color">
           <div className="group">
             <input
@@ -200,6 +232,7 @@ const AuthForm = () => {
           <button
             type="button"
             className="rounded-lg px-1 hover:bg-secondary-color/20"
+            onClick={handleIsResetPwdVerify}
           >
             Quên mật khẩu?
           </button>
@@ -210,25 +243,32 @@ const AuthForm = () => {
         type="button"
         onClick={handleSubmitClick}
         disabled={
-          isError ||
-          (!isVerify
-            ? isLogin
-              ? !email || !password
-              : !email ||
-                !password ||
-                !lastName ||
-                !firstName ||
-                !confirmPassword
-            : !verificationCode)
-            ? true
-            : false
+          isError || !isResetPwdVerify
+            ? !isVerify
+              ? isLogin
+                ? !email || !password
+                : !email ||
+                  !password ||
+                  !lastName ||
+                  !firstName ||
+                  !confirmPassword
+              : !verificationCode
+            : !email
+              ? true
+              : false
         }
-        className={`hover:scale-10 my-2 h-11 w-full rounded-2xl bg-secondary-color font-semibold text-bg-color hover:bg-gradient-to-b hover:from-secondary-color hover:to-accent-color disabled:bg-secondary-color/70 disabled:hover:bg-none`}
+        className={`hover:scale-10 mb-2 mt-8 h-11 w-full rounded-2xl bg-secondary-color font-semibold text-bg-color hover:bg-gradient-to-b hover:from-secondary-color hover:to-accent-color disabled:bg-secondary-color/70 disabled:hover:bg-none`}
       >
-        {!isVerify ? (isLogin ? 'Đăng nhập' : 'Đăng ký') : 'Xác nhận'}
+        {!isResetPwdVerify
+          ? !isVerify
+            ? isLogin
+              ? 'Đăng nhập'
+              : 'Đăng ký'
+            : 'Xác nhận'
+          : 'Gửi mã xác nhận'}
       </button>
 
-      {!isVerify && (
+      {!isVerify && !isResetPwdVerify && (
         <>
           <div className="mb-2 flex items-center justify-center gap-1">
             <div className="h-px w-full bg-text-color"></div>
