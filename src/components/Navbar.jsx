@@ -1,12 +1,35 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { NavContext } from '../Contexts/NavContext';
+import { Link, useLocation } from 'react-router-dom';
+import useTriggerScroll from '../hooks/useTriggerScroll';
+
+const buttonsInfor = [
+  {
+    title: 'Trang chủ',
+    path: '/',
+  },
+  {
+    title: 'Khám phá',
+    path: '/explore',
+  },
+  {
+    title: 'Kế hoạch',
+    path: '/trip-plan',
+  },
+];
 
 const Navbar = () => {
   const { handlePopUp, handleIsLogin, handleIsSignUp } = useContext(NavContext);
+  const isTrigged = useTriggerScroll(20);
+  const location = useLocation();
+  const isHomePagePath = location.pathname == '/';
 
   return (
-    <div className="fixed left-0 right-0 top-0 flex justify-between px-5 py-4">
-      <div className="flex flex-col items-center justify-center text-4xl font-bold text-bg-color">
+    <div
+      className={`${isHomePagePath && isTrigged ? 'bg-bg-color text-text-color' : 'text-bg-color'} ${isHomePagePath ? 'fixed left-0 right-0' : 'sticky top-0 bg-bg-color text-text-color'} top-0 z-[90] flex items-center justify-between px-5 py-4 shadow-sm`}
+    >
+      {/* Logo */}
+      <div className="flex flex-col items-center justify-center text-4xl font-bold ">
         <svg
           width="150"
           height="27"
@@ -30,26 +53,46 @@ const Navbar = () => {
             </clipPath>
           </defs>
         </svg>
-
-        <span className="text-xl">VJITradvisor</span>
+        <span
+          className={`${isHomePagePath && isTrigged && 'text-accent-color'} ${!isHomePagePath && 'text-accent-color'} text-xl`}
+        >
+          VJITradvisor
+        </span>
       </div>
-      <div>
-        <button
-          className="mr-4 rounded-xl px-4 py-1 font-semibold text-bg-color shadow-xl ring-1 ring-inset ring-accent-color hover:opacity-80 hover:ring-2 active:right-2"
-          onClick={() => {
-            handlePopUp(), handleIsLogin();
-          }}
-        >
-          Đăng nhập
-        </button>
-        <button
-          className="rounded-xl bg-bg-color px-4 py-1 font-semibold text-accent-color shadow-xl hover:opacity-80"
-          onClick={() => {
-            handlePopUp(), handleIsSignUp();
-          }}
-        >
-          Đăng ký
-        </button>
+
+      <div className="flex gap-14">
+        {/* Nút chuyển page */}
+        <div className="text-md flex items-center justify-center gap-14 font-semibold ">
+          {buttonsInfor.map((button, index) => (
+            <div key={index}>
+              <Link to={button.path}>{button.title}</Link>
+            </div>
+          ))}
+        </div>
+
+        {/* Nút đăng ký, đăng nhập / nút user profile */}
+        <div className="text-md flex items-center justify-center gap-5">
+          <div>
+            <button
+              className={`${isHomePagePath && isTrigged && 'text-accent-color'} ${!isHomePagePath && 'text-accent-color'} rounded-3xl border-[2px] border-accent-color px-4 py-1 font-semibold hover:opacity-80`}
+              onClick={() => {
+                handlePopUp(), handleIsLogin();
+              }}
+            >
+              Đăng nhập
+            </button>
+          </div>
+          <div>
+            <button
+              className={`${isHomePagePath && isTrigged && 'bg-accent-color text-bg-color'} ${isHomePagePath && !isTrigged && 'border-bg-color bg-bg-color text-accent-color'} ${!isHomePagePath && 'bg-accent-color text-bg-color'} rounded-3xl border-[2px] px-4 py-1 font-semibold hover:opacity-80`}
+              onClick={() => {
+                handlePopUp(), handleIsSignUp();
+              }}
+            >
+              Đăng ký
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

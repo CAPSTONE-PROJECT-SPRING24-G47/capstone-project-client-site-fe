@@ -6,7 +6,7 @@ import Content from './Content';
 const Wrapper = () => {
   return (
     <div className="flex flex-col bg-bg-color font-semibold">
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="flex h-svh gap-10">
         <Sidebar />
         <Content />
