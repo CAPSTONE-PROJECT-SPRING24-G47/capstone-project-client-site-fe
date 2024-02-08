@@ -7,7 +7,7 @@ const FormSide = () => {
   const { isLogin, handleChangeForm } = useContext(NavContext);
 
   return (
-    <div className=" flex h-full flex-col items-center justify-center  bg-[#8DCADC] bg-opacity-10 px-6 text-bg-color backdrop-blur-[20px]">
+    <div className="flex h-full flex-col items-center justify-center bg-[#8DCADC] bg-opacity-10 px-6 text-bg-color backdrop-blur-[20px]">
       <div className="mb-6 mt-3 text-center text-4xl font-semibold">
         {isLogin ? 'Chào mừng quay trở lại' : 'Chào mừng bạn'}
       </div>
