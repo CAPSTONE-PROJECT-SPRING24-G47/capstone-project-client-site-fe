@@ -4,7 +4,7 @@ import { NavContext } from '../../Contexts/NavContext';
 import { motion } from 'framer-motion';
 
 const Wrapper = () => {
-  const { isPopUp, isLogin, isResetPwdVerify, handlePopUp, handleIsLogin } =
+  const { isLogin, isResetPwdVerify, handlePopUp, handleIsLogin } =
     useContext(NavContext);
 
   return (

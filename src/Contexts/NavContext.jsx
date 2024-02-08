@@ -47,6 +47,7 @@ export const NavProvider = ({ children }) => {
     isLogin,
     isVerify,
     isResetPwdVerify,
+    isResetPwd,
     handlePopUp,
     handleIsLogin,
     handleIsSignUp,

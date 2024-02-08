@@ -17,6 +17,7 @@ const AuthForm = () => {
     isResetPwdVerify,
     isResetPwd,
     handleIsResetPwd,
+    handleIsSignUp,
   } = useContext(NavContext);
 
   const [lastName, setLastName] = useState('');
@@ -305,7 +306,11 @@ const AuthForm = () => {
       )}
       {isVerify && (
         <div className="flex justify-between text-accent-color">
-          <button className="hover:text-secondary-color">
+          <button
+            onClick={handleIsSignUp}
+            type="button"
+            className="hover:text-secondary-color"
+          >
             Điều chỉnh email
           </button>
           <button
