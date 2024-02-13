@@ -1,4 +1,10 @@
-import { signUp, signIn, verify, resetPasswordVerify } from './index';
+import {
+  signUp,
+  signIn,
+  verify,
+  resetPasswordVerify,
+  googleSignIn,
+} from './index';
 
 export async function performSignUp(signUpData) {
   console.log(signUpData);
@@ -48,6 +54,19 @@ export async function sendEmail(email) {
   } catch (error) {
     console.error(
       'Verify failed:',
+      error.response ? error.response.data : error.message
+    );
+  }
+}
+
+export async function googleAuth(data) {
+  try {
+    console.log(data);
+    const res = await googleSignIn(data);
+    console.log('Send successful. ', res);
+  } catch (error) {
+    console.error(
+      'Google sign-in failed:',
       error.response ? error.response.data : error.message
     );
   }
