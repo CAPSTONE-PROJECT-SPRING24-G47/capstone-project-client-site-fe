@@ -13,3 +13,5 @@ export const resetPasswordVerify = (email) =>
 
 export const resetPassword = (resetPwdData) =>
   API.post(`/auth/reset-password`, resetPwdData);
+
+export const googleSignIn = (data) => API.post(`/auth/google-auth`, data);
