@@ -1,22 +1,21 @@
+import { Link } from 'react-router-dom';
+import ArrowDownMiniIcon from './Icons/ArrowDownMiniIcon';
+
 const UserInfo = () => {
   return (
-    <div className="mr-20 inline-flex">
+    <Link
+      to="profile"
+      className="flex cursor-pointer items-center justify-center gap-4 rounded-3xl px-2 py-1 hover:bg-[#0000000d]"
+    >
       <img
-        style={{
-          width: '52px',
-          height: '52px',
-          'border-radius': '100%',
-          'margin-right': '16px',
-        }}
+        className="h-[45px] w-[45px] rounded-full"
         src="https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg"
       ></img>
-      <div>
-        <p className="flex items-center justify-center text-2xl font-bold text-black">
-          name
-        </p>
-        <p>Role</p>
+      <div className="flex items-center justify-center gap-2">
+        <p className="text-center text-xl font-bold">name</p>
+        <ArrowDownMiniIcon />
       </div>
-    </div>
+    </Link>
   );
 };
 

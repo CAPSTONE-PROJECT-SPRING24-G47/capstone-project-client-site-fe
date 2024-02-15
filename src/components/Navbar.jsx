@@ -1,7 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { NavContext } from '../Contexts/NavContext';
 import { Link, useLocation } from 'react-router-dom';
 import useTriggerScroll from '../hooks/useTriggerScroll';
+import UserInfo from './UserProfile/UserInfo';
+import { UserContext } from '../Contexts/UserContext';
+import NotificationIcon from './UserProfile/Icons/NotificationIcon';
 
 const buttonsInfor = [
   {
@@ -20,6 +23,7 @@ const buttonsInfor = [
 
 const Navbar = () => {
   const { handlePopUp, handleIsLogin, handleIsSignUp } = useContext(NavContext);
+  const { user } = useContext(UserContext);
   const isTrigged = useTriggerScroll(20);
   const location = useLocation();
   const isHomePagePath = location.pathname == '/';
@@ -72,26 +76,37 @@ const Navbar = () => {
 
         {/* Nút đăng ký, đăng nhập / nút user profile */}
         <div className="text-md flex items-center justify-center gap-5">
-          <div>
-            <button
-              className={`${isHomePagePath && isTrigged && 'text-accent-color'} ${!isHomePagePath && 'text-accent-color'} rounded-3xl border-[2px] border-accent-color px-4 py-1 font-semibold hover:opacity-80`}
-              onClick={() => {
-                handlePopUp(), handleIsLogin();
-              }}
-            >
-              Đăng nhập
-            </button>
-          </div>
-          <div>
-            <button
-              className={`${isHomePagePath && isTrigged && 'bg-accent-color text-bg-color'} ${isHomePagePath && !isTrigged && 'border-bg-color bg-bg-color text-accent-color'} ${!isHomePagePath && 'bg-accent-color text-bg-color'} rounded-3xl border-[2px] px-4 py-1 font-semibold hover:opacity-80`}
-              onClick={() => {
-                handlePopUp(), handleIsSignUp();
-              }}
-            >
-              Đăng ký
-            </button>
-          </div>
+          {!user ? (
+            <div className="flex items-center justify-center gap-4">
+              <NotificationIcon
+                color={isHomePagePath ? '#FFFFFF' : '#7398D5'}
+              />
+              <UserInfo />
+            </div>
+          ) : (
+            <>
+              <div>
+                <button
+                  className={`${isHomePagePath && isTrigged && 'text-accent-color'} ${!isHomePagePath && 'text-accent-color'} rounded-3xl border-[2px] border-accent-color px-4 py-1 font-semibold hover:opacity-80`}
+                  onClick={() => {
+                    handlePopUp(), handleIsLogin();
+                  }}
+                >
+                  Đăng nhập
+                </button>
+              </div>
+              <div>
+                <button
+                  className={`${isHomePagePath && isTrigged && 'bg-accent-color text-bg-color'} ${isHomePagePath && !isTrigged && 'border-bg-color bg-bg-color text-accent-color'} ${!isHomePagePath && 'bg-accent-color text-bg-color'} rounded-3xl border-[2px] px-4 py-1 font-semibold hover:opacity-80`}
+                  onClick={() => {
+                    handlePopUp(), handleIsSignUp();
+                  }}
+                >
+                  Đăng ký
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

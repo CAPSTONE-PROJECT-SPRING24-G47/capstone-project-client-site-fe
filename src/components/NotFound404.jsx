@@ -1,9 +1,10 @@
 import React from 'react';
-import Navbar from './Navbar';
-import Footer from './Footer';
 import notFoundImage from '../assets/notfound.png';
+import { useNavigate } from 'react-router-dom';
 
 const NotFound404 = () => {
+  const navigator = useNavigate();
+
   return (
     <>
       <div className="flex bg-bg-color">
@@ -23,7 +24,12 @@ const NotFound404 = () => {
           <div className="text-center text-[15px]">
             Trang không tồn tại hoặc đã bị xóa
           </div>
-          <button className="justify-center">
+          <button
+            className="justify-center"
+            onClick={() => {
+              navigator('/');
+            }}
+          >
             <div className="hover:bg-secondary-color-color mt-3 justify-center rounded-[50px]  bg-secondary-color/70 px-5  py-2 text-center text-[25px] font-extrabold text-text-color shadow-xl hover:bg-secondary-color hover:text-bg-color">
               Trở về trang chủ
             </div>
