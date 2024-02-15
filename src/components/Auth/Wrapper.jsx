@@ -15,7 +15,7 @@ const Wrapper = () => {
       />
       <motion.div
         layout
-        transition={{ ease: 'easeInOut', duration: 0.3 }}
+        transition={{ ease: 'easeInOut' }}
         className={`relative ${isLogin ? '' : 'flex-row-reverse'} z-50 flex w-fit overflow-hidden rounded-2xl`}
       >
         <>
