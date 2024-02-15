@@ -1,6 +1,6 @@
 import React from 'react';
-import Navbar from './Navbar';
-import Footer from './Footer';
+import Navbar from '../components/Navbar';
+import Footer from '../pages/Footer';
 import notFoundImage from '../assets/notfound.png';
 
 const NotFound404 = () => {
