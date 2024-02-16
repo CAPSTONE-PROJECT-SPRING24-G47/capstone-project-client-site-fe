@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { FormContext } from '../Contexts/FormContext';
 
 //name: only alphabet character
 const NAME_REGEX = /^[a-zA-Z ]{3,20}$/;
@@ -13,16 +14,18 @@ const useInputValidation = (
   value,
   originalPassword,
   isLogin,
-  checkIsError,
-  handleChangeForm
+  handleChangeForm,
+  isResetPwd
 ) => {
   const [error, setError] = useState('');
-
+  const { setIsError } = useContext(FormContext);
   useEffect(() => {
     setError('');
   }, [handleChangeForm]);
 
-  error ? checkIsError : !checkIsError;
+  useEffect(() => {
+    error.length !== 0 ? setIsError(true) : setIsError(false);
+  }, [error]);
 
   const validateInput = () => {
     let validationFunction = '';
@@ -33,7 +36,7 @@ const useInputValidation = (
       validationFunction = validateName;
     } else if (id === 'email' && !isLogin) {
       validationFunction = validateEmail;
-    } else if (id === 'password' && !isLogin) {
+    } else if ((id === 'password' && !isLogin) || isResetPwd) {
       validationFunction = validatePassword;
     } else if (id === 'confirmPassword') {
       validationFunction = validateConfirmPassword;

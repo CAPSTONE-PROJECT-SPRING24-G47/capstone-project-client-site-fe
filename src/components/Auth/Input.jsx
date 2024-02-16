@@ -10,10 +10,11 @@ const Input = ({
   svg,
   value,
   onChange,
-  checkIsError,
+
   originalPassword,
 }) => {
-  const { isLogin, handleChangeForm, isVerify } = useContext(NavContext);
+  const { isLogin, handleChangeForm, isVerify, isForgetPwd, isResetPwd } =
+    useContext(NavContext);
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [error, validateInput] = useInputValidation(
@@ -22,8 +23,9 @@ const Input = ({
     value,
     originalPassword,
     isLogin,
-    checkIsError,
-    handleChangeForm
+
+    handleChangeForm,
+    isResetPwd
   );
 
   const togglePasswordVisible = () => {
@@ -37,7 +39,7 @@ const Input = ({
           id={id}
           value={value}
           autoComplete={id == 'confirmPassword' ? { originalPassword } : ''}
-          className={` h-12 w-full ${error ? 'mt-6 border-sub-color' : ''} rounded-md border-2 border-secondary-color bg-bg-color px-2`}
+          className={`h-12 w-full ${error ? 'mt-6 border-sub-color' : ''} rounded-md border-2 border-secondary-color bg-bg-color px-2`}
           type={isPasswordVisible ? 'text' : type}
           onFocus={() => setIsFocused(true)}
           onBlur={() => {
@@ -45,7 +47,7 @@ const Input = ({
             validateInput();
           }}
           onChange={onChange}
-          maxLength={isVerify ? '7' : ''}
+          maxLength={isVerify || isForgetPwd ? '7' : ''}
         />
         {error && (
           <div className="group absolute bottom-11 right-1 flex items-end ">

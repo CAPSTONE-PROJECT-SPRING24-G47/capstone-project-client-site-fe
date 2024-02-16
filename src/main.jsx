@@ -5,14 +5,17 @@ import './index.css';
 import { NavProvider } from './Contexts/NavContext';
 import { UserProvider } from './Contexts/UserContext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { FormProvider } from './Contexts/FormContext';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <GoogleOAuthProvider clientId="386505745375-hcja7e078e4pjh9phsq5brjf8aen92an.apps.googleusercontent.com">
       <NavProvider>
-        <UserProvider>
-          <App />
-        </UserProvider>
+        <FormProvider>
+          <UserProvider>
+            <App />
+          </UserProvider>
+        </FormProvider>
       </NavProvider>
     </GoogleOAuthProvider>
   </React.StrictMode>
