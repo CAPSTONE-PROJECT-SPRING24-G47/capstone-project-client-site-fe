@@ -2,7 +2,7 @@ import {
   signUp,
   signIn,
   verify,
-  resetPasswordVerify,
+  forgetPasswordVerify,
   googleSignIn,
 } from './index';
 
@@ -49,7 +49,7 @@ export async function sendVerifyData(verifyData) {
 export async function sendEmail(email) {
   console.log(email);
   try {
-    const res = await resetPasswordVerify(email);
+    const res = await forgetPasswordVerify(email);
     console.log('Send successful. ', res);
   } catch (error) {
     console.error(

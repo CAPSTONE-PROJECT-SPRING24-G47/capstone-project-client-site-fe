@@ -8,10 +8,10 @@ export const signIn = (signInData) => API.post(`/auth/signin`, signInData);
 export const verify = (verifyData) =>
   API.post(`/auth/signup/verify`, verifyData);
 
-export const resetPasswordVerify = (email) =>
+export const forgetPasswordVerify = (email) =>
   API.post(`/auth/reset-password/verify`, email);
 
-export const resetPassword = (resetPwdData) =>
+export const forgetPassword = (resetPwdData) =>
   API.post(`/auth/reset-password`, resetPwdData);
 
 export const googleSignIn = (data) => API.post(`/auth/google-auth`, data);
