@@ -125,18 +125,6 @@ const AuthForm = () => {
     handleSubmitSignUpData();
   }
 
-  const setTitle = () => {
-    let title = '';
-    if (!isResetPwd) {
-      if (!isForgetPwd && !isForgetPwdVerify) {
-        if (!isVerify) {
-          isLogin ? (title = 'Đăng nhập') : (title = 'Đăng ký');
-        } else title = 'Mã Xác nhận';
-      } else title = 'Quên mật khẩu';
-    } else title = 'Thiết lập mật khẩu';
-    return title;
-  };
-
   return (
     <form
       className={`w-[460px] flex-1 bg-bg-color px-6 py-10 text-center ${isVerify || isForgetPwdVerify ? 'py-28' : isLogin ? 'py-14' : ''}`}
