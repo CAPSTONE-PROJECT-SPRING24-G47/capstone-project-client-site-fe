@@ -74,20 +74,21 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* Nút đăng ký, đăng nhập / nút user profile */}
+        {/* Nút đăng ký, đăng nhập / nút user profile, đăng xuất */}
         <div className="text-md flex items-center justify-center gap-5">
-          {!user ? (
+          {user ? (
             <div className="flex items-center justify-center gap-4">
               <NotificationIcon
                 color={isHomePagePath ? '#FFFFFF' : '#7398D5'}
               />
               <UserInfo />
+              <button>Đăng xuất</button>
             </div>
           ) : (
             <>
               <div>
                 <button
-                  className={`${isHomePagePath && isTrigged && 'text-accent-color'} ${!isHomePagePath && 'text-accent-color'} rounded-3xl border-[2px] border-accent-color px-4 py-1 font-semibold hover:opacity-80`}
+                  className={`${isHomePagePath && isTrigged && 'text-accent-color'} ${!isHomePagePath && 'text-accent-color'} rounded-3xl px-4 py-1 font-semibold ring-2 ring-inset ring-accent-color hover:opacity-80`}
                   onClick={() => {
                     handlePopUp(), handleIsLogin();
                   }}
@@ -97,7 +98,7 @@ const Navbar = () => {
               </div>
               <div>
                 <button
-                  className={`${isHomePagePath && isTrigged && 'bg-accent-color text-bg-color'} ${isHomePagePath && !isTrigged && 'border-bg-color bg-bg-color text-accent-color'} ${!isHomePagePath && 'bg-accent-color text-bg-color'} rounded-3xl border-[2px] px-4 py-1 font-semibold hover:opacity-80`}
+                  className={`${isHomePagePath && isTrigged && 'bg-accent-color text-bg-color'} ${isHomePagePath && !isTrigged && 'border-bg-color bg-bg-color text-accent-color'} ${!isHomePagePath && 'bg-accent-color text-bg-color'} rounded-3xl px-4 py-1 font-semibold ring-2 hover:opacity-80`}
                   onClick={() => {
                     handlePopUp(), handleIsSignUp();
                   }}

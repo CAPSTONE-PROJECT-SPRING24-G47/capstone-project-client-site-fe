@@ -11,7 +11,7 @@ export async function performSignUp(signUpData) {
 
   try {
     const res = await signUp(signUpData);
-    console.log('Sign-up successful. ', res.data);
+    console.log('Sign-up successful. ', res);
   } catch (error) {
     console.error(
       'Sign-up failed:',
@@ -46,10 +46,22 @@ export async function sendVerifyData(verifyData) {
   }
 }
 
-export async function sendEmail(email) {
+export async function sendEmailForgetPwd(email) {
   console.log(email);
   try {
     const res = await forgetPasswordVerify(email);
+    console.log('Send successful. ', res);
+  } catch (error) {
+    console.error(
+      'Send failed:',
+      error.response ? error.response.data : error.message
+    );
+  }
+}
+export async function handleForgetPwdData(forgetPwdData) {
+  console.log(email);
+  try {
+    const res = await forgetPassword(forgetPwdData);
     console.log('Send successful. ', res);
   } catch (error) {
     console.error(
