@@ -117,34 +117,34 @@ const AuthForm = () => {
     //verify sign up
     if (isVerify) {
       handleSubmitVerifyData();
-      if (response?.isSuccess) {
-        handleIsVerifySuccess();
-        setResponse(false);
-      }
+      handleIsVerifySuccess();
+      // if (response?.isSuccess) {
+      //   setResponse(false);
+      // }
     }
     //forget pwd verify
     else if (isForgetPwdVerify) {
       sendEmailForgetPwd({ email });
-      if (response?.isSuccess) {
-        handleIsForgetPwd();
-        setResponse(false);
-      }
+      handleIsForgetPwd();
+      // if (response?.isSuccess) {
+      //   setResponse(false);
+      // }
     }
     //forget pwd
     else if (isForgetPwd) {
       handleSubmitForgetPwdData();
-      if (response?.isSuccess) {
-        handleIsResetPwd();
-        setResponse(false);
-      }
+      handleIsResetPwd();
+      // if (response?.isSuccess) {
+      //   setResponse(false);
+      // }
     }
     //reset pwd
     else if (isResetPwd) {
       handleSubmitResetPwdData();
-      if (response?.isSuccess) {
-        handleIsVerifySuccess();
-        setResponse(false);
-      }
+      handleIsVerifySuccess();
+      // if (response?.isSuccess) {
+      //   setResponse(false);
+      // }
     } else {
       if (isLogin) {
         handleSubmitSignInData();
@@ -187,7 +187,7 @@ const AuthForm = () => {
 
   return (
     <form
-      className={`flex w-[460px] flex-1 flex-col bg-bg-color px-8  text-center ${isVerify || isForgetPwdVerify || isForgetPwd || isResetPwd ? 'py-28' : isLogin ? 'py-16' : 'py-10'} ${isVerifySuccess ? 'py-40' : ''}`}
+      className={`flex w-[460px] flex-1 flex-col bg-bg-color px-8 text-center ${isVerify || isForgetPwdVerify || isForgetPwd || isResetPwd ? 'py-28' : isLogin ? 'py-16' : 'py-10'} ${isVerifySuccess ? 'py-40' : ''}`}
     >
       {!response?.isSuccess && (
         <>
