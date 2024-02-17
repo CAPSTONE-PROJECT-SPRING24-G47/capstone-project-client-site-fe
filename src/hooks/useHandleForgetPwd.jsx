@@ -7,7 +7,7 @@ const useHandleForgetPwd = () => {
   async function handleForgetPwdData(forgetPwdData) {
     try {
       const res = await forgetPassword(forgetPwdData);
-      setResponse(res);
+      setResponse(res.data);
       console.log('Send forget pwd data successful. ', res);
     } catch (error) {
       console.error(

@@ -8,7 +8,7 @@ const useSignUp = () => {
   const performSignUp = async (signUpData) => {
     try {
       const res = await signUp(signUpData);
-      setResponse(res);
+      setResponse(res.data);
       console.log('Sign-up successful. ', res);
     } catch (error) {
       console.error(

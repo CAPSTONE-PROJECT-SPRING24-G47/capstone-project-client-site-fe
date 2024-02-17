@@ -8,7 +8,7 @@ const useSendEmailForgetPwd = () => {
   async function sendEmailForgetPwd(email) {
     try {
       const res = await forgetPasswordVerify(email);
-      setResponse(res);
+      setResponse(res.data);
       console.log('Send email successful. ', res);
     } catch (error) {
       console.error(

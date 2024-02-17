@@ -27,7 +27,7 @@ const AuthForm = () => {
     handleIsSignUp,
     handleIsLogin,
   } = useContext(NavContext);
-  const { isError, response } = useContext(FormContext);
+  const { isError, response, setResponse } = useContext(FormContext);
 
   const { performSignUp } = useSignUp();
   const { performSignIn } = useSignIn();
@@ -114,21 +114,41 @@ const AuthForm = () => {
 
   function handleSubmitClick(e) {
     e.preventDefault();
+    //verify sign up
     if (isVerify) {
       handleSubmitVerifyData();
-      if (response?.isSuccess) handleIsVerifySuccess();
-    } else if (isForgetPwdVerify) {
+      if (response?.isSuccess) {
+        handleIsVerifySuccess();
+        setResponse(false);
+      }
+    }
+    //forget pwd verify
+    else if (isForgetPwdVerify) {
       sendEmailForgetPwd({ email });
-      if (response?.isSuccess) handleIsForgetPwd();
-    } else if (isForgetPwd) {
+      if (response?.isSuccess) {
+        handleIsForgetPwd();
+        setResponse(false);
+      }
+    }
+    //forget pwd
+    else if (isForgetPwd) {
       handleSubmitForgetPwdData();
-      if (response?.isSuccess) handleIsResetPwd();
-    } else if (isResetPwd) {
+      if (response?.isSuccess) {
+        handleIsResetPwd();
+        setResponse(false);
+      }
+    }
+    //reset pwd
+    else if (isResetPwd) {
       handleSubmitResetPwdData();
-      if (response?.isSuccess) handleIsVerifySuccess();
+      if (response?.isSuccess) {
+        handleIsVerifySuccess();
+        setResponse(false);
+      }
     } else {
-      if (isLogin) handleSubmitSignInData();
-      else {
+      if (isLogin) {
+        handleSubmitSignInData();
+      } else {
         handleSubmitSignUpData();
         handleIsVerify();
       }
@@ -167,7 +187,7 @@ const AuthForm = () => {
 
   return (
     <form
-      className={`flex w-[460px] flex-1 flex-col bg-bg-color px-8 py-10 text-center ${isVerify || isForgetPwdVerify || isForgetPwd || isResetPwd ? 'py-32' : isLogin ? 'py-20' : ''} ${isVerifySuccess ? 'py-40' : ''}`}
+      className={`flex w-[460px] flex-1 flex-col bg-bg-color px-8  text-center ${isVerify || isForgetPwdVerify || isForgetPwd || isResetPwd ? 'py-28' : isLogin ? 'py-16' : 'py-10'} ${isVerifySuccess ? 'py-40' : ''}`}
     >
       {!response?.isSuccess && (
         <>
@@ -299,24 +319,6 @@ const AuthForm = () => {
               </>
             )}
           </div>
-          {isLogin && !isForgetPwdVerify && !isForgetPwd && !isResetPwd && (
-            <div className="text-md flex justify-between py-0 text-start text-secondary-color">
-              <div className="group">
-                <input
-                  type="checkbox"
-                  className="mr-1 rounded-2xl accent-accent-color"
-                />
-                <span className="">Ghi nhớ đăng nhập</span>
-              </div>
-              <button
-                type="button"
-                className="rounded-lg px-1 hover:bg-secondary-color/20"
-                onClick={handleIsForgetPwdVerify}
-              >
-                Quên mật khẩu?
-              </button>
-            </div>
-          )}
 
           <button
             type="button"
@@ -335,7 +337,7 @@ const AuthForm = () => {
                   : !verificationCode
                 : !email)
             }
-            className={`hover:scale-10 mb-2 mt-8 h-11 w-full rounded-2xl bg-secondary-color font-semibold text-bg-color hover:bg-gradient-to-b hover:from-secondary-color hover:to-accent-color disabled:bg-secondary-color/70 disabled:hover:bg-none`}
+            className={`hover:scale-10 mb-2 mt-6 h-11 w-full rounded-2xl bg-secondary-color font-semibold text-bg-color hover:bg-gradient-to-b hover:from-secondary-color hover:to-accent-color disabled:bg-secondary-color/70 disabled:hover:bg-none`}
           >
             {!isVerify && !isForgetPwd && !isResetPwd
               ? !isForgetPwdVerify
@@ -345,6 +347,17 @@ const AuthForm = () => {
                 : 'Gửi mã xác nhận'
               : 'Xác nhận'}
           </button>
+          {isLogin && !isForgetPwdVerify && !isForgetPwd && !isResetPwd && (
+            <div className="text-md py-2 text-center text-secondary-color">
+              <button
+                type="button"
+                className="rounded-lg px-1 hover:bg-secondary-color/20"
+                onClick={handleIsForgetPwdVerify}
+              >
+                Quên mật khẩu?
+              </button>
+            </div>
+          )}
           {isForgetPwd && (
             <div className="font-medium">
               Không nhận đc mã?
@@ -375,7 +388,7 @@ const AuthForm = () => {
           )}
           {!isVerify && !isForgetPwdVerify && !isForgetPwd && !isResetPwd && (
             <>
-              <div className="mb-2 flex items-center justify-center gap-1">
+              <div className="mb-3 flex items-center justify-center gap-1">
                 <div className="h-px w-full bg-text-color"></div>
                 <div className="font-light">Hoặc</div>
                 <div className="h-px w-full bg-text-color"></div>

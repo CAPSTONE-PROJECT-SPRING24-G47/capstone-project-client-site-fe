@@ -8,7 +8,7 @@ const useSendVerifyData = () => {
   async function sendVerifyData(verifyData) {
     try {
       const res = await verify(verifyData);
-      setResponse(res);
+      setResponse(res.data);
       console.log('Send verify data successful. ', res);
     } catch (error) {
       console.error(

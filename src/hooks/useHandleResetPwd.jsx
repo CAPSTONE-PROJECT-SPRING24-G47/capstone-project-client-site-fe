@@ -7,7 +7,7 @@ const usehandleResetPwd = () => {
   async function handleResetPwd(resetPwdData) {
     try {
       const res = await resetPassword(resetPwdData);
-      setResponse(res);
+      setResponse(res.data);
       console.log('Reset pwd successful. ', res);
     } catch (error) {
       console.error(

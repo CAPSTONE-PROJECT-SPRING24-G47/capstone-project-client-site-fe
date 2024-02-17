@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { NavContext } from '../Contexts/NavContext';
 import { Link, useLocation } from 'react-router-dom';
 import useTriggerScroll from '../hooks/useTriggerScroll';
@@ -23,12 +23,23 @@ const buttonsInfor = [
 ];
 
 const Navbar = () => {
-  const { handlePopUp, handleIsLogin, handleIsSignUp } = useContext(NavContext);
-  const { user } = useContext(UserContext);
+  const { handlePopUp, handleIsLogin, handleIsSignUp, setIsPopUp } =
+    useContext(NavContext);
+  const { user, setUser } = useContext(UserContext);
   const { response } = useContext(FormContext);
   const isTrigged = useTriggerScroll(20);
   const location = useLocation();
   const isHomePagePath = location.pathname == '/';
+
+  const handleUserLogin = useCallback(() => {
+    if (response?.message === 'Đăng nhập thành công!') {
+      setUser(true);
+      setIsPopUp(false);
+    } else {
+      setUser(false);
+    }
+    return user;
+  }, [response, user]);
 
   return (
     <div
@@ -78,7 +89,7 @@ const Navbar = () => {
 
         {/* Nút đăng ký, đăng nhập / nút user profile, đăng xuất */}
         <div className="text-md flex items-center justify-center gap-5">
-          {response?.message === 'Đăng nhập thành công!' ? (
+          {handleUserLogin() ? (
             <div className="flex items-center justify-center gap-4">
               <NotificationIcon
                 color={isHomePagePath ? '#FFFFFF' : '#7398D5'}

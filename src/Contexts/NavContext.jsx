@@ -14,6 +14,7 @@ export const NavProvider = ({ children }) => {
     setIsPopUp((isPopUp) => !isPopUp);
     setIsLogin(true);
   };
+
   const handleIsLogin = () => {
     setIsForgetPwdVerify(false);
     setIsForgetPwd(false);
@@ -75,6 +76,7 @@ export const NavProvider = ({ children }) => {
     handleIsResetPwd,
     handleIsForgetPwd,
     handleIsVerifySuccess,
+    setIsPopUp,
   };
   return <NavContext.Provider value={value}>{children}</NavContext.Provider>;
 };
