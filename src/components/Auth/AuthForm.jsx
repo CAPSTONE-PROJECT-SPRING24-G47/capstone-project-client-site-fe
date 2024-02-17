@@ -1,16 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { NavContext } from '../../Contexts/NavContext';
-import {
-  performSignIn,
-  performSignUp,
-  sendVerifyData,
-  sendEmailForgetPwd,
-  handleForgetPwdData,
-} from '../../api/AuthService';
 import { EyeOpenIcon, EmailIcon, Input } from './index';
 import GoogleButton from './GoogleButton';
 import { FormContext } from '../../Contexts/FormContext';
 import SuccessIconBig from './Icons/SuccessIconBig';
+import useSignUp from '../../hooks/useSignUp';
+import useSignIn from '../../hooks/useSignIn';
+import useSendVerifyData from '../../hooks/useSendVerifyData';
+import useSendEmailForgetPwd from '../../hooks/useSendEmailForgetPwd';
+import useHandleForgetPwd from '../../hooks/useHandleForgetPwd';
+import useHandleResetPwd from '../../hooks/useHandleResetPwd';
 
 const AuthForm = () => {
   const {
@@ -28,7 +27,14 @@ const AuthForm = () => {
     handleIsSignUp,
     handleIsLogin,
   } = useContext(NavContext);
-  const { isError } = useContext(FormContext);
+  const { isError, response } = useContext(FormContext);
+
+  const { performSignUp } = useSignUp();
+  const { performSignIn } = useSignIn();
+  const { sendVerifyData } = useSendVerifyData();
+  const { sendEmailForgetPwd } = useSendEmailForgetPwd();
+  const { handleForgetPwdData } = useHandleForgetPwd();
+  const { handleResetPwd } = useHandleResetPwd();
 
   const [lastName, setLastName] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -41,6 +47,7 @@ const AuthForm = () => {
   const [signUpData, setSignUpData] = useState(null);
   const [verifyData, setVerifyData] = useState(null);
   const [forgetPwdData, setForgetPwdData] = useState(null);
+  const [resetPwdData, setResetPwdData] = useState(null);
 
   useEffect(() => {
     setFirstName('');
@@ -94,20 +101,31 @@ const AuthForm = () => {
     setForgetPwdData({
       email,
       verificationCode,
+    });
+  };
+
+  const handleSubmitResetPwdData = () => {
+    setResetPwdData({
+      email,
+      verificationCode,
       password,
     });
   };
+
   function handleSubmitClick(e) {
     e.preventDefault();
     if (isVerify) {
       handleSubmitVerifyData();
       handleIsVerifySuccess();
     } else if (isForgetPwdVerify) {
-      sendEmailForgetPwd(email);
+      sendEmailForgetPwd({ email });
       handleIsForgetPwd();
     } else if (isForgetPwd) {
       handleSubmitForgetPwdData();
       handleIsResetPwd();
+    } else if (isResetPwd) {
+      handleSubmitResetPwdData();
+      handleIsVerifySuccess();
     } else {
       if (isLogin) handleSubmitSignInData();
       else {
@@ -133,17 +151,31 @@ const AuthForm = () => {
     if (forgetPwdData) handleForgetPwdData(forgetPwdData);
   }, [forgetPwdData]);
 
-  function handleSendCodeAgain(e) {
+  useEffect(() => {
+    if (resetPwdData) handleResetPwd(resetPwdData);
+  }, [resetPwdData]);
+
+  function handleSendSignUpCodeAgain(e) {
     e.preventDefault();
     handleSubmitSignUpData();
   }
 
+  function handleSendResetPwdCodeAgain(e) {
+    e.preventDefault();
+    sendEmailForgetPwd({ email });
+  }
+
   return (
     <form
-      className={`w-[460px] flex-1 bg-bg-color px-8 py-10 text-center ${isVerify || isForgetPwdVerify || isForgetPwd || isResetPwd ? 'py-32' : isLogin ? 'py-20' : ''} ${isVerifySuccess ? 'py-40' : ''}`}
+      className={`flex w-[460px] flex-1 flex-col bg-bg-color px-8 py-10 text-center ${isVerify || isForgetPwdVerify || isForgetPwd || isResetPwd ? 'py-32' : isLogin ? 'py-20' : ''} ${isVerifySuccess ? 'py-40' : ''}`}
     >
+      {!response?.isSuccess && (
+        <>
+          <div className="text-xl text-sub-color">{response?.message}</div>
+        </>
+      )}
       {isVerifySuccess && (
-        <div className="flex-col items-center justify-center">
+        <div className="flex flex-col items-center justify-center">
           <>
             <SuccessIconBig />
           </>
@@ -313,7 +345,34 @@ const AuthForm = () => {
                 : 'Gửi mã xác nhận'
               : 'Xác nhận'}
           </button>
-
+          {isForgetPwd && (
+            <div className="font-medium">
+              Không nhận đc mã?
+              <button
+                className="text-secondary-color"
+                onClick={handleSendResetPwdCodeAgain}
+              >
+                Gửi lại mã
+              </button>
+            </div>
+          )}
+          {isVerify && (
+            <div className="flex justify-between text-accent-color">
+              <button
+                onClick={handleIsSignUp}
+                type="button"
+                className="hover:text-secondary-color"
+              >
+                Điều chỉnh email
+              </button>
+              <button
+                onClick={handleSendSignUpCodeAgain}
+                className="hover:text-secondary-color"
+              >
+                Gửi lại mã
+              </button>
+            </div>
+          )}
           {!isVerify && !isForgetPwdVerify && !isForgetPwd && !isResetPwd && (
             <>
               <div className="mb-2 flex items-center justify-center gap-1">
@@ -326,23 +385,6 @@ const AuthForm = () => {
                 <GoogleButton />
               </div>
             </>
-          )}
-          {isVerify && (
-            <div className="flex justify-between text-accent-color">
-              <button
-                onClick={handleIsSignUp}
-                type="button"
-                className="hover:text-secondary-color"
-              >
-                Điều chỉnh email
-              </button>
-              <button
-                onClick={handleSendCodeAgain}
-                className="hover:text-secondary-color"
-              >
-                Gửi lại mã
-              </button>
-            </div>
           )}
         </>
       )}

@@ -12,6 +12,9 @@ export const forgetPasswordVerify = (email) =>
   API.post(`/auth/reset-password/verify`, email);
 
 export const forgetPassword = (forgetPwdData) =>
-  API.post(`/auth/reset-password`, forgetPwdData);
+  API.post(`/auth/reset-password/code`, forgetPwdData);
+
+export const resetPassword = (resetPwdData) =>
+  API.post(`/auth/reset-password`, resetPwdData);
 
 export const googleSignIn = (data) => API.post(`/auth/google-auth`, data);

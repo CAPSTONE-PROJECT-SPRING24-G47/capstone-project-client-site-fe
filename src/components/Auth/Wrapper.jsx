@@ -26,17 +26,17 @@ const Wrapper = () => {
         className={`relative ${isLogin ? '' : 'flex-row-reverse'} z-50 flex w-fit overflow-hidden rounded-2xl`}
       >
         <>
-          {isForgetPwdVerify &&
-            isForgetPwd &&
-            isResetPwd &&
-            isVerifySuccess && (
-              <button
-                className="bg absolute left-3 top-3 z-[99] rounded-full p-1 text-bg-color transition ease-in-out hover:-translate-y-1 hover:scale-110"
-                onClick={handleIsLogin}
-              >
-                <BackIcon />
-              </button>
-            )}
+          {(isForgetPwdVerify ||
+            isForgetPwd ||
+            isResetPwd ||
+            isVerifySuccess) && (
+            <button
+              className="bg absolute left-3 top-3 z-[99] rounded-full p-1 text-bg-color transition ease-in-out hover:-translate-y-1 hover:scale-110"
+              onClick={handleIsLogin}
+            >
+              <BackIcon />
+            </button>
+          )}
           <button
             className="bg absolute right-3 top-3 z-[99] rounded-bl-lg rounded-tr-lg bg-secondary-color p-1 text-bg-color transition ease-in-out hover:-translate-y-1 hover:scale-110 hover:shadow-lg"
             onClick={handlePopUp}
