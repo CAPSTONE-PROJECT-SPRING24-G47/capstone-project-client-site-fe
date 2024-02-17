@@ -2,12 +2,13 @@ import React, { useContext } from 'react';
 import { FormContext } from '../Contexts/FormContext';
 import { resetPassword } from '../api';
 
-const useHandleResetPwd = () => {
+const usehandleResetPwd = () => {
   const { setResponse } = useContext(FormContext);
   async function handleResetPwd(resetPwdData) {
     try {
       const res = await resetPassword(resetPwdData);
       setResponse(res);
+      console.log('Reset pwd successful. ', res);
     } catch (error) {
       console.error(
         'Reset failed:',
@@ -18,4 +19,4 @@ const useHandleResetPwd = () => {
   return { handleResetPwd };
 };
 
-export default useHandleResetPwd;
+export default usehandleResetPwd;

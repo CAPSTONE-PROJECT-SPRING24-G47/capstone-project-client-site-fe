@@ -8,6 +8,7 @@ const useHandleForgetPwd = () => {
     try {
       const res = await forgetPassword(forgetPwdData);
       setResponse(res);
+      console.log('Send forget pwd data successful. ', res);
     } catch (error) {
       console.error(
         'Verify failed:',

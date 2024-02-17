@@ -5,6 +5,7 @@ import useTriggerScroll from '../hooks/useTriggerScroll';
 import UserInfo from './UserProfile/UserInfo';
 import { UserContext } from '../Contexts/UserContext';
 import NotificationIcon from './UserProfile/Icons/NotificationIcon';
+import { FormContext } from '../Contexts/FormContext';
 
 const buttonsInfor = [
   {
@@ -24,6 +25,7 @@ const buttonsInfor = [
 const Navbar = () => {
   const { handlePopUp, handleIsLogin, handleIsSignUp } = useContext(NavContext);
   const { user } = useContext(UserContext);
+  const { response } = useContext(FormContext);
   const isTrigged = useTriggerScroll(20);
   const location = useLocation();
   const isHomePagePath = location.pathname == '/';
@@ -76,7 +78,7 @@ const Navbar = () => {
 
         {/* Nút đăng ký, đăng nhập / nút user profile, đăng xuất */}
         <div className="text-md flex items-center justify-center gap-5">
-          {user ? (
+          {response?.message === 'Đăng nhập thành công!' ? (
             <div className="flex items-center justify-center gap-4">
               <NotificationIcon
                 color={isHomePagePath ? '#FFFFFF' : '#7398D5'}

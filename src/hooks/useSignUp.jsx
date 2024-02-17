@@ -9,6 +9,7 @@ const useSignUp = () => {
     try {
       const res = await signUp(signUpData);
       setResponse(res);
+      console.log('Sign-up successful. ', res);
     } catch (error) {
       console.error(
         'Sign-up failed:',
@@ -16,7 +17,6 @@ const useSignUp = () => {
       );
     }
   };
-  // console.log('Sign-up successful. ', response);
 
   return { performSignUp };
 };

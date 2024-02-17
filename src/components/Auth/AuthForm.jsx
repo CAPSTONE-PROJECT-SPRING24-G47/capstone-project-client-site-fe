@@ -9,7 +9,7 @@ import useSignIn from '../../hooks/useSignIn';
 import useSendVerifyData from '../../hooks/useSendVerifyData';
 import useSendEmailForgetPwd from '../../hooks/useSendEmailForgetPwd';
 import useHandleForgetPwd from '../../hooks/useHandleForgetPwd';
-import useHandleResetPwd from '../../hooks/useHandleResetPwd';
+import useHandleResetPwd from '../../hooks/usehandleResetPwd';
 
 const AuthForm = () => {
   const {
@@ -116,16 +116,16 @@ const AuthForm = () => {
     e.preventDefault();
     if (isVerify) {
       handleSubmitVerifyData();
-      handleIsVerifySuccess();
+      if (response?.isSuccess) handleIsVerifySuccess();
     } else if (isForgetPwdVerify) {
       sendEmailForgetPwd({ email });
-      handleIsForgetPwd();
+      if (response?.isSuccess) handleIsForgetPwd();
     } else if (isForgetPwd) {
       handleSubmitForgetPwdData();
-      handleIsResetPwd();
+      if (response?.isSuccess) handleIsResetPwd();
     } else if (isResetPwd) {
       handleSubmitResetPwdData();
-      handleIsVerifySuccess();
+      if (response?.isSuccess) handleIsVerifySuccess();
     } else {
       if (isLogin) handleSubmitSignInData();
       else {

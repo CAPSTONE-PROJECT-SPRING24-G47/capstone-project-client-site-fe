@@ -9,6 +9,7 @@ const useSendVerifyData = () => {
     try {
       const res = await verify(verifyData);
       setResponse(res);
+      console.log('Send verify data successful. ', res);
     } catch (error) {
       console.error(
         'Verify failed:',

@@ -3,12 +3,13 @@ import { signIn } from '../api/index';
 import { FormContext } from '../Contexts/FormContext';
 
 const useSignIn = () => {
-  const { setResponse, response } = useContext(FormContext);
+  const { setResponse } = useContext(FormContext);
 
   const performSignIn = async (SignInData) => {
     try {
       const res = await signIn(SignInData);
       setResponse(res.data);
+      console.log('Sign-in successful. ', res);
     } catch (error) {
       console.error(
         'Sign-in failed:',
@@ -16,8 +17,6 @@ const useSignIn = () => {
       );
     }
   };
-  // console.log('Sign-in successful. ', response?.isSuccess);
-
   return { performSignIn };
 };
 
