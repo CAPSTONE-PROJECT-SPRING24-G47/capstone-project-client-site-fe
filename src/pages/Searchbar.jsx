@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FaUtensils, FaBed, FaStar } from 'react-icons/fa';
 
 const Searchbar = ({ onSearch }) => {
   const handleSearch = (event) => {
@@ -8,25 +9,36 @@ const Searchbar = ({ onSearch }) => {
   };
 
   return (
-    <div className="flex items-center justify-center mt-4 mb-8">
-      <div className="relative flex items-center bg-white rounded-md overflow-hidden shadow-md">
-        <select className="border-r border-gray-300 px-3 py-2 focus:outline-none focus:border-blue-500">
-          <option value="restaurant">Nhà hàng</option>
-          <option value="accommodation">Nơi ở</option>
-          <option value="entertainment">Hoạt động giải trí</option>
-        </select>
-        <input
-          type="text"
-          placeholder="Tìm kiếm"
-          className="border-r border-gray-300 px-80 py-2 flex-1 focus:outline-none focus:border-blue-500"
-          onChange={handleSearch}
-        />
-        <button
-          className="bg-blue-500 text-white px-4 py-2 hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue"
-          onClick={() => onSearch('')}
-        >
-          Tìm kiếm
-        </button>
+    <div className="mt-4 mb-8 bg-[#F1FBF3] ">
+      <div className='px-20 rounded-full pb-5 border border-gray-300'>
+        <div className='flex'>
+          <div className='mr-60 inline-block tẽ'>
+            <FaUtensils />
+            <span>Nhà hàng</span>
+          </div>
+          <div className='mr-60 ml-32 inline-block'>
+            <FaBed />
+            <span>Nơi ở</span>
+          </div>
+          <div className='ml-32 inline-block'>
+            <FaStar />
+            <span>Hoạt động giải trí</span>
+          </div>
+        </div>
+        <div className="relative flex items-center bg-gray-200 rounded-full overflow-hidden shadow-md">
+          <input
+            type="text"
+            placeholder=""
+            className=" border-[#E8F3EA] bg-gray-200 px-80 py-2 my-3 "
+            onChange={handleSearch}
+          />
+          <button
+            className="rounded-3xl text-xl font-bold bg-[#7398D5] text-white mx-2 px-7 py-2 hover:bg-[#8DCADC] focus:outline-none focus:shadow-outline-blue"
+            onClick={() => onSearch('')}
+          >
+            Tìm kiếm
+          </button>
+        </div>
       </div>
     </div>
   );

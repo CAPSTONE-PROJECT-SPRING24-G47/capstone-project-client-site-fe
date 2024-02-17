@@ -8,7 +8,7 @@ import Outstandingactivity from './Outstandingactivity';
 import Outstandingrestaurant from './Outstandingrestaurant';
 import Outstandingresidence from './Outstandingresidence';
 import Outstandingblog from './Outstandingblog';
-import GoogleMap from './GoogleMap';
+import Region from './Region';
 
 
 const HomePage = () => {
@@ -18,46 +18,52 @@ const HomePage = () => {
     <main
       className={`relative flex h-full flex-col items-center justify-center bg-bg-color ${isPopUp ? 'bg-opacity-90' : ''}`}
     >
-      <div className="relative h-full">
+      <div className="relative h-full flex flex-col items-center justify-center">
         <div className="absolute inset-0 bg-[#03121A] opacity-30 backdrop-blur-[20px]" />
         <img src={fujiImage} alt="fuji" className="h-full object-cover" />
 
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
+          <h1 className="font-bold text-7xl mb-4 uppercase">Bắt đầu chuyến đi của bạn</h1>
+          <button className="uppercase border rounded-3xl font-bold px-3 py-3 text-3xl bg-white text-[#7398D5] px-4 py-2 hover:bg-[#8DCADC] focus:outline-none focus:shadow-outline-blue">
+            Lên kế hoạch
+          </button>
+        </div>
       </div>
       {/* Searchbar Component */}
       <div>
-      <Searchbar />
+        <Searchbar />
       </div>
 
-      {/* Section Component */}
+      {/* Region Component */}
       <div>
-      <GoogleMap />
+        <Region />
       </div>
 
       {/* Outstanding activity Component */}
       <div>
-      <Outstandingactivity />
+        <Outstandingactivity />
       </div>
 
       {/* Outstandingrestaurant Component */}
       <div>
-      <Outstandingrestaurant />
+        <Outstandingrestaurant />
       </div>
 
       {/* Outstandingresidence Component */}
       <div>
-      <Outstandingresidence />
+        <Outstandingresidence />
       </div>
 
       {/* Outstandingblog Component */}
       <div>
-      <Outstandingblog />
+        <Outstandingblog />
       </div>
 
       {/* Footer Component */}
       <div>
-      <Footer />
+        <Footer />
       </div>
-     
+
     </main>
   );
 };

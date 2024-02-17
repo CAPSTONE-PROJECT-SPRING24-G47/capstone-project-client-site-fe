@@ -1,35 +1,33 @@
 import React from "react";
-import logoImage from "../assets/logoFooter.png";  
+import logoImage from "../assets/logoFooter.png";
 
 const Footer = () => {
   return (
-    <div className="relative h-full text-black max-w-full">
-      <div className="mx-auto flex">
+    <div className="mb-10">
+      <div className="flex">
         {/* Logo */}
-        <div className="flex-none">
-          <img src={logoImage} alt="logoImage" className="h-16 w-auto object-cover" />
+        <div className="mr-60">
+          <img src={logoImage} alt="logoImage" className="w-4/5" />
+          <span className="text-[#7398D5] text-xl font-bold pl-5">VJITradvisor</span>
         </div>
 
         {/* About Us */}
-        <div className="flex-1 p-4">
-          <h4 className="text-lg font-bold mb-2">Về chúng tôi</h4>
-          <p className="text-sm">Thông tin về chúng tôi</p>
+        <div className="mr-60">
+          <h4 className="text-lg font-bold mb-1">Giới thiệu chung</h4>
+          <p className="text-sm">Về chúng tôi</p>
           <p className="text-sm">Liên hệ.</p>
         </div>
 
         {/* Links */}
-        <div className="flex-1 p-4">
-          <h4 className="text-lg font-bold mb-2">Liên kết</h4>
+        <div className="">
+          <h4 className="text-lg font-bold mb-1">Điều khoản sử dụng</h4>
           <p className="text-sm">Điều khoản chung</p>
           <p className="text-sm">Chính sách bảo mật</p>
         </div>
       </div>
 
-      {/* Bottom Footer */}
-      {/* <div className="bottomFooter h-20 flex items-center justify-center border-t-2 border-gray-300">
-        <p className="text-sm">Powered by SEP490-G47</p>
-      </div> */}
-      
+
+
     </div>
   );
 };
