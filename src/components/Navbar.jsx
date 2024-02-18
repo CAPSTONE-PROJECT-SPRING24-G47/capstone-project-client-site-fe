@@ -66,10 +66,10 @@ const Navbar = () => {
 
       <div className="flex gap-14">
         {/* Nút chuyển page */}
-        <div className="text-md flex items-center justify-center gap-14 font-semibold ">
+        <div className="text-md flex items-center justify-center gap-14 font-semibold  ">
           {buttonsInfor.map((button, index) => (
             <div key={index}>
-              <Link to={button.path}>{button.title}</Link>
+              <Link className='hover:text-bg-color hover:opacity-10' to={button.path}>{button.title}</Link>
             </div>
           ))}
         </div>
@@ -88,7 +88,7 @@ const Navbar = () => {
             <>
               <div>
                 <button
-                  className={`${isHomePagePath && isTrigged && 'text-accent-color'} ${!isHomePagePath && 'text-accent-color'} rounded-3xl px-4 py-1 font-semibold ring-2 ring-inset ring-accent-color hover:opacity-80`}
+                  className={`${isHomePagePath && isTrigged && 'text-accent-color'} ${!isHomePagePath && 'text-accent-color'} rounded-3xl px-4 py-1 font-semibold ring-2 ring-inset ring-accent-color hover:bg-white hover:text-accent-color hover:border-accent-color`}
                   onClick={() => {
                     handlePopUp(), handleIsLogin();
                   }}
@@ -98,7 +98,7 @@ const Navbar = () => {
               </div>
               <div>
                 <button
-                  className={`${isHomePagePath && isTrigged && 'bg-accent-color text-bg-color'} ${isHomePagePath && !isTrigged && 'border-bg-color bg-bg-color text-accent-color'} ${!isHomePagePath && 'bg-accent-color text-bg-color'} rounded-3xl px-4 py-1 font-semibold ring-2 hover:opacity-80`}
+                  className={`${isHomePagePath && isTrigged && 'bg-accent-color text-bg-color'} ${isHomePagePath && !isTrigged && 'border-bg-color bg-bg-color text-accent-color'} ${!isHomePagePath && 'bg-accent-color text-bg-color'} rounded-3xl px-4 py-1 font-semibold ring-2 hover:bg-accent-color hover:text-white`}
                   onClick={() => {
                     handlePopUp(), handleIsSignUp();
                   }}

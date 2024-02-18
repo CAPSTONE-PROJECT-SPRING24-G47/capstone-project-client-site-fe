@@ -15,7 +15,7 @@ const Outstandingblox = () => {
             Chia sẻ trải nghiệm cá nhân và khám phá những trải nghiệm chân thực từ những người khác về Nhật Bản
           </p>
         </div>
-        <button className="text-2xl font-bold mt-4 bg-[#48C75E] text-white px-10 py-2 rounded-3xl hover:bg-green-600 focus:outline-none">
+        <button className="text-2xl font-bold mt-4 bg-primary-color text-white px-10 py-2 rounded-3xl hover:bg-white hover:text-primary-color focus:outline-none">
           Khám phá
         </button>
       </div>
@@ -28,7 +28,7 @@ const Outstandingblox = () => {
       </div>
       <style jsx>{`
         .outstanding-blox{
-          max-width: 1180px;
+          max-width: 1240px;
         }
       `}</style>
 

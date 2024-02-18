@@ -13,7 +13,10 @@ import Region from './Region';
 
 const HomePage = () => {
   const { isPopUp } = useContext(NavContext);
-
+  const handleSearch = (searchTerm) => {
+    // Xử lý tìm kiếm ở đây
+    console.log('Searching for:', searchTerm);
+  };
   return (
     <main
       className={`relative flex h-full flex-col items-center justify-center bg-bg-color ${isPopUp ? 'bg-opacity-90' : ''}`}
@@ -24,14 +27,14 @@ const HomePage = () => {
 
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
           <h1 className="font-bold text-7xl mb-4 uppercase">Bắt đầu chuyến đi của bạn</h1>
-          <button className="uppercase border rounded-3xl font-bold px-3 py-3 text-3xl bg-white text-[#7398D5] px-4 py-2 hover:bg-[#8DCADC] focus:outline-none focus:shadow-outline-blue">
+          <button className="uppercase border rounded-3xl font-bold px-3 py-3 text-3xl bg-white text-[#7398D5] px-4 py-2 hover:bg-accent-color hover:text-white focus:outline-none focus:shadow-outline-blue">
             Lên kế hoạch
           </button>
         </div>
       </div>
       {/* Searchbar Component */}
       <div>
-        <Searchbar />
+        <Searchbar onSearch={handleSearch} />
       </div>
 
       {/* Region Component */}
