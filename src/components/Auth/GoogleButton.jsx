@@ -1,9 +1,10 @@
 import React from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
-import { googleAuth } from '../../api/AuthService';
+import useGoogleAuth from '../../hooks/useGoogleAuth';
 
 const GoogleButton = () => {
+  const { googleAuth } = useGoogleAuth();
   const handleSuccess = (credentialResponse) => {
     const data = jwtDecode(credentialResponse.credential);
     googleAuth({

@@ -3,7 +3,7 @@ import { signUp } from '../api/index';
 import { FormContext } from '../Contexts/FormContext';
 
 const useSignUp = () => {
-  const { setResponse, response } = useContext(FormContext);
+  const { setResponse } = useContext(FormContext);
 
   const performSignUp = async (signUpData) => {
     try {

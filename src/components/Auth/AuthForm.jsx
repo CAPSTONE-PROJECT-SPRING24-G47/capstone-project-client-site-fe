@@ -26,6 +26,7 @@ const AuthForm = () => {
     handleIsForgetPwd,
     handleIsSignUp,
     handleIsLogin,
+    isSignUp,
   } = useContext(NavContext);
   const { isError, response, setResponse } = useContext(FormContext);
 
@@ -35,6 +36,7 @@ const AuthForm = () => {
   const { sendEmailForgetPwd } = useSendEmailForgetPwd();
   const { handleForgetPwdData } = useHandleForgetPwd();
   const { handleResetPwd } = useHandleResetPwd();
+  // const { googleAuth } = useGoogleAuth();
 
   const [lastName, setLastName] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -117,41 +119,22 @@ const AuthForm = () => {
     //verify sign up
     if (isVerify) {
       handleSubmitVerifyData();
-      handleIsVerifySuccess();
-      // if (response?.isSuccess) {
-      //   setResponse(false);
-      // }
     }
     //forget pwd verify
     else if (isForgetPwdVerify) {
       sendEmailForgetPwd({ email });
-      handleIsForgetPwd();
-      // if (response?.isSuccess) {
-      //   setResponse(false);
-      // }
     }
     //forget pwd
     else if (isForgetPwd) {
       handleSubmitForgetPwdData();
-      handleIsResetPwd();
-      // if (response?.isSuccess) {
-      //   setResponse(false);
-      // }
     }
     //reset pwd
     else if (isResetPwd) {
       handleSubmitResetPwdData();
-      handleIsVerifySuccess();
-      // if (response?.isSuccess) {
-      //   setResponse(false);
-      // }
-    } else {
-      if (isLogin) {
-        handleSubmitSignInData();
-      } else {
-        handleSubmitSignUpData();
-        handleIsVerify();
-      }
+    } else if (isLogin) {
+      handleSubmitSignInData();
+    } else if (isSignUp) {
+      handleSubmitSignUpData();
     }
   }
 
@@ -174,6 +157,28 @@ const AuthForm = () => {
   useEffect(() => {
     if (resetPwdData) handleResetPwd(resetPwdData);
   }, [resetPwdData]);
+
+  useEffect(() => {
+    if (response) {
+      if (response.isSuccess) {
+        if (isSignUp) {
+          handleIsVerify();
+        } else if (isForgetPwdVerify) {
+          handleIsForgetPwd();
+        } else if (
+          isForgetPwd &&
+          response.message !== `Mã xác minh đã được gửi lại vào mail ${email}`
+        ) {
+          handleIsResetPwd();
+        } else if (isResetPwd || isVerify) {
+          handleIsVerifySuccess();
+        }
+        setResponse(null);
+      }
+    }
+  }, [response]);
+
+  // console.log(response);
 
   function handleSendSignUpCodeAgain(e) {
     e.preventDefault();
@@ -260,7 +265,7 @@ const AuthForm = () => {
             )}
             {!isVerify && (
               <>
-                {!isLogin && (
+                {isSignUp && (
                   <>
                     <div className="flex justify-between gap-3">
                       <Input
@@ -302,7 +307,7 @@ const AuthForm = () => {
                         svg={<EyeOpenIcon />}
                       />
 
-                      {(!isLogin || isResetPwd) && (
+                      {(isSignUp || isResetPwd) && (
                         <Input
                           id={'confirmPassword'}
                           label={'Nhập lại mật khẩu'}
@@ -327,7 +332,7 @@ const AuthForm = () => {
               isError ||
               (!isForgetPwdVerify
                 ? !isVerify && !isForgetPwd
-                  ? isLogin
+                  ? isLogin && !isSignUp
                     ? !email || !password
                     : !email ||
                       !password ||

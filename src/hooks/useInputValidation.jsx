@@ -14,6 +14,7 @@ const useInputValidation = (
   value,
   originalPassword,
   isLogin,
+  isSignUp,
   handleChangeForm,
   isResetPwd
 ) => {
@@ -34,9 +35,9 @@ const useInputValidation = (
       validationFunction = validateName;
     } else if (id === 'firstName') {
       validationFunction = validateName;
-    } else if (id === 'email' && !isLogin) {
+    } else if (id === 'email' && isSignUp) {
       validationFunction = validateEmail;
-    } else if ((id === 'password' && !isLogin) || isResetPwd) {
+    } else if ((id === 'password' && isSignUp) || isResetPwd) {
       validationFunction = validatePassword;
     } else if (id === 'confirmPassword') {
       validationFunction = validateConfirmPassword;

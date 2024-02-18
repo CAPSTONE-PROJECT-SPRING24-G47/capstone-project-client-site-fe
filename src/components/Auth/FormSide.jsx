@@ -4,7 +4,7 @@ import { NavContext } from '../../Contexts/NavContext';
 import { ArrowDownIcon } from './index';
 
 const FormSide = () => {
-  const { isLogin, handleChangeForm } = useContext(NavContext);
+  const { isLogin, isSignUp, handleChangeForm } = useContext(NavContext);
 
   return (
     <div className="flex h-full flex-col items-center justify-center bg-[#8DCADC] bg-opacity-10 px-6 text-bg-color backdrop-blur-[20px]">

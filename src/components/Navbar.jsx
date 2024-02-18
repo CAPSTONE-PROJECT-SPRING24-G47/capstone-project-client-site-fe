@@ -32,14 +32,14 @@ const Navbar = () => {
   const isHomePagePath = location.pathname == '/';
 
   const handleUserLogin = useCallback(() => {
-    if (response?.message === 'Đăng nhập thành công!') {
+    if (response?.message.includes('Đăng nhập thành công')) {
       setUser(true);
       setIsPopUp(false);
     } else {
       setUser(false);
     }
     return user;
-  }, [response, user]);
+  }, [response]);
 
   return (
     <div
