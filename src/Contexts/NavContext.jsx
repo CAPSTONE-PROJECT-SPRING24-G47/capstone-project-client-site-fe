@@ -35,6 +35,7 @@ export const NavProvider = ({ children }) => {
     setIsSignUp(true);
   };
   const handleIsVerify = () => {
+    setIsSignUp(false);
     setIsVerify(true);
   };
   const handleIsVerifySuccess = () => {
