@@ -31,15 +31,25 @@ const Navbar = () => {
   const location = useLocation();
   const isHomePagePath = location.pathname == '/';
 
-  const handleUserLogin = useCallback(() => {
-    if (response?.message.includes('Đăng nhập thành công') || isGoogleAuth) {
-      setUser(true);
-      setIsPopUp(false);
-    } else {
-      setUser(false);
-    }
-    return user;
-  }, [response]);
+  // const handleUserLogin = useCallback(() => {
+  //   if (response?.message.includes('Đăng nhập thành công') || isGoogleAuth) {
+  //     setUser(response.data[0]);
+  //     setIsPopUp(false);
+  //   }
+  //   // } else {
+  //   //   setUser(false);
+  //   // }
+  //   return user;
+  // }, [response]);
+
+  const handleSignOut = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+  };
+
+  useEffect(() => {
+    if (user) setIsPopUp(false);
+  }, [user]);
 
   return (
     <div
@@ -89,13 +99,13 @@ const Navbar = () => {
 
         {/* Nút đăng ký, đăng nhập / nút user profile, đăng xuất */}
         <div className="text-md flex items-center justify-center gap-5">
-          {handleUserLogin() ? (
+          {user ? (
             <div className="flex items-center justify-center gap-4">
               <NotificationIcon
                 color={isHomePagePath ? '#FFFFFF' : '#7398D5'}
               />
               <UserInfo />
-              <button>Đăng xuất</button>
+              <button onClick={handleSignOut}>Đăng xuất</button>
             </div>
           ) : (
             <>
