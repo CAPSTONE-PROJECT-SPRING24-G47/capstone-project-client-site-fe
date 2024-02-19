@@ -27,6 +27,7 @@ const AuthForm = () => {
     handleIsSignUp,
     handleIsLogin,
     isSignUp,
+    handleChangeForm,
   } = useContext(NavContext);
   const { isError, response, setResponse } = useContext(FormContext);
 
@@ -44,6 +45,7 @@ const AuthForm = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
+  const [isCheckProvision, setIsCheckProvision] = useState(false);
 
   const [signInData, setSignInData] = useState(null);
   const [signUpData, setSignUpData] = useState(null);
@@ -60,8 +62,13 @@ const AuthForm = () => {
     setSignInData(null);
     setSignUpData(null);
     setVerifyData(null);
-  }, [isLogin]);
-
+    if (response) {
+      setResponse('');
+    }
+  }, [handleChangeForm]);
+  const handleIsCheckProvisionChange = (e) => {
+    setIsCheckProvision(e.target.checked);
+  };
   const handleFirstNameChange = (e) => setFirstName(e.target.value);
   const handleLastNameChange = (e) => setLastName(e.target.value);
   const handleEmailChange = (e) => {
@@ -332,15 +339,22 @@ const AuthForm = () => {
 
           {isSignUp && (
             <>
-              <div className="mt-4 text-start">
-                Bằng việc đăng ký tài khoản, bạn đồng ý với VJITradvisor về{' '}
-                <a href="#" className="text-secondary-color">
-                  Điều khoản Dịch vụ
-                </a>{' '}
-                &
-                <a href="#" className="text-secondary-color">
-                  Các chính sách
-                </a>
+              <div className="mt-4 flex gap-4 text-start">
+                <input
+                  type="checkbox"
+                  className="mt-[6px] self-start accent-secondary-color"
+                  onChange={handleIsCheckProvisionChange}
+                />
+                <div>
+                  Bằng việc đăng ký tài khoản, bạn đồng ý với VJITradvisor về
+                  <a href="#" className="text-secondary-color">
+                    Điều khoản Dịch vụ
+                  </a>{' '}
+                  &{' '}
+                  <a href="#" className="text-secondary-color">
+                    Các chính sách
+                  </a>
+                </div>
               </div>
               <a href=""></a>
             </>
@@ -359,7 +373,8 @@ const AuthForm = () => {
                       !password ||
                       !lastName ||
                       !firstName ||
-                      !confirmPassword
+                      !confirmPassword ||
+                      !isCheckProvision
                   : !verificationCode
                 : !email)
             }
