@@ -27,6 +27,7 @@ const AuthForm = () => {
     handleIsSignUp,
     handleIsLogin,
     isSignUp,
+    handleChangeForm,
   } = useContext(NavContext);
   const { isError, response, setResponse } = useContext(FormContext);
 
@@ -60,7 +61,10 @@ const AuthForm = () => {
     setSignInData(null);
     setSignUpData(null);
     setVerifyData(null);
-  }, [isLogin]);
+    if (response) {
+      setResponse('');
+    }
+  }, [handleChangeForm]);
 
   const handleFirstNameChange = (e) => setFirstName(e.target.value);
   const handleLastNameChange = (e) => setLastName(e.target.value);
