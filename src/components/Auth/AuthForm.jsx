@@ -170,7 +170,12 @@ const AuthForm = () => {
           response.message !== `Mã xác minh đã được gửi lại vào mail ${email}`
         ) {
           handleIsResetPwd();
-        } else if (isResetPwd || isVerify) {
+        } else if (
+          isResetPwd ||
+          (isVerify &&
+            response.message !==
+              `Mã xác minh đã được gửi lại vào mail ${email}`)
+        ) {
           handleIsVerifySuccess();
         }
         setResponse(null);
@@ -183,7 +188,7 @@ const AuthForm = () => {
   function handleSendSignUpCodeAgain(e) {
     e.preventDefault();
     handleSubmitSignUpData();
-    handleIsVerify();
+    // handleIsSignUp();
   }
 
   function handleSendResetPwdCodeAgain(e) {
