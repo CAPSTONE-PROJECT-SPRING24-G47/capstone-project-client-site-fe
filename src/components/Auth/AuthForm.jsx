@@ -66,7 +66,9 @@ const AuthForm = () => {
       setResponse('');
     }
   }, [handleChangeForm]);
-
+  const handleIsCheckProvisionChange = (e) => {
+    setIsCheckProvision(e.target.checked);
+  };
   const handleFirstNameChange = (e) => setFirstName(e.target.value);
   const handleLastNameChange = (e) => setLastName(e.target.value);
   const handleEmailChange = (e) => {
@@ -341,7 +343,7 @@ const AuthForm = () => {
                 <input
                   type="checkbox"
                   className="mt-[6px] self-start accent-secondary-color"
-                  onClick={() => setIsCheckProvision(true)}
+                  onChange={handleIsCheckProvisionChange}
                 />
                 <div>
                   Bằng việc đăng ký tài khoản, bạn đồng ý với VJITradvisor về
@@ -372,7 +374,7 @@ const AuthForm = () => {
                       !lastName ||
                       !firstName ||
                       !confirmPassword ||
-                      isCheckProvision
+                      !isCheckProvision
                   : !verificationCode
                 : !email)
             }
