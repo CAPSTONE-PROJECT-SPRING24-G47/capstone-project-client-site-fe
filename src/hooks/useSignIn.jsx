@@ -10,8 +10,14 @@ const useSignIn = () => {
   const performSignIn = async (SignInData) => {
     try {
       const res = await signIn(SignInData);
-      setUser(res.data.data[0]);
+
+      const user = res.data.data ? res.data.data[0] : null;
+
+      user && localStorage.setItem('user', JSON.stringify(user));
+
+      setUser(user);
       setResponse(res.data);
+      console.log(res.data.data ? res.data.data[0] : null);
       console.log('Sign-in successful. ', res);
     } catch (error) {
       console.error(

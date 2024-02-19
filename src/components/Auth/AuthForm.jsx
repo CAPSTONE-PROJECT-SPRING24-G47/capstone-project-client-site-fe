@@ -52,7 +52,6 @@ const AuthForm = () => {
   const [verifyData, setVerifyData] = useState(null);
   const [forgetPwdData, setForgetPwdData] = useState(null);
   const [resetPwdData, setResetPwdData] = useState(null);
-
   useEffect(() => {
     setFirstName('');
     setLastName('');
@@ -65,7 +64,7 @@ const AuthForm = () => {
     if (response) {
       setResponse('');
     }
-  }, [handleChangeForm]);
+  }, [isLogin]);
   const handleIsCheckProvisionChange = (e) => {
     setIsCheckProvision(e.target.checked);
   };
@@ -126,6 +125,7 @@ const AuthForm = () => {
     //verify sign up
     if (isVerify) {
       handleSubmitVerifyData();
+      console.log(signUpData);
     }
     //forget pwd verify
     else if (isForgetPwdVerify) {
@@ -204,9 +204,9 @@ const AuthForm = () => {
 
   return (
     <form
-      className={`flex w-[460px] flex-1 flex-col bg-bg-color px-8 text-center ${isVerify || isForgetPwdVerify || isForgetPwd || isResetPwd ? 'py-28' : isLogin ? 'py-16' : 'py-10'} ${isVerifySuccess ? 'py-40' : ''}`}
+      className={`flex w-[460px] flex-1 flex-col bg-bg-color px-8 text-center ${isVerify || isForgetPwdVerify || isForgetPwd || isResetPwd ? 'py-28' : isLogin ? 'py-16' : 'pb-8 pt-10'} ${isVerifySuccess ? 'py-40' : ''}`}
     >
-      {!response?.isSuccess && !isSignUp && (
+      {!response?.isSuccess && (
         <>
           <div className="text-xl text-sub-color">{response?.message}</div>
         </>
@@ -337,29 +337,6 @@ const AuthForm = () => {
             )}
           </div>
 
-          {isSignUp && (
-            <>
-              <div className="mt-4 flex gap-4 text-start">
-                <input
-                  type="checkbox"
-                  className="mt-[6px] self-start accent-secondary-color"
-                  onChange={handleIsCheckProvisionChange}
-                />
-                <div>
-                  Bằng việc đăng ký tài khoản, bạn đồng ý với VJITradvisor về
-                  <a href="#" className="text-secondary-color">
-                    Điều khoản Dịch vụ
-                  </a>{' '}
-                  &{' '}
-                  <a href="#" className="text-secondary-color">
-                    Các chính sách
-                  </a>
-                </div>
-              </div>
-              <a href=""></a>
-            </>
-          )}
-
           <button
             type="button"
             onClick={handleSubmitClick}
@@ -393,7 +370,10 @@ const AuthForm = () => {
               <button
                 type="button"
                 className="rounded-lg px-1 hover:bg-secondary-color/20"
-                onClick={handleIsForgetPwdVerify}
+                onClick={() => {
+                  handleIsForgetPwdVerify();
+                  setResponse(null);
+                }}
               >
                 Quên mật khẩu?
               </button>
@@ -413,7 +393,10 @@ const AuthForm = () => {
           {isVerify && (
             <div className="flex justify-between text-accent-color">
               <button
-                onClick={handleIsSignUp}
+                onClick={() => {
+                  handleIsSignUp();
+                  setResponse(null);
+                }}
                 type="button"
                 className="hover:text-secondary-color"
               >
@@ -437,6 +420,22 @@ const AuthForm = () => {
               {/* Google button */}
               <div className="flex items-center justify-center">
                 <GoogleButton />
+              </div>
+            </>
+          )}
+          {isSignUp && (
+            <>
+              <div className="mt-6 flex gap-4 text-sm">
+                <div>
+                  Bằng việc đăng ký tài khoản, bạn đồng ý với VJITradvisor về{' '}
+                  <a href="#" className="text-secondary-color">
+                    Điều khoản Dịch vụ
+                  </a>{' '}
+                  &{' '}
+                  <a href="#" className="text-secondary-color">
+                    Các chính sách
+                  </a>
+                </div>
               </div>
             </>
           )}

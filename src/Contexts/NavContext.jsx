@@ -21,6 +21,7 @@ export const NavProvider = ({ children }) => {
     setIsForgetPwd(false);
     setIsResetPwd(false);
     setIsVerifySuccess(false);
+    setIsVerify(false);
     setIsSignUp(false);
 
     setIsLogin(true);
@@ -46,7 +47,6 @@ export const NavProvider = ({ children }) => {
     setIsVerifySuccess(true);
   };
   const handleIsForgetPwdVerify = () => {
-    setIsLogin(false);
     setIsForgetPwdVerify(true);
   };
   const handleIsForgetPwd = () => {
