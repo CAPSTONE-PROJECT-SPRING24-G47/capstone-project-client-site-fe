@@ -1,10 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { NavContext } from '../Contexts/NavContext';
 import { Link, useLocation } from 'react-router-dom';
 import useTriggerScroll from '../hooks/useTriggerScroll';
 import UserInfo from './UserProfile/UserInfo';
 import { UserContext } from '../Contexts/UserContext';
 import NotificationIcon from './UserProfile/Icons/NotificationIcon';
+import { FormContext } from '../Contexts/FormContext';
 
 const buttonsInfor = [
   {
@@ -22,11 +23,33 @@ const buttonsInfor = [
 ];
 
 const Navbar = () => {
-  const { handlePopUp, handleIsLogin, handleIsSignUp } = useContext(NavContext);
-  const { user } = useContext(UserContext);
+  const { handlePopUp, handleIsLogin, handleIsSignUp, setIsPopUp } =
+    useContext(NavContext);
+  const { user, setUser, isGoogleAuth } = useContext(UserContext);
+  const { response } = useContext(FormContext);
   const isTrigged = useTriggerScroll(20);
   const location = useLocation();
   const isHomePagePath = location.pathname == '/';
+
+  // const handleUserLogin = useCallback(() => {
+  //   if (response?.message.includes('Đăng nhập thành công') || isGoogleAuth) {
+  //     setUser(response.data[0]);
+  //     setIsPopUp(false);
+  //   }
+  //   // } else {
+  //   //   setUser(false);
+  //   // }
+  //   return user;
+  // }, [response]);
+
+  const handleSignOut = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+  };
+
+  useEffect(() => {
+    if (user) setIsPopUp(false);
+  }, [user]);
 
   return (
     <div
@@ -66,10 +89,10 @@ const Navbar = () => {
 
       <div className="flex gap-14">
         {/* Nút chuyển page */}
-        <div className="text-md flex items-center justify-center gap-14 font-semibold  ">
+        <div className="text-md flex items-center justify-center gap-14 font-semibold ">
           {buttonsInfor.map((button, index) => (
             <div key={index}>
-              <Link className='hover:text-bg-color hover:opacity-10' to={button.path}>{button.title}</Link>
+              <Link to={button.path}>{button.title}</Link>
             </div>
           ))}
         </div>
@@ -82,13 +105,13 @@ const Navbar = () => {
                 color={isHomePagePath ? '#FFFFFF' : '#7398D5'}
               />
               <UserInfo />
-              <button>Đăng xuất</button>
+              <button onClick={handleSignOut}>Đăng xuất</button>
             </div>
           ) : (
             <>
               <div>
                 <button
-                  className={`${isHomePagePath && isTrigged && 'text-accent-color'} ${!isHomePagePath && 'text-accent-color'} rounded-3xl px-4 py-1 font-semibold ring-2 ring-inset ring-accent-color hover:bg-white hover:text-accent-color hover:border-accent-color`}
+                  className={`${isHomePagePath && isTrigged && 'text-accent-color'} ${!isHomePagePath && 'text-accent-color'} rounded-3xl px-4 py-1 font-semibold ring-2 ring-inset ring-accent-color hover:opacity-80`}
                   onClick={() => {
                     handlePopUp(), handleIsLogin();
                   }}
@@ -98,7 +121,7 @@ const Navbar = () => {
               </div>
               <div>
                 <button
-                  className={`${isHomePagePath && isTrigged && 'bg-accent-color text-bg-color'} ${isHomePagePath && !isTrigged && 'border-bg-color bg-bg-color text-accent-color'} ${!isHomePagePath && 'bg-accent-color text-bg-color'} rounded-3xl px-4 py-1 font-semibold ring-2 hover:bg-accent-color hover:text-white`}
+                  className={`${isHomePagePath && isTrigged && 'bg-accent-color text-bg-color'} ${isHomePagePath && !isTrigged && 'border-bg-color bg-bg-color text-accent-color'} ${!isHomePagePath && 'bg-accent-color text-bg-color'} rounded-3xl px-4 py-1 font-semibold ring-2 hover:opacity-80`}
                   onClick={() => {
                     handlePopUp(), handleIsSignUp();
                   }}
