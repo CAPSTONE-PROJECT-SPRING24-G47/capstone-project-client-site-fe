@@ -45,6 +45,7 @@ const AuthForm = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
+  const [isCheckProvision, setIsCheckProvision] = useState(false);
 
   const [signInData, setSignInData] = useState(null);
   const [signUpData, setSignUpData] = useState(null);
@@ -336,15 +337,22 @@ const AuthForm = () => {
 
           {isSignUp && (
             <>
-              <div className="mt-4 text-start">
-                Bằng việc đăng ký tài khoản, bạn đồng ý với VJITradvisor về{' '}
-                <a href="#" className="text-secondary-color">
-                  Điều khoản Dịch vụ
-                </a>{' '}
-                &
-                <a href="#" className="text-secondary-color">
-                  Các chính sách
-                </a>
+              <div className="mt-4 flex gap-4 text-start">
+                <input
+                  type="checkbox"
+                  className="mt-[6px] self-start accent-secondary-color"
+                  onClick={() => setIsCheckProvision(true)}
+                />
+                <div>
+                  Bằng việc đăng ký tài khoản, bạn đồng ý với VJITradvisor về
+                  <a href="#" className="text-secondary-color">
+                    Điều khoản Dịch vụ
+                  </a>{' '}
+                  &{' '}
+                  <a href="#" className="text-secondary-color">
+                    Các chính sách
+                  </a>
+                </div>
               </div>
               <a href=""></a>
             </>
@@ -363,7 +371,8 @@ const AuthForm = () => {
                       !password ||
                       !lastName ||
                       !firstName ||
-                      !confirmPassword
+                      !confirmPassword ||
+                      isCheckProvision
                   : !verificationCode
                 : !email)
             }
