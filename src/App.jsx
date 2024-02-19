@@ -20,6 +20,7 @@ const router = createBrowserRouter(
       <Route path="profile" element={<UserProfile />} />
       <Route path="trip-plan" element={<TripPlan />} />
       <Route path="explore" element={<Explore />} />
+
     </Route>
   )
 );
