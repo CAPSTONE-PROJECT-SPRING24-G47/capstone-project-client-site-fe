@@ -25,22 +25,10 @@ const buttonsInfor = [
 const Navbar = () => {
   const { handlePopUp, handleIsLogin, handleIsSignUp, setIsPopUp } =
     useContext(NavContext);
-  const { user, setUser, isGoogleAuth } = useContext(UserContext);
-  const { response } = useContext(FormContext);
+  const { user, setUser } = useContext(UserContext);
   const isTrigged = useTriggerScroll(20);
   const location = useLocation();
   const isHomePagePath = location.pathname == '/';
-
-  // const handleUserLogin = useCallback(() => {
-  //   if (response?.message.includes('Đăng nhập thành công') || isGoogleAuth) {
-  //     setUser(response.data[0]);
-  //     setIsPopUp(false);
-  //   }
-  //   // } else {
-  //   //   setUser(false);
-  //   // }
-  //   return user;
-  // }, [response]);
 
   const handleSignOut = () => {
     localStorage.removeItem('user');

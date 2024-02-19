@@ -23,7 +23,7 @@ const Wrapper = () => {
       />
       <motion.div
         layout
-        transition={{ ease: 'easeInOut' }}
+        transition={{ ease: 'linear' }}
         className={`relative ${isLogin ? '' : 'flex-row-reverse'} z-50 flex w-fit overflow-hidden rounded-2xl`}
       >
         <>
@@ -50,7 +50,7 @@ const Wrapper = () => {
               initial={{ opacity: 0, x: '-100%' }}
               animate={{ opacity: 1, x: '0%' }}
               exit={{ opacity: 0, x: '100%' }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              transition={{ duration: 0.2, ease: 'linear' }}
             >
               <AuthForm />
             </motion.div>
@@ -62,7 +62,7 @@ const Wrapper = () => {
                   initial={{ opacity: 0, x: '100%' }}
                   animate={{ opacity: 1, x: '0%' }}
                   exit={{ opacity: 0, x: '-100%' }}
-                  transition={{ duration: 0.3, ease: 'easeInOut' }}
+                  transition={{ duration: 0.2, ease: 'linear' }}
                 >
                   <FormSide />
                 </motion.div>

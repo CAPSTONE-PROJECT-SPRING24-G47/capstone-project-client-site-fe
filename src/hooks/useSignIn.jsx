@@ -4,15 +4,16 @@ import { FormContext } from '../Contexts/FormContext';
 import { UserContext } from '../Contexts/UserContext';
 
 const useSignIn = () => {
-  const { setResponse } = useContext(FormContext);
+  const { setResponse, setIsLoading } = useContext(FormContext);
   const { setUser } = useContext(UserContext);
 
   const performSignIn = async (SignInData) => {
     try {
       const res = await signIn(SignInData);
 
-      const user = res.data.data ? res.data.data[0] : null;
+      if (res) setIsLoading(false);
 
+      const user = res.data.data ? res.data.data[0] : null;
       user && localStorage.setItem('user', JSON.stringify(user));
 
       setUser(user);

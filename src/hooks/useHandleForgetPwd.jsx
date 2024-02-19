@@ -3,10 +3,13 @@ import { FormContext } from '../Contexts/FormContext';
 import { forgetPassword } from '../api';
 
 const useHandleForgetPwd = () => {
-  const { setResponse } = useContext(FormContext);
+  const { setResponse, setIsLoading } = useContext(FormContext);
   async function handleForgetPwdData(forgetPwdData) {
     try {
       const res = await forgetPassword(forgetPwdData);
+
+      if (res) setIsLoading(false);
+
       setResponse(res.data);
       console.log('Send forget pwd data successful. ', res);
     } catch (error) {

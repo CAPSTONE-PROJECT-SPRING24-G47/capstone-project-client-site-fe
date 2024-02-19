@@ -10,6 +10,7 @@ import useSendVerifyData from '../../hooks/useSendVerifyData';
 import useSendEmailForgetPwd from '../../hooks/useSendEmailForgetPwd';
 import useHandleForgetPwd from '../../hooks/useHandleForgetPwd';
 import useHandleResetPwd from '../../hooks/usehandleResetPwd';
+import Loading from '../Loading';
 
 const AuthForm = () => {
   const {
@@ -27,9 +28,9 @@ const AuthForm = () => {
     handleIsSignUp,
     handleIsLogin,
     isSignUp,
-    handleChangeForm,
   } = useContext(NavContext);
-  const { isError, response, setResponse } = useContext(FormContext);
+  const { isError, response, setResponse, isLoading, setIsLoading } =
+    useContext(FormContext);
 
   const { performSignUp } = useSignUp();
   const { performSignIn } = useSignIn();
@@ -37,7 +38,6 @@ const AuthForm = () => {
   const { sendEmailForgetPwd } = useSendEmailForgetPwd();
   const { handleForgetPwdData } = useHandleForgetPwd();
   const { handleResetPwd } = useHandleResetPwd();
-  // const { googleAuth } = useGoogleAuth();
 
   const [lastName, setLastName] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -336,7 +336,10 @@ const AuthForm = () => {
 
           <button
             type="button"
-            onClick={handleSubmitClick}
+            onClick={(e) => {
+              handleSubmitClick(e);
+              setIsLoading(true);
+            }}
             disabled={
               isError ||
               (!isForgetPwdVerify
@@ -351,15 +354,18 @@ const AuthForm = () => {
                   : !verificationCode
                 : !email)
             }
-            className={`hover:scale-10 mb-2 mt-6 h-11 w-full rounded-2xl bg-secondary-color font-semibold text-bg-color hover:bg-gradient-to-b hover:from-secondary-color hover:to-accent-color disabled:bg-secondary-color/70 disabled:hover:bg-none`}
+            className={`hover:scale-10 mb-2 mt-6 flex h-11 w-full items-center justify-center gap-3 rounded-2xl bg-secondary-color font-semibold text-bg-color hover:bg-gradient-to-b hover:from-secondary-color hover:to-accent-color disabled:bg-secondary-color/70 disabled:hover:bg-none`}
           >
-            {!isVerify && !isForgetPwd && !isResetPwd
-              ? !isForgetPwdVerify
-                ? isLogin
-                  ? 'Đăng nhập'
-                  : 'Đăng ký'
-                : 'Gửi mã xác nhận'
-              : 'Xác nhận'}
+            <p>
+              {!isVerify && !isForgetPwd && !isResetPwd
+                ? !isForgetPwdVerify
+                  ? isLogin
+                    ? 'Đăng nhập'
+                    : 'Đăng ký'
+                  : 'Gửi mã xác nhận'
+                : 'Xác nhận'}
+            </p>
+            {isLoading && <Loading />}
           </button>
           {isLogin && !isForgetPwdVerify && !isForgetPwd && !isResetPwd && (
             <div className="text-md py-2 text-center text-secondary-color">
@@ -376,11 +382,14 @@ const AuthForm = () => {
             </div>
           )}
           {isForgetPwd && (
-            <div className="font-medium">
-              Không nhận đc mã?
+            <div className="flex items-center justify-center gap-1 font-medium">
+              <p>Không nhận được mã?</p>
               <button
                 className="text-secondary-color"
-                onClick={handleSendResetPwdCodeAgain}
+                onClick={(e) => {
+                  handleSendResetPwdCodeAgain(e);
+                  setIsLoading(true);
+                }}
               >
                 Gửi lại mã
               </button>
@@ -399,7 +408,10 @@ const AuthForm = () => {
                 Điều chỉnh email
               </button>
               <button
-                onClick={handleSendSignUpCodeAgain}
+                onClick={(e) => {
+                  handleSendSignUpCodeAgain(e);
+                  setIsLoading(true);
+                }}
                 className="hover:text-secondary-color"
               >
                 Gửi lại mã

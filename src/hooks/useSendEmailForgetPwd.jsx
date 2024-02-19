@@ -1,13 +1,16 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { FormContext } from '../Contexts/FormContext';
 import { forgetPasswordVerify } from '../api';
 
 const useSendEmailForgetPwd = () => {
-  const { setResponse } = useContext(FormContext);
+  const { setResponse, setIsLoading } = useContext(FormContext);
 
   async function sendEmailForgetPwd(email) {
     try {
       const res = await forgetPasswordVerify(email);
+
+      if (res) setIsLoading(false);
+
       setResponse(res.data);
       console.log('Send email successful. ', res);
     } catch (error) {
