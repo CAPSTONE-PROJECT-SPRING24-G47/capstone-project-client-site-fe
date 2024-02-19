@@ -2,14 +2,13 @@
 import { useContext } from 'react';
 import { NavContext } from '../Contexts/NavContext';
 import fujiImage from '../assets/fuji.jpg';
-import Footer from './Footer';
-import Searchbar from './Searchbar';
-import Outstandingactivity from './Outstandingactivity';
-import Outstandingrestaurant from './Outstandingrestaurant';
-import Outstandingresidence from './Outstandingresidence';
-import Outstandingblog from './Outstandingblog';
-import Region from './Region';
-
+import Footer from '../components/Footer';
+import Searchbar from '../components/Home/Searchbar';
+import OutstandingActivity from '../components/Home/OutstandingActivity';
+import OutstandingRestaurant from '../components/Home/OutstandingRestaurant';
+import OutstandingResidence from '../components/Home/OutstandingResidence';
+import OutstandingBlog from '../components/Home/OutstandingBlog';
+import Region from '../components/Home/Region';
 
 const HomePage = () => {
   const { isPopUp } = useContext(NavContext);
@@ -21,13 +20,15 @@ const HomePage = () => {
     <main
       className={`relative flex h-full flex-col items-center justify-center bg-bg-color ${isPopUp ? 'bg-opacity-90' : ''}`}
     >
-      <div className="relative h-full flex flex-col items-center justify-center">
+      <div className="relative flex h-full flex-col items-center justify-center">
         <div className="absolute inset-0 bg-[#03121A] opacity-30 backdrop-blur-[20px]" />
         <img src={fujiImage} alt="fuji" className="h-full object-cover" />
 
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-          <h1 className="font-bold text-7xl mb-4 uppercase">Bắt đầu chuyến đi của bạn</h1>
-          <button className="uppercase border rounded-3xl font-bold px-3 py-3 text-3xl bg-white text-[#7398D5] px-4 py-2 hover:bg-accent-color hover:text-white focus:outline-none focus:shadow-outline-blue">
+          <h1 className="mb-4 text-7xl font-bold uppercase">
+            Bắt đầu chuyến đi của bạn
+          </h1>
+          <button className="focus:shadow-outline-blue rounded-3xl border bg-white px-3 px-4 py-2 py-3 text-3xl font-bold uppercase text-[#7398D5] hover:bg-accent-color hover:text-white focus:outline-none">
             Lên kế hoạch
           </button>
         </div>
@@ -44,29 +45,28 @@ const HomePage = () => {
 
       {/* Outstanding activity Component */}
       <div>
-        <Outstandingactivity />
+        <OutstandingActivity />
       </div>
 
       {/* Outstandingrestaurant Component */}
       <div>
-        <Outstandingrestaurant />
+        <OutstandingRestaurant />
       </div>
 
       {/* Outstandingresidence Component */}
       <div>
-        <Outstandingresidence />
+        <OutstandingResidence />
       </div>
 
       {/* Outstandingblog Component */}
       <div>
-        <Outstandingblog />
+        <OutstandingBlog />
       </div>
 
       {/* Footer Component */}
       <div>
         <Footer />
       </div>
-
     </main>
   );
 };
