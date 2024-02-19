@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { FormContext } from '../Contexts/FormContext';
 
 //name: only alphabet character
-const NAME_REGEX = /^[\p{L} ]{3,20}$/u;
+const NAME_REGEX = /^[\p{L} ]{1,20}$/u;
 //pwd: at least 6 characters, at least one uppercase letter, at least one lowercase letter, at least one digit and at least 1 special character
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{6,}$/;
 //email: example: abc@abc.com
