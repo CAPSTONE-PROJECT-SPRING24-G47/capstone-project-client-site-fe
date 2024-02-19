@@ -2,11 +2,11 @@ import { useContext, useEffect, useState } from 'react';
 import { FormContext } from '../Contexts/FormContext';
 
 //name: only alphabet character
-const NAME_REGEX = /^[a-zA-Z ]{3,20}$/;
+const NAME_REGEX = /^[\p{L} ]{1,20}$/u;
 //pwd: at least 6 characters, at least one uppercase letter, at least one lowercase letter, at least one digit and at least 1 special character
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{6,}$/;
 //email: example: abc@abc.com
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_REGEX = /^(?![0-9])[^@\s]+@[^\s@]+\.[^\s@]+$/;
 
 const useInputValidation = (
   id,
@@ -14,6 +14,7 @@ const useInputValidation = (
   value,
   originalPassword,
   isLogin,
+  isSignUp,
   handleChangeForm,
   isResetPwd
 ) => {
@@ -34,9 +35,9 @@ const useInputValidation = (
       validationFunction = validateName;
     } else if (id === 'firstName') {
       validationFunction = validateName;
-    } else if (id === 'email' && !isLogin) {
+    } else if (id === 'email' && isSignUp) {
       validationFunction = validateEmail;
-    } else if ((id === 'password' && !isLogin) || isResetPwd) {
+    } else if ((id === 'password' && isSignUp) || isResetPwd) {
       validationFunction = validatePassword;
     } else if (id === 'confirmPassword') {
       validationFunction = validateConfirmPassword;
@@ -46,7 +47,7 @@ const useInputValidation = (
         setError(
           validationFunction(value)
             ? ''
-            : `${label} cần phải có ít nhất một ký tự viết hoa, viết thường, số, ký tự đặc biệt và phải trên 6 ký tự`
+            : `${label} cần phải có từ 6 kí tự trở lên, bao gồm 1 ký tự viết hoa, 1 kí tự viết thường, 1 kí tự số, 1 kí tự đặc biệt`
         );
       } else if (id === 'confirmPassword')
         setError(validationFunction(value) ? '' : `${label} không khớp`);

@@ -4,6 +4,7 @@ export const NavContext = createContext();
 export const NavProvider = ({ children }) => {
   const [isPopUp, setIsPopUp] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
   const [isVerify, setIsVerify] = useState(false);
   const [isVerifySuccess, setIsVerifySuccess] = useState(false);
   const [isForgetPwdVerify, setIsForgetPwdVerify] = useState(false);
@@ -12,12 +13,16 @@ export const NavProvider = ({ children }) => {
 
   const handlePopUp = () => {
     setIsPopUp((isPopUp) => !isPopUp);
+    setIsLogin(true);
   };
+
   const handleIsLogin = () => {
     setIsForgetPwdVerify(false);
     setIsForgetPwd(false);
     setIsResetPwd(false);
     setIsVerifySuccess(false);
+    setIsVerify(false);
+    setIsSignUp(false);
 
     setIsLogin(true);
   };
@@ -26,14 +31,19 @@ export const NavProvider = ({ children }) => {
     setIsForgetPwdVerify(false);
     setIsForgetPwd(false);
     setIsResetPwd(false);
-
     setIsLogin(false);
+    setIsVerifySuccess(false);
+
+    setIsSignUp(true);
   };
   const handleIsVerify = () => {
+    setIsSignUp(false);
+    setIsLogin(false);
     setIsVerify(true);
   };
   const handleIsVerifySuccess = () => {
     setIsVerify(false);
+    setIsResetPwd(false);
     setIsVerifySuccess(true);
   };
   const handleIsForgetPwdVerify = () => {
@@ -64,6 +74,7 @@ export const NavProvider = ({ children }) => {
     isResetPwd,
     isForgetPwd,
     isVerifySuccess,
+    isSignUp,
     handlePopUp,
     handleIsLogin,
     handleIsSignUp,
@@ -73,6 +84,8 @@ export const NavProvider = ({ children }) => {
     handleIsResetPwd,
     handleIsForgetPwd,
     handleIsVerifySuccess,
+    setIsPopUp,
+    setIsResetPwd,
   };
   return <NavContext.Provider value={value}>{children}</NavContext.Provider>;
 };

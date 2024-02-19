@@ -1,10 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { NavContext } from '../Contexts/NavContext';
 import { Link, useLocation } from 'react-router-dom';
 import useTriggerScroll from '../hooks/useTriggerScroll';
 import UserInfo from './UserProfile/UserInfo';
 import { UserContext } from '../Contexts/UserContext';
 import NotificationIcon from './UserProfile/Icons/NotificationIcon';
+import { FormContext } from '../Contexts/FormContext';
 
 const buttonsInfor = [
   {
@@ -22,11 +23,33 @@ const buttonsInfor = [
 ];
 
 const Navbar = () => {
-  const { handlePopUp, handleIsLogin, handleIsSignUp } = useContext(NavContext);
-  const { user } = useContext(UserContext);
+  const { handlePopUp, handleIsLogin, handleIsSignUp, setIsPopUp } =
+    useContext(NavContext);
+  const { user, setUser, isGoogleAuth } = useContext(UserContext);
+  const { response } = useContext(FormContext);
   const isTrigged = useTriggerScroll(20);
   const location = useLocation();
   const isHomePagePath = location.pathname == '/';
+
+  // const handleUserLogin = useCallback(() => {
+  //   if (response?.message.includes('Đăng nhập thành công') || isGoogleAuth) {
+  //     setUser(response.data[0]);
+  //     setIsPopUp(false);
+  //   }
+  //   // } else {
+  //   //   setUser(false);
+  //   // }
+  //   return user;
+  // }, [response]);
+
+  const handleSignOut = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+  };
+
+  useEffect(() => {
+    if (user) setIsPopUp(false);
+  }, [user]);
 
   return (
     <div
@@ -82,7 +105,7 @@ const Navbar = () => {
                 color={isHomePagePath ? '#FFFFFF' : '#7398D5'}
               />
               <UserInfo />
-              <button>Đăng xuất</button>
+              <button onClick={handleSignOut}>Đăng xuất</button>
             </div>
           ) : (
             <>

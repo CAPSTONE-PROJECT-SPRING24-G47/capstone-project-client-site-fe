@@ -3,10 +3,14 @@ import {
   RouterProvider,
   createBrowserRouter,
   createRoutesFromElements,
+  useNavigate,
 } from 'react-router-dom';
 import RootLayout from './layouts/RootLayout';
 import { Explore, HomePage, TripPlan, UserProfile } from './pages';
 import NotFound404 from './components/NotFound404';
+import { useContext, useEffect } from 'react';
+import { fetchUserFromLocalStorage } from './utils/fetchUserFromLocalStorage';
+import { UserContext } from './Contexts/UserContext';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -21,6 +25,17 @@ const router = createBrowserRouter(
 );
 
 function App() {
+  const { setUser } = useContext(UserContext);
+
+  useEffect(() => {
+    const userLS = fetchUserFromLocalStorage();
+
+    if (userLS) {
+      console.log(userLS);
+      setUser(userLS);
+    }
+  }, []);
+
   return <RouterProvider router={router} />;
 }
 

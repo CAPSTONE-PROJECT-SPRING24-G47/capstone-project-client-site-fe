@@ -13,8 +13,14 @@ const Input = ({
 
   originalPassword,
 }) => {
-  const { isLogin, handleChangeForm, isVerify, isForgetPwd, isResetPwd } =
-    useContext(NavContext);
+  const {
+    isLogin,
+    isSignUp,
+    handleChangeForm,
+    isVerify,
+    isForgetPwd,
+    isResetPwd,
+  } = useContext(NavContext);
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [error, validateInput] = useInputValidation(
@@ -23,7 +29,7 @@ const Input = ({
     value,
     originalPassword,
     isLogin,
-
+    isSignUp,
     handleChangeForm,
     isResetPwd
   );
