@@ -188,7 +188,6 @@ const AuthForm = () => {
   function handleSendSignUpCodeAgain(e) {
     e.preventDefault();
     handleSubmitSignUpData();
-    // handleIsSignUp();
   }
 
   function handleSendResetPwdCodeAgain(e) {
