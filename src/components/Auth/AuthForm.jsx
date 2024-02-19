@@ -326,6 +326,22 @@ const AuthForm = () => {
             )}
           </div>
 
+          {isSignUp && (
+            <>
+              <div className="mt-4 text-start">
+                Bằng việc đăng ký tài khoản, bạn đồng ý với VJITradvisor về{' '}
+                <a href="#" className="text-secondary-color">
+                  Điều khoản Dịch vụ
+                </a>{' '}
+                &
+                <a href="#" className="text-secondary-color">
+                  Các chính sách
+                </a>
+              </div>
+              <a href=""></a>
+            </>
+          )}
+
           <button
             type="button"
             onClick={handleSubmitClick}

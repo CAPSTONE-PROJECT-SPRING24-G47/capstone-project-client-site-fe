@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
 import useGoogleAuth from '../../hooks/useGoogleAuth';
+import { UserContext } from '../../Contexts/UserContext';
 
 const GoogleButton = () => {
+  const { setIsGoogleAuth } = useContext(UserContext);
   const { googleAuth } = useGoogleAuth();
   const handleSuccess = (credentialResponse) => {
+    setIsGoogleAuth(true);
     const data = jwtDecode(credentialResponse.credential);
     googleAuth({
       lastName: data.family_name ? data.family_name : '',
