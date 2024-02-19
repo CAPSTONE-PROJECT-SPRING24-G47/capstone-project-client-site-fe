@@ -199,7 +199,7 @@ const AuthForm = () => {
     <form
       className={`flex w-[460px] flex-1 flex-col bg-bg-color px-8 text-center ${isVerify || isForgetPwdVerify || isForgetPwd || isResetPwd ? 'py-28' : isLogin ? 'py-16' : 'py-10'} ${isVerifySuccess ? 'py-40' : ''}`}
     >
-      {!response?.isSuccess && !isSignUp && !isLogin && (
+      {!response?.isSuccess && !isSignUp && (
         <>
           <div className="text-xl text-sub-color">{response?.message}</div>
         </>
