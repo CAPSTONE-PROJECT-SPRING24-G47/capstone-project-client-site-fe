@@ -45,7 +45,6 @@ const AuthForm = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
-  const [isCheckProvision, setIsCheckProvision] = useState(false);
 
   const [signInData, setSignInData] = useState(null);
   const [signUpData, setSignUpData] = useState(null);
@@ -65,9 +64,7 @@ const AuthForm = () => {
       setResponse('');
     }
   }, [isLogin]);
-  const handleIsCheckProvisionChange = (e) => {
-    setIsCheckProvision(e.target.checked);
-  };
+
   const handleFirstNameChange = (e) => setFirstName(e.target.value);
   const handleLastNameChange = (e) => setLastName(e.target.value);
   const handleEmailChange = (e) => {
@@ -350,8 +347,7 @@ const AuthForm = () => {
                       !password ||
                       !lastName ||
                       !firstName ||
-                      !confirmPassword ||
-                      !isCheckProvision
+                      !confirmPassword
                   : !verificationCode
                 : !email)
             }
