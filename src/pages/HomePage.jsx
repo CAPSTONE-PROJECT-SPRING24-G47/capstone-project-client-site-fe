@@ -18,30 +18,34 @@ const HomePage = () => {
   };
   return (
     <main
-      className={`relative flex h-full flex-col items-center justify-center bg-bg-color ${isPopUp ? 'bg-opacity-90' : ''}`}
+      className={`relative flex h-full w-screen flex-col items-center justify-center bg-bg-color ${isPopUp ? 'bg-opacity-90' : ''}`}
     >
-      <div className="relative flex h-full flex-col items-center justify-center">
+      <div className="relative mb-40 flex h-full flex-col items-center justify-center">
         <div className="absolute inset-0 bg-[#03121A] opacity-30 backdrop-blur-[20px]" />
-        <img src={fujiImage} alt="fuji" className="h-full object-cover" />
+        <img
+          src={fujiImage}
+          alt="fuji"
+          className="h-full object-cover shadow-md"
+        />
 
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-          <h1 className="mb-4 text-7xl font-bold uppercase">
+        <div className="absolute inset-0 flex w-screen flex-col items-center justify-center text-bg-color">
+          <h1 className="mb-5 text-7xl font-bold uppercase">
             Bắt đầu chuyến đi của bạn
           </h1>
-          <button className="focus:shadow-outline-blue rounded-3xl border bg-white px-3 px-4 py-2 py-3 text-3xl font-bold uppercase text-[#7398D5] hover:bg-accent-color hover:text-white focus:outline-none">
+          <button className="focus:shadow-outline-blue rounded-full bg-bg-color px-4 py-3 text-3xl font-bold uppercase text-accent-color hover:bg-accent-color hover:text-bg-color focus:outline-none">
             Lên kế hoạch
           </button>
         </div>
       </div>
       {/* Searchbar Component */}
-      <div>
+      <div className="absolute top-[550px]">
         <Searchbar onSearch={handleSearch} />
       </div>
 
       {/* Region Component */}
-      <div>
+      {/* <div>
         <Region />
-      </div>
+      </div> */}
 
       {/* Outstanding activity Component */}
       <div>
