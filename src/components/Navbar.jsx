@@ -45,7 +45,7 @@ const Navbar = () => {
       className={`${isHomePagePath && isTrigged ? 'bg-bg-color text-text-color' : 'text-bg-color'} ${isHomePagePath ? 'fixed left-0 right-0' : 'sticky top-0 bg-bg-color text-text-color'} top-0 z-[90] flex items-center justify-between px-5 py-2 shadow-sm`}
     >
       {/* Logo */}
-      <div className="flex flex-col items-center justify-center text-4xl font-bold">
+      <div className="flex items-center justify-center text-4xl font-bold">
         <LogoIcon />
         <span
           className={`${isHomePagePath && isTrigged && 'text-accent-color'} ${!isHomePagePath && 'text-accent-color'} text-xl`}

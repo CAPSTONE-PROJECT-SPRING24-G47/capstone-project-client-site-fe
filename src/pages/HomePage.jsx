@@ -29,16 +29,16 @@ const HomePage = () => {
         />
 
         <div className="absolute inset-0 flex w-screen flex-col items-center justify-center text-bg-color">
-          <h1 className="mb-5 text-7xl font-bold uppercase">
+          <h1 className="mb-5 text-6xl font-bold uppercase">
             Bắt đầu chuyến đi của bạn
           </h1>
-          <button className="focus:shadow-outline-blue rounded-full bg-bg-color px-4 py-3 text-3xl font-bold uppercase text-accent-color hover:bg-accent-color hover:text-bg-color focus:outline-none">
+          <button className="focus:shadow-outline-blue rounded-full bg-bg-color px-3 py-2 text-xl font-bold uppercase text-accent-color hover:bg-accent-color hover:text-bg-color focus:outline-none">
             Lên kế hoạch
           </button>
         </div>
       </div>
       {/* Searchbar Component */}
-      <div className="absolute top-[19%]">
+      <div className="absolute top-[19.5%]">
         <Searchbar onSearch={handleSearch} />
       </div>
 

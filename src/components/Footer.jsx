@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="h-[2px] bg-secondary-color"></div>
       <div className="mb-10 mt-4 flex w-screen items-center justify-around">
         {/* Logo */}
-        <div className="flex flex-col items-center justify-center text-4xl font-bold">
+        <div className="flex items-center justify-center text-4xl font-bold">
           <LogoIcon />
           <span className={`text-xl text-accent-color`}>VJITradvisor</span>
         </div>

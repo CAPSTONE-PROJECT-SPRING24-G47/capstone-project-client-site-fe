@@ -9,7 +9,7 @@ const Searchbar = ({ onSearch }) => {
 
   return (
     <div className="flex w-screen justify-center">
-      <div className="flex w-4/5 flex-col justify-center gap-4 rounded-3xl bg-bg-color px-16 pb-4 pt-2 font-semibold shadow-lg">
+      <div className="flex w-1/2 flex-col justify-center gap-3 rounded-full bg-bg-color px-16 pb-4 pt-2 font-semibold shadow-lg">
         <div className="flex justify-between px-10">
           <div className="flex items-center">
             <svg
@@ -72,11 +72,11 @@ const Searchbar = ({ onSearch }) => {
           <input
             type="text"
             placeholder=""
-            className="my-3 flex-1 border-none border-[#E8F3EA] bg-gray-200 px-4 py-2 outline-none "
+            className="my-2 flex-1 bg-gray-200 px-4 py-1 outline-none "
             onChange={handleSearch}
           />
           <button
-            className="focus:shadow-outline-blue mx-2 rounded-3xl bg-[#7398D5] px-7 py-2 text-xl font-bold text-white hover:bg-white hover:text-accent-color focus:outline-none"
+            className="focus:shadow-outline-blue mx-2 rounded-3xl bg-accent-color px-5 py-1 text-xl font-bold text-bg-color hover:bg-bg-color hover:text-accent-color focus:outline-none"
             onClick={() => onSearch('')}
           >
             Tìm kiếm
