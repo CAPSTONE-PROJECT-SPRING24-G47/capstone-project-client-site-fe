@@ -38,7 +38,7 @@ const HomePage = () => {
         </div>
       </div>
       {/* Searchbar Component */}
-      <div className="absolute top-[550px]">
+      <div className="absolute top-[19%]">
         <Searchbar onSearch={handleSearch} />
       </div>
 
