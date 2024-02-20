@@ -67,8 +67,12 @@ const UserProfileDetail = ({
           <p className="mt-8">Ngày tham gia: {`${day}/${month}/${year}`}</p>
         </div>
         <div className="mt-8 flex justify-center">
-          <div className="inline-block rounded-full bg-accent-color text-bg-secondary-color">
-            <button className="p-4">THAY ĐỔI THÔNG TIN</button>
+          <div className="group inline-block rounded-full bg-accent-color text-bg-secondary-color hover:bg-bg-color">
+            <button className="p-4">
+              <p className="group-hover:text-accent-color">
+                THAY ĐỔI THÔNG TIN
+              </p>
+            </button>
           </div>
         </div>
       </div>
