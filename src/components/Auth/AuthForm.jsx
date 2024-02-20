@@ -11,6 +11,7 @@ import useSendEmailForgetPwd from '../../hooks/useSendEmailForgetPwd';
 import useHandleForgetPwd from '../../hooks/useHandleForgetPwd';
 import useHandleResetPwd from '../../hooks/usehandleResetPwd';
 import Loading from '../Loading';
+import { motion } from 'framer-motion';
 
 const AuthForm = () => {
   const {
@@ -334,7 +335,7 @@ const AuthForm = () => {
             )}
           </div>
 
-          <button
+          <motion.button
             type="button"
             onClick={(e) => {
               handleSubmitClick(e);
@@ -356,7 +357,7 @@ const AuthForm = () => {
             }
             className={`hover:scale-10 mb-2 mt-6 flex h-11 w-full items-center justify-center gap-3 rounded-2xl bg-secondary-color font-semibold text-bg-color hover:bg-gradient-to-b hover:from-secondary-color hover:to-accent-color disabled:bg-secondary-color/70 disabled:hover:bg-none`}
           >
-            <p>
+            <motion.p layout transition={{ ease: 'linear', duration: 0.1 }}>
               {!isVerify && !isForgetPwd && !isResetPwd
                 ? !isForgetPwdVerify
                   ? isLogin
@@ -364,9 +365,9 @@ const AuthForm = () => {
                     : 'Đăng ký'
                   : 'Gửi mã xác nhận'
                 : 'Xác nhận'}
-            </p>
+            </motion.p>
             {isLoading && <Loading />}
-          </button>
+          </motion.button>
           {isLogin && !isForgetPwdVerify && !isForgetPwd && !isResetPwd && (
             <div className="text-md py-2 text-center text-secondary-color">
               <button
