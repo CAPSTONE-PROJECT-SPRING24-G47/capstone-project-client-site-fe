@@ -1,37 +1,27 @@
 import React from 'react';
-import outstandingblog from '../../assets/outstandingblog.png';
+import blogBackground from '../../assets/blogBackground.jpg';
 
 const OutstandingBlog = () => {
   return (
-    <div className="outstanding-blox my-24 flex rounded-md font-sans shadow-md ">
+    <div className="outstanding-blox bg-blogBackground flex w-full rounded-md bg-cover bg-center bg-no-repeat font-sans shadow-md">
       {/* Blog Section */}
-      <div className=" flex-1 text-center">
-        <h2 className="mb-4 text-5xl font-bold">Blog</h2>
-        <div className="textblog pl-20 text-left">
-          <p className="text-2xl font-bold">
-            Trải nghiệm chân thực về Nhật Bản
-          </p>
-          <p className="text-sm">
-            Chia sẻ trải nghiệm cá nhân và khám phá những trải nghiệm chân thực
-            từ những người khác về Nhật Bản
-          </p>
-        </div>
-        <button className="mt-4 rounded-3xl bg-primary-color px-10 py-2 text-2xl font-bold text-white hover:bg-white hover:text-primary-color focus:outline-none">
-          Khám phá
-        </button>
-      </div>
-
-      {/* Activity Image Section */}
-      <div className="activity-section relative ml-8 flex-1 overflow-hidden">
-        <div className="image-wrapper relative h-full w-full ">
-          <img src={outstandingblog} alt="blogImnage" className="w-full" />
+      <div className=" h-[100%] w-[60%] flex-col rounded-e-full bg-white text-center ">
+        <div className="mt-[12%]">
+          <h2 className="mb-4 text-6xl font-bold">Blog</h2>
+          <div className="textblog">
+            <p className="text-4xl font-bold">
+              Trải nghiệm chân thực về Nhật Bản
+            </p>
+            <p className="text-xl font-bold">
+              Chia sẻ trải nghiệm cá nhân và khám phá những trải nghiệm chân
+              thực từ những người khác về Nhật Bản
+            </p>
+          </div>
+          <button className="mt-4 rounded-3xl bg-primary-color px-10 py-2 text-2xl font-bold text-white hover:bg-white hover:text-primary-color focus:outline-none">
+            Khám phá
+          </button>
         </div>
       </div>
-      <style jsx>{`
-        .outstanding-blox {
-          max-width: 1240px;
-        }
-      `}</style>
     </div>
   );
 };
