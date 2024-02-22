@@ -72,7 +72,7 @@ const HomePage = () => {
       </div>
 
       {/* Outstandingblog Component */}
-      <div className="flex h-[432px] w-full justify-center">
+      <div className="w-full">
         <OutstandingBlog />
       </div>
 

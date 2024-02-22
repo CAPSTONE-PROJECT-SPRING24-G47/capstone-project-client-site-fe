@@ -3,25 +3,24 @@ import blogBackground from '../../assets/blogBackground.jpg';
 
 const OutstandingBlog = () => {
   return (
-    <div className="outstanding-blox bg-blogBackground flex w-full rounded-md bg-cover bg-center bg-no-repeat font-sans shadow-md">
+    <div className="outstanding-blog mb-24 flex w-full rounded-md bg-blogBackground bg-cover bg-center bg-no-repeat font-sans">
       {/* Blog Section */}
-      <div className=" h-[100%] w-[60%] flex-col rounded-e-full bg-white text-center ">
-        <div className="mt-[12%]">
-          <h2 className="mb-4 text-6xl font-bold">Blog</h2>
-          <div className="textblog">
-            <p className="text-4xl font-bold">
-              Trải nghiệm chân thực về Nhật Bản
-            </p>
-            <p className="text-xl font-bold">
-              Chia sẻ trải nghiệm cá nhân và khám phá những trải nghiệm chân
-              thực từ những người khác về Nhật Bản
-            </p>
-          </div>
-          <button className="mt-4 rounded-3xl bg-primary-color px-10 py-2 text-2xl font-bold text-white hover:bg-white hover:text-primary-color focus:outline-none">
-            Khám phá
-          </button>
+      <div className="w-3/5 rounded-e-full bg-bg-color px-10 py-20 text-center shadow-none">
+        <h2 className="text-6xl font-semibold">Blog</h2>
+        <div className="my-10 flex flex-col gap-5 text-start">
+          <p className="text-4xl font-light">
+            Trải nghiệm chân thực về Nhật Bản
+          </p>
+          <p className="text-xl">
+            Chia sẻ trải nghiệm cá nhân và khám phá những trải nghiệm chân thực
+            từ những người khác về Nhật Bản
+          </p>
         </div>
+        <button className="rounded-full bg-primary-color px-16 py-4 text-4xl font-light text-white hover:bg-white hover:text-primary-color focus:outline-none">
+          Khám phá
+        </button>
       </div>
+      {/* <div className="w-full bg-blogBackground shadow-lg"></div> */}
     </div>
   );
 };

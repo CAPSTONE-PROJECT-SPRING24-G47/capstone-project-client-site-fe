@@ -2,7 +2,7 @@ import React from 'react';
 
 const OutstandingItem = ({ image, index, count, name, location }) => {
   return (
-    <div className="activity-item ml-4 mr-4 rounded-md bg-bg-color p-4 transition duration-300 hover:shadow-2xl">
+    <div className="activity-item my-4 rounded-md bg-bg-color p-4 transition duration-300 hover:shadow-2xl">
       <img
         src={image}
         alt={`Restaurant ${index + 1}`}
