@@ -4,9 +4,9 @@ import LogoIcon from '../assets/LogoIcon';
 
 const Footer = () => {
   return (
-    <div>
+    <div className="w-full">
       <div className="h-[2px] bg-secondary-color"></div>
-      <div className="mb-10 mt-4 flex w-screen items-center justify-around">
+      <div className="mb-10 mt-4 flex w-full items-center justify-around">
         {/* Logo */}
         <div className="flex items-center justify-center text-4xl font-bold">
           <LogoIcon />
