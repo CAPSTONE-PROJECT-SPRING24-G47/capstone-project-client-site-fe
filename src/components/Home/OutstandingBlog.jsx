@@ -3,7 +3,7 @@ import blogBackground from '../../assets/blogBackground.jpg';
 
 const OutstandingBlog = () => {
   return (
-    <div className="outstanding-blox bg-blogBackground flex w-full rounded-md bg-cover bg-center bg-no-repeat font-sans shadow-md">
+    <div className="outstanding-blox flex w-full rounded-md bg-blogBackground bg-cover bg-center bg-no-repeat font-sans shadow-md">
       {/* Blog Section */}
       <div className=" h-[100%] w-[60%] flex-col rounded-e-full bg-white text-center ">
         <div className="mt-[12%]">
