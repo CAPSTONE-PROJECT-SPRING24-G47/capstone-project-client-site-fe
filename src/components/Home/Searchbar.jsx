@@ -8,7 +8,7 @@ const Searchbar = ({ onSearch }) => {
   };
 
   return (
-    <div className="flex w-screen justify-center">
+    <div className="flex w-auto justify-center">
       <div className="flex w-1/2 flex-col justify-center gap-3 rounded-full bg-bg-color px-16 pb-4 pt-2 font-semibold shadow-lg">
         <div className="flex justify-between px-10">
           <div className="flex items-center">

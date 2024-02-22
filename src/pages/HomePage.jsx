@@ -18,7 +18,7 @@ const HomePage = () => {
   };
   return (
     <main
-      className={`relative flex h-full w-screen flex-col items-center justify-center bg-bg-color ${isPopUp ? 'bg-opacity-90' : ''}`}
+      className={`relative flex h-full w-full flex-col items-center justify-center bg-bg-color ${isPopUp ? 'bg-opacity-90' : ''}`}
     >
       <div className="relative mb-40 flex h-full flex-col items-center justify-center">
         <div className="absolute inset-0 bg-[#03121A] opacity-30 backdrop-blur-[20px]" />
@@ -28,7 +28,7 @@ const HomePage = () => {
           className="h-full object-cover shadow-md"
         />
 
-        <div className="absolute inset-0 flex w-screen flex-col items-center justify-center text-bg-color">
+        <div className="absolute inset-0 flex w-full flex-col items-center justify-center text-bg-color">
           <h1 className="mb-5 text-6xl font-bold uppercase">
             Bắt đầu chuyến đi của bạn
           </h1>
@@ -38,7 +38,7 @@ const HomePage = () => {
         </div>
       </div>
       {/* Searchbar Component */}
-      <div className="absolute top-[19.5%]">
+      <div className="absolute top-[19.5%] w-full">
         <Searchbar onSearch={handleSearch} />
       </div>
 
@@ -68,7 +68,7 @@ const HomePage = () => {
       </div>
 
       {/* Footer Component */}
-      <div>
+      <div className="w-full">
         <Footer />
       </div>
     </main>
