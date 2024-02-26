@@ -1,7 +1,7 @@
 import React from 'react';
 import UserMenuDropDownItem from './UserMenuDropDownItem';
-import UserIcon from './Icons/UserIcon';
-import LogOutIcon from './Icons/LogOutIcon';
+import UserIcon from '../Icons/UserIcon';
+import LogOutIcon from '../Icons/LogOutIcon';
 import { motion } from 'framer-motion';
 
 //bg-opacity-10 backdrop-blur-[20px]

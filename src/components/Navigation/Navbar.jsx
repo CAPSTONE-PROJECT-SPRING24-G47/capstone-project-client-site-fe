@@ -1,11 +1,11 @@
 import React, { useContext, useEffect } from 'react';
-import { NavContext } from '../Contexts/NavContext';
+import { NavContext } from '../../Contexts/NavContext';
 import { Link, useLocation } from 'react-router-dom';
-import useTriggerScroll from '../hooks/useTriggerScroll';
-import UserInfo from './UserProfile/UserInfo';
-import { UserContext } from '../Contexts/UserContext';
-import NotificationIcon from './UserProfile/Icons/NotificationIcon';
-import LogoIcon from '../assets/LogoIcon';
+import useTriggerScroll from '../../hooks/useTriggerScroll';
+import UserInfo from './UserInfo';
+import { UserContext } from '../../Contexts/UserContext';
+import NotificationIcon from '../UserProfile/Icons/NotificationIcon';
+import LogoIcon from '../../assets/LogoIcon';
 
 const buttonsInfor = [
   {
