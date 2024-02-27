@@ -20,67 +20,65 @@ const HomePage = () => {
     console.log('Searching for:', searchTerm);
   };
   return (
-    <main
-      className={`relative flex h-full w-full flex-col items-center justify-center bg-bg-color ${isPopUp ? 'bg-opacity-90' : ''}`}
-    >
-      <div className="relative mb-40 flex h-full flex-col items-center justify-center">
-        <div className="absolute inset-0 bg-[#03121A] opacity-30 backdrop-blur-[20px]" />
-        <img
-          src={fujiImage}
-          alt="fuji"
-          className="h-full object-cover shadow-md"
-        />
+    <>
+      <header className="relative">
+        <div className="relative flex h-full flex-col items-center justify-center">
+          <div className="absolute inset-0 bg-[#03121A] opacity-30 backdrop-blur-[20px]" />
+          <img
+            src={fujiImage}
+            alt="fuji"
+            className="h-full object-cover shadow-md"
+          />
 
-        <div className="absolute inset-0 flex w-full flex-col items-center justify-center text-bg-color">
-          <h1 className="mb-5 text-6xl font-bold uppercase">
-            Bắt đầu chuyến đi của bạn
-          </h1>
-          <button className="focus:shadow-outline-blue rounded-full bg-bg-color px-3 py-2 text-xl font-bold uppercase text-accent-color hover:bg-accent-color hover:text-bg-color focus:outline-none">
-            Lên kế hoạch
-          </button>
+          <div className="absolute inset-0 flex w-full flex-col items-center justify-center text-bg-color">
+            <h1 className="mb-5 text-6xl font-bold uppercase">
+              Bắt đầu chuyến đi của bạn
+            </h1>
+            <button className="focus:shadow-outline-blue rounded-full bg-bg-color px-3 py-2 text-xl font-bold uppercase text-accent-color hover:bg-accent-color hover:text-bg-color focus:outline-none">
+              Lên kế hoạch
+            </button>
+          </div>
         </div>
-      </div>
-      {/* Searchbar Component */}
-      <div className="absolute top-[19.5%] w-full">
-        <Searchbar onSearch={handleSearch} />
-      </div>
+      </header>
+      <main
+        className={`relative bg-bg-color py-24 ${isPopUp ? 'bg-opacity-90' : ''}`}
+      >
+        {/* Searchbar Component */}
+        <div className="absolute -top-[2%] w-full">
+          <Searchbar onSearch={handleSearch} />
+        </div>
+        <div className="flex h-full w-full flex-col items-center justify-center px-24">
+          {/* Outstanding activity Component */}
+          <div className="w-full">
+            <OutstandingSection
+              data={activities}
+              type={'Hoạt động giải trí nổi bật'}
+            />
+          </div>
 
-      {/* Region Component */}
-      {/* <div>
-        <Region />
-      </div> */}
+          {/* Outstandingrestaurant Component */}
+          <div className="w-full">
+            <OutstandingSection data={restaurants} type={'Nhà hàng nổi bật'} />
+          </div>
 
-      {/* Outstanding activity Component */}
-      <div>
-        <OutstandingSection
-          activities={activities}
-          type={'Hoạt động giải trí nổi bật'}
-        />
-      </div>
+          {/* Outstandingresidence Component */}
+          <div className="w-full">
+            <OutstandingSection data={residences} type={'Nơi ở nổi bật'} />
+          </div>
+        </div>
 
-      {/* Outstandingrestaurant Component */}
-      <div>
-        <OutstandingSection
-          activities={restaurants}
-          type={'Nhà hàng nổi bật'}
-        />
-      </div>
-
-      {/* Outstandingresidence Component */}
-      <div>
-        <OutstandingSection activities={residences} type={'Nơi ở nổi bật'} />
-      </div>
-
-      {/* Outstandingblog Component */}
-      <div className="w-full">
-        <OutstandingBlog />
-      </div>
-
-      {/* Footer Component */}
-      <div className="w-full">
-        <Footer />
-      </div>
-    </main>
+        {/* Outstandingblog Component */}
+        <div className="w-full">
+          <OutstandingBlog />
+        </div>
+      </main>
+      <footer className="bg-bg-color">
+        {/* Footer Component */}
+        <div className="w-full">
+          <Footer />
+        </div>
+      </footer>
+    </>
   );
 };
 
