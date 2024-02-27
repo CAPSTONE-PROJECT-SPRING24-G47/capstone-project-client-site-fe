@@ -1,23 +1,25 @@
 import React, { useState } from 'react';
 import OutstandingItem from './OutstandingItem';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import ButtonSwiperNext from './ButtonSwiperNext';
+import ButtonSwiperPrev from './ButtonSwiperPrev';
 
-const OutstandingSection = ({ activities, type }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+const OutstandingSection = ({ data, type }) => {
+  const [swiperInstance, setSwiperInstance] = useState(null);
 
-  const prevActivity = () => {
-    setCurrentIndex((prev) => (prev === 0 ? activities.length - 1 : prev - 1));
+  const handleSwipeNext = () => {
+    swiperInstance.slideNext();
   };
-
-  const nextActivity = () => {
-    setCurrentIndex((prev) => (prev === activities.length - 1 ? 0 : prev + 1));
+  const handleSwipePrev = () => {
+    swiperInstance.slidePrev();
   };
 
   return (
-    <div
-      className={`outstanding-section mb-8 rounded-md p-8 font-sans ${type}`}
-    >
+    <div className={`mb-8 rounded-md p-8 font-sans`}>
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="ml-24 border-l-4 border-accent-color pl-2 text-4xl font-bold">
+        <h2 className="border-l-4 border-accent-color pl-2 text-4xl font-bold">
           {type}
         </h2>
         <div className="mt-4 flex text-right hover:text-base hover:font-bold hover:text-accent-color">
@@ -39,85 +41,32 @@ const OutstandingSection = ({ activities, type }) => {
           </svg>
         </div>
       </div>
-
       <div className="flex items-center">
-        <button
-          className="p-2 text-[#7398D5] hover:underline"
-          onClick={prevActivity}
+        <ButtonSwiperPrev handleSwipePrev={handleSwipePrev} />
+        <Swiper
+          allowTouchMove={false}
+          onSwiper={(swiper) => setSwiperInstance(swiper)}
+          slidesPerView={4}
+          slidesPerGroup={4}
+          slidesPerGroupSkip={0}
+          spaceBetween={30}
+          className="mySwiper"
         >
-          <svg
-            width="40"
-            height="40"
-            viewBox="0 0 40 40"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M18.75 15L13.75 20M13.75 20L18.75 25M13.75 20H26.25M35 20C35 28.2843 28.2843 35 20 35C11.7157 35 5 28.2843 5 20C5 11.7157 11.7157 5 20 5C28.2843 5 35 11.7157 35 20Z"
-              stroke="#7398D5"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
-        <div className=" ml-5 flex flex-grow flex-nowrap overflow-x-auto">
-          {activities
-            .slice(currentIndex, currentIndex + 4)
-            .map((activity, index) => (
-              <div key={index} className="relative mr-3 flex-shrink-0">
+          <div>
+            {data.map((activity, index) => (
+              <SwiperSlide key={index}>
                 <OutstandingItem
                   image={activity.image}
-                  index={index}
                   name={activity.name}
                   location={activity.location}
                   count={activity.count}
                 />
-              </div>
+              </SwiperSlide>
             ))}
-        </div>
-        <button
-          className="p-2 text-[#7398D5] hover:underline"
-          onClick={nextActivity}
-        >
-          <svg
-            width="32"
-            height="32"
-            viewBox="0 0 32 32"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M17.25 21L22.25 16M22.25 16L17.25 11M22.25 16L9.75 16M31 16C31 24.2843 24.2843 31 16 31C7.71573 31 1 24.2843 1 16C1 7.71573 7.71573 1 16 1C24.2843 1 31 7.71573 31 16Z"
-              stroke="#7398D5"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-          {/* Đặt icon tiến ở đây */}
-        </button>
+          </div>
+        </Swiper>
+        <ButtonSwiperNext handleSwipeNext={handleSwipeNext} />
       </div>
-
-      <style jsx>{`
-        .outstanding-section {
-          min-width: 1240px;
-        }
-        .activity-item {
-          max-width: 250px;
-          max-height: 400px;
-          overflow: hidden; // Ẩn nội dung vượt quá giới hạn.
-          position: relative;
-        }
-        .residence-textitem {
-          max-height: 20px;
-          overflow: hidden; // Ẩn nội dung vượt quá giới hạn.
-        }
-        .form-button {
-          width: 100px;
-          font-size: 14px;
-        }
-      `}</style>
     </div>
   );
 };
