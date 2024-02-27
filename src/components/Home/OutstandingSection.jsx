@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
 import OutstandingItem from './OutstandingItem';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/pagination';
+
+// import required modules
+import { Pagination } from 'swiper/modules';
 
 const OutstandingSection = ({ activities, type }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -62,19 +70,32 @@ const OutstandingSection = ({ activities, type }) => {
           </svg>
         </button>
         <div className=" ml-5 flex flex-grow flex-nowrap overflow-x-auto">
-          {activities
-            .slice(currentIndex, currentIndex + 4)
-            .map((activity, index) => (
-              <div key={index} className="relative mr-3 flex-shrink-0">
-                <OutstandingItem
-                  image={activity.image}
-                  index={index}
-                  name={activity.name}
-                  location={activity.location}
-                  count={activity.count}
-                />
-              </div>
-            ))}
+          <Swiper
+            slidesPerView={3}
+            spaceBetween={30}
+            pagination={{
+              clickable: true,
+            }}
+            modules={[Pagination]}
+            className="mySwiper"
+          >
+            {activities
+              .slice(currentIndex, currentIndex + 4)
+              .map((activity, index) => (
+                <SwiperSlide
+                  key={index}
+                  className="relative mr-3 flex-shrink-0"
+                >
+                  <OutstandingItem
+                    image={activity.image}
+                    index={index}
+                    name={activity.name}
+                    location={activity.location}
+                    count={activity.count}
+                  />
+                </SwiperSlide>
+              ))}
+          </Swiper>
         </div>
         <button
           className="p-2 text-[#7398D5] hover:underline"

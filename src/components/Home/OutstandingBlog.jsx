@@ -20,7 +20,6 @@ const OutstandingBlog = () => {
           Khám phá
         </button>
       </div>
-      {/* <div className="w-full bg-blogBackground shadow-lg"></div> */}
     </div>
   );
 };
