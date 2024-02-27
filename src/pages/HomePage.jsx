@@ -4,11 +4,14 @@ import { NavContext } from '../Contexts/NavContext';
 import fujiImage from '../assets/fuji.jpg';
 import Footer from '../components/Footer';
 import Searchbar from '../components/Home/Searchbar';
-import OutstandingActivity from '../components/Home/OutstandingActivity';
-import OutstandingRestaurant from '../components/Home/OutstandingRestaurant';
-import OutstandingResidence from '../components/Home/OutstandingResidence';
 import OutstandingBlog from '../components/Home/OutstandingBlog';
 import Region from '../components/Home/Region';
+import OutstandingSection from '../components/Home/OutstandingSection';
+import {
+  residences,
+  restaurants,
+  activities,
+} from '../components/Home/TestData';
 
 const HomePage = () => {
   const { isPopUp } = useContext(NavContext);
@@ -49,21 +52,27 @@ const HomePage = () => {
 
       {/* Outstanding activity Component */}
       <div>
-        <OutstandingActivity />
+        <OutstandingSection
+          activities={activities}
+          type={'Hoạt động giải trí nổi bật'}
+        />
       </div>
 
       {/* Outstandingrestaurant Component */}
       <div>
-        <OutstandingRestaurant />
+        <OutstandingSection
+          activities={restaurants}
+          type={'Nhà hàng nổi bật'}
+        />
       </div>
 
       {/* Outstandingresidence Component */}
       <div>
-        <OutstandingResidence />
+        <OutstandingSection activities={residences} type={'Nơi ở nổi bật'} />
       </div>
 
       {/* Outstandingblog Component */}
-      <div>
+      <div className="w-full">
         <OutstandingBlog />
       </div>
 

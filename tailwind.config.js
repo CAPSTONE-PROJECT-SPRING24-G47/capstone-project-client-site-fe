@@ -15,6 +15,9 @@ export default {
       fontFamily: {
         sans: ['QuickSand', 'sans-serif'],
       },
+      backgroundImage: {
+        blogBackground: "url('./src/assets/blogBackground.jpg')",
+      },
     },
   },
   plugins: [],
