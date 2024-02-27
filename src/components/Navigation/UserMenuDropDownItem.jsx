@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../Contexts/UserContext';
+import { UserContext } from '../../Contexts/UserContext';
 
 const UserMenuDropDownItem = ({ text, svg, path, isLogOut = false }) => {
   const { setUser } = useContext(UserContext);

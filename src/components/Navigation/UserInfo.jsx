@@ -1,8 +1,8 @@
-import ArrowDownMiniIcon from './Icons/ArrowDownMiniIcon';
+import ArrowDownMiniIcon from '../UserProfile/Icons/ArrowDownMiniIcon';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
 import { useState } from 'react';
-import UserMenuDropDown from '../UserMenuDropDown';
 import { AnimatePresence, motion } from 'framer-motion';
+import UserMenuDropDown from './UserMenuDropDown';
 
 const buttonAnimate = {
   rest: { scale: 1 },
