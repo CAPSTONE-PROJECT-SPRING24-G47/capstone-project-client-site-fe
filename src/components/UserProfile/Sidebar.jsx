@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
 import DesignedButton from './DesignedButton';
 
 const Sidebar = () => {
   return (
-    <div className="ml-4 mt-4 h-3/4 rounded-3xl bg-bg-secondary-color px-5">
+    <div className="sticky top-[85px] flex h-fit w-1/6 flex-col gap-5 rounded-3xl bg-bg-secondary-color p-5">
       <DesignedButton
+        path={'/profile/information'}
         label={'Thông tin'}
         svg={
           <svg
@@ -40,6 +40,7 @@ const Sidebar = () => {
       />
       <DesignedButton
         label={'Chuyến đi'}
+        path={'/profile/trips'}
         svg={
           <svg
             width="24"
@@ -60,6 +61,7 @@ const Sidebar = () => {
       />
       <DesignedButton
         label={'Blog'}
+        path={'/profile/blogs'}
         svg={
           <svg
             width="22"
@@ -81,6 +83,7 @@ const Sidebar = () => {
 
       <DesignedButton
         label={'Thiết lập'}
+        path={'/profile/settings'}
         svg={
           <svg
             width="22"
@@ -108,6 +111,7 @@ const Sidebar = () => {
       />
       <DesignedButton
         label={'Hỗ trợ'}
+        path={'/profile/support'}
         svg={
           <svg
             width="24"

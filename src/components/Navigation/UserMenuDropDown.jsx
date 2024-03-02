@@ -17,7 +17,7 @@ const UserMenuDropDown = () => {
       <UserMenuDropDownItem
         text={'Thông tin cá nhân'}
         svg={<UserIcon />}
-        path={'profile'}
+        path={'profile/information'}
       />
       <UserMenuDropDownItem
         text={'Đăng xuất'}

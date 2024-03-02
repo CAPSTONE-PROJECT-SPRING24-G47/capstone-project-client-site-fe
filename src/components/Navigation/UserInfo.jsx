@@ -35,7 +35,7 @@ const UserInfo = () => {
           src={`${user.pictureProfile ? user.pictureProfile : 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'}`}
         ></img>
         <div className="flex items-center justify-center gap-2">
-          <p className="text-center text-lg font-bold">{nameTruncated}</p>
+          <p className="text-md text-center font-bold">{nameTruncated}</p>
           <ArrowDownMiniIcon
             variants={{
               open: { rotate: 180 },

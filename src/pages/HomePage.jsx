@@ -1,11 +1,10 @@
-//Homepage.jsx
 import { useContext } from 'react';
+import { motion } from 'framer-motion';
 import { NavContext } from '../Contexts/NavContext';
 import fujiImage from '../assets/fuji.jpg';
 import Footer from '../components/Footer';
 import Searchbar from '../components/Home/Searchbar';
 import OutstandingBlog from '../components/Home/OutstandingBlog';
-import Region from '../components/Home/Region';
 import OutstandingSection from '../components/Home/OutstandingSection';
 import {
   residences,
@@ -30,14 +29,20 @@ const HomePage = () => {
             className="h-full object-cover shadow-md"
           />
 
-          <div className="absolute inset-0 flex w-full flex-col items-center justify-center text-bg-color">
+          <motion.div
+            initial={{ opacity: 0, translateY: 20 }}
+            animate={{ opacity: 1, translateY: 0 }}
+            transition={{ duration: 0.3, type: 'spring', stiffness: 120 }}
+            viewport={{ once: true }}
+            className="absolute inset-0 flex w-full flex-col items-center justify-center text-bg-color"
+          >
             <h1 className="mb-5 text-6xl font-bold uppercase">
               Bắt đầu chuyến đi của bạn
             </h1>
             <button className="focus:shadow-outline-blue rounded-full bg-bg-color px-3 py-2 text-xl font-bold uppercase text-accent-color hover:bg-accent-color hover:text-bg-color focus:outline-none">
               Lên kế hoạch
             </button>
-          </div>
+          </motion.div>
         </div>
       </header>
       <main
@@ -72,12 +77,6 @@ const HomePage = () => {
           <OutstandingBlog />
         </div>
       </main>
-      <footer className="bg-bg-color">
-        {/* Footer Component */}
-        <div className="w-full">
-          <Footer />
-        </div>
-      </footer>
     </>
   );
 };
