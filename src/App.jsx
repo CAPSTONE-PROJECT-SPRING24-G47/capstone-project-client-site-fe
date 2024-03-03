@@ -27,6 +27,7 @@ function App() {
         {user && (
           <Route path="profile" element={<ProfileLayout />}>
             <Route path="information" element={<UserProfile />} />
+            <Route path="change-password" element={<UserProfile />} />
           </Route>
         )}
         <Route path="trip-plan" element={<TripPlan />} />

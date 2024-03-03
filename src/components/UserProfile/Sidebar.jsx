@@ -39,6 +39,41 @@ const Sidebar = () => {
         }
       />
       <DesignedButton
+        path={'/profile/change-password'}
+        label={'Đổi mật khẩu'}
+        svg={
+          <svg
+            width="22"
+            height="16"
+            viewBox="0 0 22 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M1 2.17431C1 1.53706 1.51659 1.02046 2.15385 1.02046H8.30769C8.94494 1.02046 9.46154 1.53706 9.46154 2.17431V6.02046C9.46154 6.65771 8.94494 7.17431 8.30769 7.17431H2.15385C1.51659 7.17431 1 6.65771 1 6.02046V2.17431Z"
+              stroke="#7398D5"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M13.3077 3.71277C13.3077 3.07552 13.8243 2.55892 14.4615 2.55892H19.8462C20.4834 2.55892 21 3.07552 21 3.71277V12.1743C21 12.8116 20.4834 13.3282 19.8462 13.3282H14.4615C13.8243 13.3282 13.3077 12.8116 13.3077 12.1743V3.71277Z"
+              stroke="#7398D5"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M2.53846 11.4051C2.53846 10.7678 3.05506 10.2512 3.69231 10.2512H9.07692C9.71417 10.2512 10.2308 10.7678 10.2308 11.4051V13.7128C10.2308 14.35 9.71417 14.8666 9.07692 14.8666H3.69231C3.05506 14.8666 2.53846 14.35 2.53846 13.7128V11.4051Z"
+              stroke="#7398D5"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        }
+      />
+      <DesignedButton
         label={'Chuyến đi'}
         path={'/profile/trips'}
         svg={

@@ -6,6 +6,7 @@ import UserInfo from './UserInfo';
 import { UserContext } from '../../Contexts/UserContext';
 import NotificationIcon from '../UserProfile/Icons/NotificationIcon';
 import LogoIcon from '../../assets/LogoIcon';
+import ChangePassword from './ChangePassword';
 
 const buttonsInfor = [
   {
@@ -61,7 +62,7 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* Nút đăng ký, đăng nhập / nút user profile, đăng xuất */}
+        {/* Nút đăng ký, đăng nhập / nút user profile, change password, đăng xuất */}
         <div className="text-md flex items-center justify-center gap-5">
           {user ? (
             <div className="flex items-center justify-center gap-4">
