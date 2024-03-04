@@ -1,5 +1,5 @@
 import React from 'react';
-import ChangePasswordDetail from '../components/ChangePassword/ChangePasswordDetail';
+import ChangePasswordDetail from '../components/UserProfile/ChangePasswordDetail';
 
 const ChangePassword = () => {
   return (

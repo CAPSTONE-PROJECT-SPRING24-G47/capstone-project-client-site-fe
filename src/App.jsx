@@ -6,6 +6,7 @@ import { useContext, useEffect } from 'react';
 import { fetchUserFromLocalStorage } from './utils/fetchUserFromLocalStorage';
 import { UserContext } from './Contexts/UserContext';
 import ProfileLayout from './layouts/ProfileLayout';
+import ChangePassword from './pages/ChangePassword';
 
 function App() {
   const { setUser, user } = useContext(UserContext);
@@ -27,7 +28,7 @@ function App() {
         {user && (
           <Route path="profile" element={<ProfileLayout />}>
             <Route path="information" element={<UserProfile />} />
-            <Route path="change-password" element={<UserProfile />} />
+            <Route path="change-password" element={<ChangePassword />} />
           </Route>
         )}
         <Route path="trip-plan" element={<TripPlan />} />
