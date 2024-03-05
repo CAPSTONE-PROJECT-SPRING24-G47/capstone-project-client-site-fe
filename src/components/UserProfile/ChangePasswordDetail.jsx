@@ -103,6 +103,7 @@ const ChangePasswordDetail = () => {
             onChange={handleCurrentPwdChange}
             label={'Mật khẩu hiện tại'}
             svg={<EyeOpenIcon />}
+            type={'password'}
           />
 
           <Input
@@ -111,6 +112,7 @@ const ChangePasswordDetail = () => {
             onChange={handleNewPwdChange}
             label={'Mật khẩu mới'}
             svg={<EyeOpenIcon />}
+            type={'password'}
           />
 
           <Input
@@ -120,6 +122,7 @@ const ChangePasswordDetail = () => {
             label={'Nhập lại mật khẩu mới'}
             svg={<EyeOpenIcon />}
             originalPassword={newPwd}
+            type={'password'}
           />
         </div>
       </div>
