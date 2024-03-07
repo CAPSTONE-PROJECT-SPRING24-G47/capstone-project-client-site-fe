@@ -43,6 +43,7 @@ const ChangePasswordDetail = () => {
       confirmNewPwd,
     });
   };
+
   useEffect(() => {
     async function fetchData() {
       if (newPwd) {
@@ -53,7 +54,7 @@ const ChangePasswordDetail = () => {
       }
     }
     fetchData();
-  }, [newPwd]);
+  }, [changePwdData]);
   return (
     <div>
       <div className="text-center">

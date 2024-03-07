@@ -19,5 +19,5 @@ export const resetPassword = (resetPwdData) =>
 
 export const googleSignIn = (data) => API.post(`/auth/google-auth`, data);
 
-export const changePwd = (password) =>
+export const changePwd = (userId, password) =>
   API.post(`users/${userId}/change-password?newPass=${password}`);

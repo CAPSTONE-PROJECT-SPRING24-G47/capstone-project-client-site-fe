@@ -1,10 +1,11 @@
 import { changePwd } from '..';
 
 export const changePassword = async (userId, password) => {
-  console.log(userId);
   try {
+    console.log(userId);
     const res = await changePwd(userId, password);
-    return res.data;
+    console.log(res);
+    return res;
   } catch (error) {
     console.error(
       'Change-password failed:',

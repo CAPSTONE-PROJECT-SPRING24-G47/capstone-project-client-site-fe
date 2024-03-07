@@ -7,6 +7,9 @@ import { fetchUserFromLocalStorage } from './utils/fetchUserFromLocalStorage';
 import { UserContext } from './Contexts/UserContext';
 import ProfileLayout from './layouts/ProfileLayout';
 import ChangePassword from './pages/ChangePassword';
+import Blog from './pages/Blog';
+import UpdateBlog from './components/Blog/UpdateBlog';
+import CreateBlog from './components/Blog/CreateBlog';
 
 function App() {
   const { setUser, user } = useContext(UserContext);
@@ -31,6 +34,9 @@ function App() {
             <Route path="change-password" element={<ChangePassword />} />
           </Route>
         )}
+        <Route path="blog" element={<Blog />} />
+        <Route path="blog-update" element={<UpdateBlog />} />
+        <Route path="blog-create" element={<CreateBlog />} />
         <Route path="trip-plan" element={<TripPlan />} />
         <Route path="explore" element={<Explore />} />
         <Route path="*" element={<NotFound404 />} />
