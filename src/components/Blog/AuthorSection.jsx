@@ -3,6 +3,11 @@ import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage
 
 const AuthorSection = () => {
   const [user, setUser] = useState(null);
+  const [blogCategoryId, setBlogCategoryId] = useState();
+
+  const handleBlogCategoryIdChange = (e) => {
+    setBlogCategoryId(e.target.value);
+  };
 
   useEffect(() => {
     const userLS = fetchUserFromLocalStorage();
@@ -10,6 +15,8 @@ const AuthorSection = () => {
       setUser(userLS);
     }
   }, []);
+  // console.log(blogCategoryId);
+
   return (
     <>
       {/* author's name */}
@@ -26,7 +33,9 @@ const AuthorSection = () => {
         <h1 className="mb-7 text-xl font-bold">Danh mục</h1>
         <select
           name=""
-          id=""
+          id="blogCategoryId"
+          value={blogCategoryId}
+          onChange={handleBlogCategoryIdChange}
           className="w-full rounded-lg bg-secondary-color px-1 py-2 opacity-90"
         >
           <option value={0}>Chọn</option>

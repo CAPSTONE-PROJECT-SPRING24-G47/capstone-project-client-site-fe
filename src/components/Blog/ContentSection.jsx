@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 const ContentSection = () => {
-  const [content, setContent] = useState('');
-
   const toolbarOptions = [
     ['bold', 'italic', 'underline', 'strike'], // toggled buttons
     // ['blockquote', 'code-block'],
@@ -23,12 +21,23 @@ const ContentSection = () => {
     [{ color: [] }, { background: [] }], // dropdown with defaults from theme
     // [{ font: [] }],
 
-    ['bubble'], // remove formatting button
+    ['snow'], // remove formatting button
   ];
   const modules = {
     toolbar: toolbarOptions,
   };
 
+  const [title, setTitle] = useState('');
+  const [blogContent, setBlogContent] = useState('');
+
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
+  };
+  const handleBlogContentChange = (e) => {
+    setBlogContent(e?.target?.value);
+  };
+
+  // console.log(title);
   return (
     <>
       {/* title */}
@@ -37,6 +46,8 @@ const ContentSection = () => {
 
         <input
           type="text"
+          value={title}
+          onChange={handleTitleChange}
           placeholder="Nhập tiêu đề blog của bạn"
           className="w-full rounded-lg bg-bg-color px-1 py-2"
         />
@@ -50,8 +61,8 @@ const ContentSection = () => {
           <ReactQuill
             modules={modules}
             // theme="snow"
-            value={content}
-            onChange={setContent}
+            // value={blogContent}
+            // onChange={handleBlogContentChange}
             className={`h-full pb-11`}
           />
         </div>

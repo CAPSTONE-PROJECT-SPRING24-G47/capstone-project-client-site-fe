@@ -180,52 +180,43 @@ const BlogDetail = () => {
         {/* blog tuong tu */}
         {!user && (
           <section className="w-1/6">
-            <h1 className=" text-4xl font-bold">Các bài viết tương tự</h1>
+            <h1 className=" text-xl font-bold leading-10">
+              Các bài viết tương tự
+            </h1>
             {/* cac blog tuong tu */}
             <div className="border-b-[1px] border-text-color/20 pb-5 pt-7 font-bold">
-              <h2 className="text-3xl">Tiêu đề</h2>
-              <h3 className="text-2xl">Tác giả</h3>
+              <h2 className="text-lg">Tiêu đề</h2>
+              <h3 className="text-sm">Tác giả</h3>
               {/* category */}
-              <div className="flex flex-col gap-2 py-4 font-normal">
+              <div className="flex flex-col gap-2 py-4 text-xs font-normal">
                 <div>CATEGORY</div>
                 <div>CATEGORY</div>
                 <div>CATEGORY</div>
               </div>
               <Link
                 to={''}
-                className="flex w-full items-center justify-end gap-px text-lg font-normal text-primary-color"
+                className="flex w-full items-center justify-end gap-px text-xs font-normal text-primary-color"
               >
                 Xem chi tiết
                 <RightArrowIcon />
               </Link>
             </div>
             <div className="border-b-[1px] border-text-color/20 pb-5 pt-7 font-bold">
-              <h2 className="text-3xl">Tiêu đề</h2>
-              <h3 className="text-2xl">Tác giả</h3>
+              <h2 className="text-lg">Tiêu đề</h2>
+              <h3 className="text-sm">Tác giả</h3>
               {/* category */}
-              <div className="flex flex-col gap-2 py-4 font-normal">
+              <div className="flex flex-col gap-2 py-4 text-xs font-normal">
                 <div>CATEGORY</div>
                 <div>CATEGORY</div>
                 <div>CATEGORY</div>
               </div>
-              <button className="flex w-full items-center justify-end gap-px text-lg font-normal text-primary-color">
+              <Link
+                to={''}
+                className="flex w-full items-center justify-end gap-px text-xs font-normal text-primary-color"
+              >
                 Xem chi tiết
                 <RightArrowIcon />
-              </button>
-            </div>
-            <div className="border-b-[1px] border-text-color/20 pb-5 pt-7 font-bold">
-              <h2 className="text-3xl">Tiêu đề</h2>
-              <h3 className="text-2xl">Tác giả</h3>
-              {/* category */}
-              <div className="flex flex-col gap-2 py-4 font-normal">
-                <div>CATEGORY</div>
-                <div>CATEGORY</div>
-                <div>CATEGORY</div>
-              </div>
-              <button className="flex w-full items-center justify-end gap-px text-lg font-normal text-primary-color">
-                Xem chi tiết
-                <RightArrowIcon />
-              </button>
+              </Link>
             </div>
           </section>
         )}
