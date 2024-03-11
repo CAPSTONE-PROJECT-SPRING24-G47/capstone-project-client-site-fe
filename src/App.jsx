@@ -10,6 +10,9 @@ import ChangePassword from './pages/ChangePassword';
 import Blog from './pages/Blog';
 import UpdateBlog from './components/Blog/UpdateBlog';
 import CreateBlog from './components/Blog/CreateBlog';
+import BlogList from './components/Blog/BlogList';
+import BlogIndividualList from './components/Blog/BlogIndividualList';
+import BlogDetail from './components/Blog/BlogDetail';
 
 function App() {
   const { setUser, user } = useContext(UserContext);
@@ -34,7 +37,9 @@ function App() {
             <Route path="change-password" element={<ChangePassword />} />
           </Route>
         )}
-        <Route path="blog" element={<Blog />} />
+        <Route path="blog-detail" element={<BlogDetail />} />
+        <Route path="blog-list-individual" element={<BlogIndividualList />} />
+        <Route path="blog-list" element={<BlogList />} />
         <Route path="blog-update" element={<UpdateBlog />} />
         <Route path="blog-create" element={<CreateBlog />} />
         <Route path="trip-plan" element={<TripPlan />} />

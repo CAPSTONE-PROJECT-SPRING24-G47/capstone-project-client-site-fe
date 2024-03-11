@@ -1,9 +1,10 @@
 import React from 'react';
 import blogBackground from '../../assets/blogBackground.jpg';
+import { Link } from 'react-router-dom';
 
 const OutstandingBlog = () => {
   return (
-    <div className="outstanding-blog bg-blogBackground flex w-full rounded-md bg-cover bg-center bg-no-repeat font-sans">
+    <div className="flex w-full rounded-md bg-blogBackground bg-cover bg-center bg-no-repeat font-sans">
       {/* Blog Section */}
       <div className="w-3/5 rounded-e-full bg-bg-color px-10 py-20 text-center shadow-none">
         <h2 className="text-6xl font-semibold">Blog</h2>
@@ -16,9 +17,12 @@ const OutstandingBlog = () => {
             từ những người khác về Nhật Bản
           </p>
         </div>
-        <button className="rounded-full bg-primary-color px-16 py-4 text-4xl font-light text-white hover:bg-white hover:text-primary-color focus:outline-none">
+        <Link
+          to={`/blog-list`}
+          className="rounded-full bg-primary-color px-16 py-4 text-4xl font-light text-white hover:bg-white hover:text-primary-color focus:outline-none"
+        >
           Khám phá
-        </button>
+        </Link>
       </div>
       {/* <div className="w-full bg-blogBackground shadow-lg"></div> */}
     </div>

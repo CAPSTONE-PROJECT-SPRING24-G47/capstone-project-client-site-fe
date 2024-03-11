@@ -28,7 +28,7 @@ const BlogDetail = () => {
       <div className="py-7 text-text-color/40">Category Category Category</div>
       <div className="flex justify-center gap-20">
         {/* blog */}
-        <section className={`${user ? 'w-full' : 'w-2/3'}`}>
+        <section className={`${user ? 'w-full' : 'w-5/6'}`}>
           {/* title */}
           <h1 className=" text-4xl font-bold">
             Có bức ảnh nào nhìn vào khiến người ta cười không ngừng được không?
@@ -92,10 +92,16 @@ const BlogDetail = () => {
           </div>
           {/* share + like/ Sửa, xóa */}
           {user ? (
-            <Link to={`/blog-update`} className="flex gap-1 pt-5">
-              <WrenchIcon />
-              SỬA/XÓA
-            </Link>
+            <div className="flex justify-between">
+              <Link to={`/blog-update`} className="flex gap-1 pt-5">
+                <WrenchIcon />
+                SỬA/XÓA
+              </Link>
+              {/* <Link to={`/blog-create`} className="flex gap-1 pt-5">
+                <WrenchIcon />
+                THÊM
+              </Link> */}
+            </div>
           ) : (
             <>
               <div className="flex flex-col gap-3 border-b-[1px] border-text-color/20 py-3">
@@ -173,7 +179,7 @@ const BlogDetail = () => {
         </section>
         {/* blog tuong tu */}
         {!user && (
-          <section className="w-1/3">
+          <section className="w-1/6">
             <h1 className=" text-4xl font-bold">Các bài viết tương tự</h1>
             {/* cac blog tuong tu */}
             <div className="border-b-[1px] border-text-color/20 pb-5 pt-7 font-bold">
@@ -185,10 +191,13 @@ const BlogDetail = () => {
                 <div>CATEGORY</div>
                 <div>CATEGORY</div>
               </div>
-              <button className="flex w-full items-center justify-end gap-px text-lg font-normal text-primary-color">
+              <Link
+                to={''}
+                className="flex w-full items-center justify-end gap-px text-lg font-normal text-primary-color"
+              >
                 Xem chi tiết
                 <RightArrowIcon />
-              </button>
+              </Link>
             </div>
             <div className="border-b-[1px] border-text-color/20 pb-5 pt-7 font-bold">
               <h2 className="text-3xl">Tiêu đề</h2>

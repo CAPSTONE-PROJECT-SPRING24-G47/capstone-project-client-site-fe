@@ -9,7 +9,7 @@ const UpdateBlog = () => {
 
   return (
     <div className="bg-bg-color px-3 py-10">
-      <Link to={`../blog`}>
+      <Link to={`../blog-detail`}>
         <BackIcon />
       </Link>
       <div className="my-5 flex w-full justify-center gap-14">
