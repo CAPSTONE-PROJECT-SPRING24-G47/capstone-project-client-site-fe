@@ -25,7 +25,6 @@ const ChangePasswordDetail = () => {
       setUser(userLS);
     }
   }, []);
-
   const handleCurrentPwdChange = (e) => {
     setCurrentPwd(e.target.value);
   };

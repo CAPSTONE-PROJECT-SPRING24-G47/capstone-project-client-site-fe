@@ -1,6 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
 
 const AuthorSection = () => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const userLS = fetchUserFromLocalStorage();
+    if (userLS) {
+      setUser(userLS);
+    }
+  }, []);
   return (
     <>
       {/* author's name */}
@@ -8,8 +17,8 @@ const AuthorSection = () => {
         <h1 className="mb-7 text-xl font-bold">Tác giả</h1>
         <input
           type="text"
-          // value={user.email}
-          className="w-full rounded-lg bg-bg-color px-1 py-2"
+          value={user?.lastName + ' ' + user?.firstName}
+          className="w-full rounded-lg bg-bg-color px-2 py-2 text-center font-bold"
         />
       </div>
       {/* danh muc */}
@@ -20,18 +29,10 @@ const AuthorSection = () => {
           id=""
           className="w-full rounded-lg bg-secondary-color px-1 py-2 opacity-90"
         >
-          <option value="" className="">
-            Chọn
-          </option>
-          <option value="" className="">
-            Chỗ ở
-          </option>
-          <option value="" className="">
-            Nhà hàng
-          </option>
-          <option value="" className="">
-            Trải nghiệm
-          </option>
+          <option value={0}>Chọn</option>
+          <option value={1}>Chỗ ở</option>
+          <option value={2}>Nhà hàng</option>
+          <option value={3}>Trải nghiệm</option>
         </select>
       </div>
       {/* picture */}
