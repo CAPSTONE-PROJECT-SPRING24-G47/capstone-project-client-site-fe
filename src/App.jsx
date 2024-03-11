@@ -1,6 +1,13 @@
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import RootLayout from './layouts/RootLayout';
-import { Explore, HomePage, TripPlan, UserProfile } from './pages';
+import {
+  Explore,
+  HomePage,
+  TripPlan,
+  UserProfile,
+  TripBuilder,
+  TripBuilderManual,
+} from './pages';
 import NotFound404 from './components/NotFound404';
 import { useContext, useEffect } from 'react';
 import { fetchUserFromLocalStorage } from './utils/fetchUserFromLocalStorage';
@@ -34,6 +41,8 @@ function App() {
         <Route path="explore" element={<Explore />} />
         <Route path="*" element={<NotFound404 />} />
       </Route>
+      <Route path="/trip-builder" element={<TripBuilder />} />
+      <Route path="/trip-builder-manual" element={<TripBuilderManual />} />
     </Routes>
   );
 }

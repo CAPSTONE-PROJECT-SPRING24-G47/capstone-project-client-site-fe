@@ -18,3 +18,17 @@ export const resetPassword = (resetPwdData) =>
   API.post(`/auth/reset-password`, resetPwdData);
 
 export const googleSignIn = (data) => API.post(`/auth/google-auth`, data);
+
+//accommodation
+export const getAccommodationCategories = () =>
+  API.get(`/accommodation-category`);
+
+//restaurant
+export const getRestaurantCategories = () => API.get(`/restaurant-category`);
+
+//tourist attraction
+export const getTouristAttractionCategories = () =>
+  API.get(`/touristattraction-category`);
+
+//search
+export const search = (searchData) => API.post(`/search`, searchData);
