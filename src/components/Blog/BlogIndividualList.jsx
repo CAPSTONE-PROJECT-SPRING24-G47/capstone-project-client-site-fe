@@ -14,7 +14,7 @@ const BlogIndividualList = () => {
         <div className="flex">
           <Link
             to={`../blog-create`}
-            className="flex w-32 justify-center rounded-xl bg-primary-color px-2 py-1 text-xl font-semibold text-bg-color"
+            className="flex w-32 justify-center rounded-xl bg-primary-color px-2 py-1 text-xl font-semibold text-bg-color hover:bg-primary-color/80"
           >
             Thêm mới
           </Link>

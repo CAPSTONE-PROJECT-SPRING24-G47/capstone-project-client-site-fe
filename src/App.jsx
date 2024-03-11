@@ -39,7 +39,7 @@ function App() {
         )}
         <Route path="blog-detail" element={<BlogDetail />} />
         <Route path="blog-list-individual" element={<BlogIndividualList />} />
-        <Route path="blog-list" element={<BlogList />} />
+        <Route path="blog" element={<BlogList />} />
         <Route path="blog-update" element={<UpdateBlog />} />
         <Route path="blog-create" element={<CreateBlog />} />
         <Route path="trip-plan" element={<TripPlan />} />

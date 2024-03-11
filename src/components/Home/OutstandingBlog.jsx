@@ -18,7 +18,7 @@ const OutstandingBlog = () => {
           </p>
         </div>
         <Link
-          to={`/blog-list`}
+          to={`/blog`}
           className="rounded-full bg-primary-color px-16 py-4 text-4xl font-light text-white hover:bg-white hover:text-primary-color focus:outline-none"
         >
           Khám phá

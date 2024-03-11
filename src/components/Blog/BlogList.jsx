@@ -14,6 +14,10 @@ const BlogList = () => {
       setUser(userLS);
     }
   }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="bg-bg-color">
       <HeadingBlogList title={'Trải nghiệm chân thực về Nhật Bản'} />

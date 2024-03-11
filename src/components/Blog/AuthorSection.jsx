@@ -23,6 +23,15 @@ const AuthorSection = () => {
           <option value="" className="">
             Chọn
           </option>
+          <option value="" className="">
+            Chỗ ở
+          </option>
+          <option value="" className="">
+            Nhà hàng
+          </option>
+          <option value="" className="">
+            Trải nghiệm
+          </option>
         </select>
       </div>
       {/* picture */}
