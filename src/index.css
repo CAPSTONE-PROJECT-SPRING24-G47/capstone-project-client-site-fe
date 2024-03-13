@@ -19,3 +19,17 @@
 .active {
   background-color: rgb(141 202 220 / 0.7);
 }
+
+.rdrDefinedRangesWrapper {
+  display: none;
+}
+
+/* Hide scrollbar for Chrome, Safari, and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
