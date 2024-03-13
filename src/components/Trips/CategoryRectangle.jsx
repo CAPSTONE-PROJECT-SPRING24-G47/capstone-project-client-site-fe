@@ -15,7 +15,7 @@ const CategoryRectangle = ({
     restaurantOption || accommodationOption || touristAttractionOption;
 
   const handleSelect = () => {
-    if (mode === 5) {
+    if (mode === 3) {
       const isSelected = accommodationOption.categories.includes(id);
 
       if (isSelected) {
@@ -31,7 +31,7 @@ const CategoryRectangle = ({
           categories: [...prevState.categories, id],
         }));
       }
-    } else if (mode === 6) {
+    } else if (mode === 4) {
       const isSelected = restaurantOption.categories.includes(id);
 
       if (isSelected) {
@@ -47,7 +47,7 @@ const CategoryRectangle = ({
           categories: [...prevState.categories, id],
         }));
       }
-    } else if (mode === 7) {
+    } else if (mode === 5) {
       const isSelected = touristAttractionOption.categories.includes(id);
 
       if (isSelected) {

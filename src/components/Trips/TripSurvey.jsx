@@ -6,7 +6,6 @@ import PrevArrowIcon from './Icons/PrevArrowIcon';
 import NextArrowIcon from './Icons/NextArrowIcon';
 import Calendar from './Calendar';
 import BudgetInput from './BudgetInput';
-import Rectangle from './Rectangle';
 import PriceLevelRectangle from './PriceLevelRectangle';
 import CategoryRectangle from './CategoryRectangle';
 import ErrorPopup from './ErrorPopup';
@@ -18,7 +17,6 @@ const searchMode = [
   { typeNum: 2, name: 'Tỉnh', property: 'PrefectureName', type: 'Prefectures' },
   { typeNum: 3, name: 'Thành phố', property: 'CityName', type: 'Cities' },
 ];
-const goingWithData = ['Một mình', 'Người yêu', 'Gia đình', 'Bạn bè'];
 const priceLevelData = [
   { text: 'Giá thấp', price: '2.000.000VND/người đổ xuống' },
   { text: 'Trung bình', price: '2.000.000VND - 4.000.000VND/người' },
@@ -29,16 +27,11 @@ const TripSurvey = ({
   title,
   progress,
   setProgress,
+  location,
   setLocation,
   date,
   duration,
   handleChangeDate,
-  budget,
-  setBudget,
-  goingWithOption,
-  setGoingWithOption,
-  setIsChildrenVisible,
-  isChildrenVisible,
   accommodationOption,
   setAccommodationOption,
   accommodationCategories,
@@ -65,14 +58,26 @@ const TripSurvey = ({
   const [searchTACategories, setSearchTACategories] = useState('');
 
   const handleChooseLocation = (e) => {
-    setLocation((prevState) => ({
-      ...prevState,
-      regionId: +e.target.getAttribute('regionId'),
-      prefectureId: +e.target.getAttribute('prefectureId'),
-      cityId: +e.target.getAttribute('cityId'),
-      name: e.target.getAttribute('name'),
-    }));
-    if (!error.isError) setProgress((state) => ++state);
+    const newLocation = {
+      regionId: +e.target.closest('div#clickme').getAttribute('regionId'),
+      prefectureId: +e.target
+        .closest('div#clickme')
+        .getAttribute('prefectureId'),
+      cityId: +e.target.closest('div#clickme').getAttribute('cityId'),
+      name: e.target.closest('div#clickme').getAttribute('name'),
+    };
+
+    const isLocationExist = location.some(
+      (loc) =>
+        loc.regionId === newLocation.regionId &&
+        loc.prefectureId === newLocation.prefectureId &&
+        loc.cityId === newLocation.cityId &&
+        loc.name === newLocation.name
+    );
+
+    if (!isLocationExist) {
+      setLocation((prevState) => [...prevState, newLocation]);
+    }
   };
 
   const handleSearchModeChange = (e) => {
@@ -108,26 +113,18 @@ const TripSurvey = ({
   );
 
   const filteredTACategories = touristAttractionCategories?.filter((category) =>
-    category.touristAttactionCategoryName
+    category.touristAttractionCategoryName
       .toLowerCase()
       .includes(searchTACategories.toLowerCase())
   );
 
-  //for 4
-  const handleSelectChildren = (e) => {
-    setGoingWithOption((prevState) => ({
-      ...prevState,
-      isChildren: +e.target.id ? true : false,
-    }));
-  };
-
   useEffect(() => {
-    if (duration > 10) {
+    if (duration > 30) {
       setError((prevState) => ({
         ...prevState,
         type: 2,
         isError: true,
-        message: 'Khoảng thời gian tối đa cho một chuyến hành trình là 10 ngày',
+        message: 'Khoảng thời gian tối đa cho một chuyến hành trình là 30 ngày',
       }));
     } else {
       setError((prevState) => ({
@@ -140,35 +137,10 @@ const TripSurvey = ({
   }, [duration]);
 
   useEffect(() => {
-    if (budget?.minPrice > budget?.maxPrice) {
-      setError((prevState) => ({
-        ...prevState,
-        type: 3,
-        isError: true,
-        message: 'Giá tối thiểu không được lớn hơn giá tối đa',
-      }));
-    } else if (budget?.minPrice === 0 || budget?.maxPrice === 0) {
-      setError((prevState) => ({
-        ...prevState,
-        type: 3,
-        isError: true,
-        message: 'Ngân sách phải lớn hơn 0',
-      }));
-    } else {
-      setError((prevState) => ({
-        ...prevState,
-        type: 0,
-        isError: false,
-        message: '',
-      }));
-    }
-  }, [budget]);
-
-  useEffect(() => {
     if (accommodationOption?.categories.length < 2) {
       setError((prevState) => ({
         ...prevState,
-        type: 5,
+        type: 3,
         isError: true,
         message: 'Chọn tối thiểu 2 tiện ích',
       }));
@@ -186,7 +158,7 @@ const TripSurvey = ({
     if (restaurantOption?.categories.length < 2) {
       setError((prevState) => ({
         ...prevState,
-        type: 6,
+        type: 4,
         isError: true,
         message: 'Chọn tối thiểu 2 danh mục',
       }));
@@ -204,7 +176,7 @@ const TripSurvey = ({
     if (touristAttractionOption?.categories.length < 2) {
       setError((prevState) => ({
         ...prevState,
-        type: 7,
+        type: 5,
         isError: true,
         message: 'Chọn tối thiểu 2 danh mục',
       }));
@@ -246,9 +218,8 @@ const TripSurvey = ({
         />
       )}
       {error.isError && error.type === 3 && <ErrorPopup text={error.message} />}
+      {error.isError && error.type === 4 && <ErrorPopup text={error.message} />}
       {error.isError && error.type === 5 && <ErrorPopup text={error.message} />}
-      {error.isError && error.type === 6 && <ErrorPopup text={error.message} />}
-      {error.isError && error.type === 7 && <ErrorPopup text={error.message} />}
       <div className="absolute inset-x-0 top-[7%] flex flex-col items-center justify-center gap-10 text-center">
         <motion.div
           initial={{ opacity: 0, translateY: 20 }}
@@ -311,76 +282,6 @@ const TripSurvey = ({
             animate={{ opacity: 1, translateY: 0 }}
             transition={{ duration: 0.1, type: 'spring', stiffness: 120 }}
             viewport={{ once: true }}
-            className="flex w-full flex-col items-center justify-center gap-5 text-text-color"
-          >
-            <div className="text-[25px] font-semibold text-bg-color">
-              Nhập khoảng chi phí cho ngân sách của bạn
-            </div>
-            <div className="flex w-full justify-center gap-10">
-              <BudgetInput
-                placeholder={'Giá thấp nhất'}
-                setBudget={setBudget}
-                budget={budget}
-                type={'min'}
-              />
-              <BudgetInput
-                placeholder={'Giá cao nhất'}
-                setBudget={setBudget}
-                budget={budget}
-                type={'max'}
-              />
-            </div>
-          </motion.div>
-        )}
-        {progress === 4 && (
-          <motion.div
-            initial={{ opacity: 0, translateY: -20 }}
-            animate={{ opacity: 1, translateY: 0 }}
-            transition={{ duration: 0.1, type: 'spring', stiffness: 120 }}
-            viewport={{ once: true }}
-            className="flex w-full flex-col items-center justify-center gap-10 text-text-color"
-          >
-            <div className="grid w-fit grid-cols-2 grid-rows-2 gap-x-20 gap-y-10">
-              {goingWithData.map((text, index) => (
-                <Rectangle
-                  key={index}
-                  text={text}
-                  index={index}
-                  goingWithOption={goingWithOption}
-                  setGoingWithOption={setGoingWithOption}
-                  setIsChildrenVisible={setIsChildrenVisible}
-                />
-              ))}
-            </div>
-            {isChildrenVisible && (
-              <div className="flex items-center justify-center gap-5 text-[25px] font-semibold text-bg-color">
-                <p>Có trẻ em đi cùng bạn không?</p>
-                <div className="flex items-center justify-center gap-4">
-                  <div
-                    onClick={handleSelectChildren}
-                    className={`w-[130px] cursor-pointer rounded-full bg-bg-color py-2 text-text-color ${goingWithOption.isChildren ? 'opacity-[100%]' : 'opacity-[50%]'}`}
-                    id="1"
-                  >
-                    Có
-                  </div>
-                  <div
-                    onClick={handleSelectChildren}
-                    className={`w-[130px] cursor-pointer rounded-full bg-bg-color py-2 text-text-color ${!goingWithOption.isChildren ? 'opacity-[100%]' : 'opacity-[50%]'}`}
-                    id="0"
-                  >
-                    Không
-                  </div>
-                </div>
-              </div>
-            )}
-          </motion.div>
-        )}
-        {progress === 5 && (
-          <motion.div
-            initial={{ opacity: 0, translateY: -20 }}
-            animate={{ opacity: 1, translateY: 0 }}
-            transition={{ duration: 0.1, type: 'spring', stiffness: 120 }}
-            viewport={{ once: true }}
             className="flex w-full items-start justify-center gap-20 text-text-color"
           >
             <div className="flex flex-col gap-5">
@@ -393,7 +294,7 @@ const TripSurvey = ({
                     text={data.text}
                     price={data.price}
                     index={index}
-                    mode={5}
+                    mode={3}
                     setAccommodationOption={setAccommodationOption}
                     accommodationOption={accommodationOption}
                   />
@@ -419,14 +320,14 @@ const TripSurvey = ({
                     text={data.accommodationCategoryName}
                     setAccommodationOption={setAccommodationOption}
                     accommodationOption={accommodationOption}
-                    mode={5}
+                    mode={3}
                   />
                 ))}
               </div>
             </div>
           </motion.div>
         )}
-        {progress === 6 && (
+        {progress === 4 && (
           <motion.div
             initial={{ opacity: 0, translateY: -20 }}
             animate={{ opacity: 1, translateY: 0 }}
@@ -444,7 +345,7 @@ const TripSurvey = ({
                     text={data.text}
                     price={data.price}
                     index={index}
-                    mode={6}
+                    mode={4}
                     setRestaurantOption={setRestaurantOption}
                     restaurantOption={restaurantOption}
                   />
@@ -470,14 +371,14 @@ const TripSurvey = ({
                     text={data.restaurantCategoryName}
                     setRestaurantOption={setRestaurantOption}
                     restaurantOption={restaurantOption}
-                    mode={6}
+                    mode={4}
                   />
                 ))}
               </div>
             </div>
           </motion.div>
         )}
-        {progress === 7 && (
+        {progress === 5 && (
           <motion.div
             initial={{ opacity: 0, translateY: -20 }}
             animate={{ opacity: 1, translateY: 0 }}
@@ -501,10 +402,10 @@ const TripSurvey = ({
                 {filteredTACategories.map((data) => (
                   <CategoryRectangle
                     id={data.touristAttractionCategoryId}
-                    text={data.touristAttactionCategoryName}
+                    text={data.touristAttractionCategoryName}
                     touristAttractionOption={touristAttractionOption}
                     setTouristAttractionOption={setTouristAttractionOption}
-                    mode={7}
+                    mode={5}
                   />
                 ))}
               </div>
@@ -532,7 +433,7 @@ const TripSurvey = ({
         </motion.div>
       )}
 
-      {progress !== 7 && (
+      {progress !== 5 && (
         <motion.div
           initial={{ opacity: 0.3 }}
           whileHover={{
@@ -550,7 +451,7 @@ const TripSurvey = ({
         </motion.div>
       )}
 
-      {progress === 7 && (
+      {progress === 5 && (
         <motion.div
           initial={{ opacity: 0.3 }}
           whileHover={{

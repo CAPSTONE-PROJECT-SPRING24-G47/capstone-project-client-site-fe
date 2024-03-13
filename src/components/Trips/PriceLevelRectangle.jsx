@@ -13,13 +13,13 @@ const PriceLevelRectangle = ({
   const optionObj = restaurantOption || accommodationOption;
 
   const handleSelect = () => {
-    if (mode === 5) {
+    if (mode === 3) {
       setAccommodationOption((prevState) => ({
         ...prevState,
         priceLevelNum: index,
         priceLevel: text,
       }));
-    } else if (mode === 6) {
+    } else if (mode === 4) {
       setRestaurantOption((prevState) => ({
         ...prevState,
         priceLevelNum: index,

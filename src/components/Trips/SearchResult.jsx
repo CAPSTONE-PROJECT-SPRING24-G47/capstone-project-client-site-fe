@@ -9,6 +9,7 @@ const SearchResult = ({
     <div className="max-h-[300px] w-1/2 overflow-y-scroll rounded-b-xl bg-bg-color">
       {searchResult?.map((item) => (
         <div
+          id="clickme"
           onClick={handleChooseLocation}
           regionId={item?.regionId ? item?.regionId : null}
           prefectureId={item?.prefectureId ? item?.prefectureId : null}

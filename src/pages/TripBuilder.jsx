@@ -8,14 +8,17 @@ import PrevArrowIcon from '../components/Trips/Icons/PrevArrowIcon';
 import { getListAccommodationCategories } from '../api/services/accommodation';
 import { getListRestaurantCategories } from '../api/services/restaurant';
 import { getListTACategories } from '../api/services/touristAttraction';
+import LocationPopup from '../components/Trips/LocationPopup';
+import { fetchUserFromLocalStorage } from '../utils/fetchUserFromLocalStorage';
 
 const millisecondsInADay = 1000 * 60 * 60 * 24;
 
 const TripBuilder = () => {
+  const user = fetchUserFromLocalStorage();
+  const [isLocationPopup, setIsLocationPopup] = useState(false);
   const [isTripSelection, setIsTripSelection] = useState(true);
   const [mode, setMode] = useState(null);
   const [progress, setProgress] = useState(1);
-  const [isChildrenVisible, setIsChildrenVisible] = useState(false);
   const [accommodationCategories, setAccommodationCategories] = useState([]);
   const [restaurantCategories, setRestaurantCategories] = useState([]);
   const [touristAttractionCategories, setTouristAttractionCategories] =
@@ -23,48 +26,28 @@ const TripBuilder = () => {
 
   //data tổng
   const [surveyData, setSurveyData] = useState({
-    userId: 0,
+    userId: user,
     title: '',
     description: '',
     startDate: '2024-03-10T02:49:25.736Z',
     endDate: '2024-03-10T02:49:25.736Z',
-    maxBudget: 0,
-    minBudget: 0,
     isPublic: true,
-    hasChildren: false,
     restaurantPriceLevel: 'string',
     accommodationPriceLevel: 'string',
-    regionId: 0,
-    prefectureId: 0,
-    cityId: 0,
+    location: [],
     touristAttractionCategories: [],
     restaurantCategories: [],
     accommodationCategories: [],
   });
 
   //data
-  const [location, setLocation] = useState({
-    regionId: null,
-    prefectureId: null,
-    cityId: null,
-    name: '',
-  });
-
+  const [location, setLocation] = useState([]);
   const [date, setDate] = useState({
     startDate: new Date(),
     endDate: new Date(),
     key: 'selection',
   });
   const [duration, setDuration] = useState(null);
-  const [goingWithOption, setGoingWithOption] = useState({
-    typeNum: 0,
-    type: '',
-    isChildren: true,
-  });
-  const [budget, setBudget] = useState({
-    minPrice: 1000000,
-    maxPrice: 5000000,
-  });
   const [accommodationOption, setAccommodationOption] = useState({
     type: 'accommodation',
     priceLevelNum: 1,
@@ -116,20 +99,17 @@ const TripBuilder = () => {
     fetchData();
   }, []);
 
+  console.log(surveyData);
+
   useEffect(() => {
     setSurveyData((prevState) => ({
       ...prevState,
       startDate: date.startDate,
       endDate: date.endDate,
-      maxBudget: budget.minPrice,
-      minBudget: budget.maxPrice,
       isPublic: true,
-      hasChildren: goingWithOption.isChildren,
       restaurantPriceLevel: restaurantOption.priceLevel,
       accommodationPriceLevel: accommodationOption.priceLevel,
-      regionId: location.regionId,
-      prefectureId: location.prefectureId,
-      cityId: location.cityId,
+      location: location,
       touristAttractionCategories: [...touristAttractionOption.categories],
       restaurantCategories: [...restaurantOption.categories],
       accommodationCategories: [...accommodationOption.categories],
@@ -137,8 +117,6 @@ const TripBuilder = () => {
   }, [
     location,
     date,
-    goingWithOption,
-    budget,
     accommodationOption,
     restaurantOption,
     touristAttractionOption,
@@ -153,14 +131,30 @@ const TripBuilder = () => {
         >
           <PrevArrowIcon colorFill={'#8DCADC'} className={'h-10 w-10'} />
         </Link>
-        <p>
+        <p
+          onClick={() => {
+            if (!isTripSelection) setIsLocationPopup(true);
+          }}
+          className={`${!isTripSelection && 'cursor-pointer'}`}
+        >
           {isTripSelection
             ? 'CHỌN CÁCH LÊN KẾ HOẠCH CỦA BẠN'
-            : location.regionId || location.prefectureId || location.cityId
-              ? `Điểm đến: ${location.name}`
+            : location.length !== 0
+              ? `Điểm đến: ${location.length === 1 ? location[0].name : ''} 
+                ${location.length === 2 ? `${location[0].name}, ${location[1].name}` : ''} 
+                ${location.length > 2 ? `${location[0].name}, ${location[1].name} (+${location.length - 2})` : ''}`
               : 'Lựa chọn cho mình một điểm đến'}
         </p>
       </div>
+      {isLocationPopup && (
+        <>
+          <div
+            onClick={() => setIsLocationPopup(false)}
+            className="absolute top-0 z-20 h-screen w-full bg-[#03121A] opacity-50"
+          />
+          <LocationPopup location={location} setLocation={setLocation} />
+        </>
+      )}
       {isTripSelection && (
         <div className="flex h-full w-full gap-4">
           <TripSelection
@@ -187,6 +181,7 @@ const TripBuilder = () => {
           progress={progress}
           setProgress={setProgress}
           setLocation={setLocation}
+          location={location}
         />
       )}
       {!isTripSelection && mode === 'auto' && progress === 2 && (
@@ -201,26 +196,6 @@ const TripBuilder = () => {
       )}
       {!isTripSelection && mode === 'auto' && progress === 3 && (
         <TripSurvey
-          title={`Ngân sách dự định cho ${duration} ngày`}
-          progress={progress}
-          setProgress={setProgress}
-          budget={budget}
-          setBudget={setBudget}
-        />
-      )}
-      {!isTripSelection && mode === 'auto' && progress === 4 && (
-        <TripSurvey
-          title={'Bạn đi cùng ai?'}
-          progress={progress}
-          setProgress={setProgress}
-          setGoingWithOption={setGoingWithOption}
-          goingWithOption={goingWithOption}
-          setIsChildrenVisible={setIsChildrenVisible}
-          isChildrenVisible={isChildrenVisible}
-        />
-      )}
-      {!isTripSelection && mode === 'auto' && progress === 5 && (
-        <TripSurvey
           title={'Về nơi ở'}
           progress={progress}
           setProgress={setProgress}
@@ -229,7 +204,7 @@ const TripBuilder = () => {
           accommodationCategories={accommodationCategories}
         />
       )}
-      {!isTripSelection && mode === 'auto' && progress === 6 && (
+      {!isTripSelection && mode === 'auto' && progress === 4 && (
         <TripSurvey
           title={'Về nhà hàng'}
           progress={progress}
@@ -239,7 +214,7 @@ const TripBuilder = () => {
           restaurantCategories={restaurantCategories}
         />
       )}
-      {!isTripSelection && mode === 'auto' && progress === 7 && (
+      {!isTripSelection && mode === 'auto' && progress === 5 && (
         <TripSurvey
           title={'Về địa điểm giải trí'}
           progress={progress}
