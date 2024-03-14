@@ -21,3 +21,9 @@ export const googleSignIn = (data) => API.post(`/auth/google-auth`, data);
 
 export const changePwd = (userId, password) =>
   API.post(`users/${userId}/change-password?newPass=${password}`);
+
+export const createBlog = (data) => API.post(`/blogs`, data);
+
+export const getBlogCategories = () => API.get('/blog-category');
+export const getBlogs = () => API.get('/blogs');
+export const getBlog = (blogId) => API.get(`/blogs/${blogId}`);

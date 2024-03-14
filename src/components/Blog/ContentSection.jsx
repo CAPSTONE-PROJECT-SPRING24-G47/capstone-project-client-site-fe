@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+
 const ContentSection = () => {
   const toolbarOptions = [
     ['bold', 'italic', 'underline', 'strike'], // toggled buttons
@@ -27,17 +28,8 @@ const ContentSection = () => {
     toolbar: toolbarOptions,
   };
 
-  const [title, setTitle] = useState('');
-  const [blogContent, setBlogContent] = useState('');
-
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
-  };
-  const handleBlogContentChange = (e) => {
-    setBlogContent(e?.target?.value);
-  };
-
-  // console.log(title);
+  // console.log(blogContent.replace(/<[^>]*>/g, ''));
+  console.log(blogContent);
   return (
     <>
       {/* title */}
@@ -61,19 +53,11 @@ const ContentSection = () => {
           <ReactQuill
             modules={modules}
             // theme="snow"
-            // value={blogContent}
-            // onChange={handleBlogContentChange}
+            value={blogContent}
+            onChange={handleBlogContentChange}
             className={`h-full pb-11`}
           />
         </div>
-        {/* <textarea
-          name=""
-          id="comment"
-          // cols="30"
-          // rows="10"
-          placeholder="Nhập nội dung"
-          className={`h-screen w-full resize-none rounded-lg bg-bg-color px-2 py-2`}
-        ></textarea> */}
       </div>
     </>
   );

@@ -34,7 +34,9 @@ function App() {
         {user && (
           <Route path="profile" element={<ProfileLayout />}>
             <Route path="information" element={<UserProfile />} />
-            <Route path="change-password" element={<ChangePassword />} />
+            {!user.isGoogleAuth && (
+              <Route path="change-password" element={<ChangePassword />} />
+            )}
           </Route>
         )}
         <Route path="blog-detail" element={<BlogDetail />} />

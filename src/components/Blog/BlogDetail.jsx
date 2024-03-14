@@ -145,7 +145,7 @@ const BlogDetail = () => {
             </button>
           </div>
           {/* comment section */}
-          <div className={`${user ? 'bg-bg-secondary-color px-12' : ''}`}>
+          <div className={`${user ? 'bg-bg-secondary-color px-12' : ''} `}>
             <h1 className="py-10 text-4xl font-bold">
               Bình luận về bài viết này
             </h1>
@@ -159,14 +159,14 @@ const BlogDetail = () => {
                   // cols="30"
                   // rows="10"
                   placeholder="Để lại bình luận của bạn"
-                  className={`h-16 w-3/4 resize-none border-[1px] border-text-color/40 ${user ? 'bg-bg-secondary-color' : 'bg-bg-color'} px-2`}
+                  className={`h-16 w-full resize-none border-[1px] border-text-color/40 ${user ? 'bg-bg-secondary-color' : 'bg-bg-color'} p-1`}
                 ></textarea>
               </div>
               {/* comment */}
               <div className="flex gap-5">
                 <img src="../../assets/fuji.jpg" alt="abc" />
                 <div
-                  className={`h-16 w-3/4 ${user ? 'bg-bg-secondary-color' : 'bg-bg-color'} px-2`}
+                  className={`h-16 w-full ${user ? 'bg-bg-secondary-color' : 'bg-bg-color'} px-2`}
                 >
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   Praesentium voluptatum blanditiis sit doloremque eius officia
