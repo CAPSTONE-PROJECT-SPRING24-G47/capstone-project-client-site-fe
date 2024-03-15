@@ -11,8 +11,14 @@ import { Link, useParams } from 'react-router-dom';
 import { getBlog } from '../../api/service/blog';
 import GetAuthor from './GetAuthor';
 import FormattedDate from '../FormattedDate';
+import { useContext } from 'react';
+import { BlogContext } from '../../Contexts/BlogContext';
 
 const BlogDetail = () => {
+  const { limitBlog } = useContext(BlogContext);
+
+  // const lastBlogId = limitBlog[limitBlog.length - 1];
+  // console.log(limitBlog);
   const [user, setUser] = useState(null);
   const [blog, setBlog] = useState(null);
 
@@ -60,8 +66,8 @@ const BlogDetail = () => {
             </div>
             <button className="flex items-center justify-center gap-1">
               <SolidUserIcon />
-              <GetAuthor userId={blog?.userId} />
-              {/* {user?.lastName + ' ' + user?.firstName} */}
+              {/* <GetAuthor userId={blog?.userId} /> */}
+              {blog?.user.lastName + ' ' + blog?.user.firstName}
             </button>
           </div>
           {/* blog content */}
@@ -97,11 +103,11 @@ const BlogDetail = () => {
           )}
           {/* prev/next blog button */}
           <div
-            className={`my-8 flex justify-between gap-10 py-2 ${user?.userId === blog?.userId ? 'bg-bg-secondary-color' : ''}`}
+            className={`my-8 flex ${blogId >= 2 ? 'justify-between' : 'justify-end'} gap-10 py-2 ${user?.userId === blog?.userId ? 'bg-bg-secondary-color' : ''}`}
           >
             {/* prev blog */}
             {/* chua xong */}
-            {blogId > 0 && (
+            {blogId >= 2 && (
               <Link
                 to={`/blog/${parseInt(blogId) - 1}`}
                 className="flex items-center"
@@ -117,20 +123,21 @@ const BlogDetail = () => {
               </Link>
             )}
             {/* next blog */}
-            <Link
-              to={`/blog/${parseInt(blogId) + 1}`}
-              className="flex flex-row-reverse items-center"
-              // onClick={window.location.reload()}
-            >
-              <NextIcon />
-              <div className="flex flex-col gap-2 text-end">
-                <h4 className="text-xl">Bài sau</h4>
-                <div className="font-bold">
-                  Có bức ảnh nào nhìn vào khiến người ta cười không ngừng được
-                  không?
+            {blogId <= 20 && (
+              <Link
+                to={`/blog/${parseInt(blogId) + 1}`}
+                className={`flex flex-row-reverse items-center ${blogId >= 2 ? '' : 'w-1/2'}`}
+              >
+                <NextIcon />
+                <div className="flex flex-col gap-2 text-end">
+                  <h4 className="text-xl">Bài sau</h4>
+                  <div className="font-bold">
+                    Có bức ảnh nào nhìn vào khiến người ta cười không ngừng được
+                    không?
+                  </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            )}
           </div>
           {/* comment section */}
           <div

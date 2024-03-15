@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
 import FilterIcon from '../Icons/FilterIcon';
 import ClockIcon from '../Icons/ClockIcon';
@@ -9,8 +9,11 @@ import { Link } from 'react-router-dom';
 import FormattedDate from '../FormattedDate';
 import { getUser } from '../../api/service/user';
 import GetAuthor from './GetAuthor';
+import { BlogContext } from '../../Contexts/BlogContext';
 
 const BlogList = () => {
+  const { setLimitBlog } = useContext(BlogContext);
+
   const [user, setUser] = useState(null);
   const [listBlogs, setListBlogs] = useState([]);
 
@@ -24,12 +27,20 @@ const BlogList = () => {
   useEffect(() => {
     async function fetchData() {
       const response = await getListBlogs();
-
       if (response) {
         setListBlogs(response.data);
       }
     }
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (listBlogs) {
+      const blogIdArr = listBlogs?.map((blog) => {
+        return blog.blogId;
+      });
+      setLimitBlog(blogIdArr);
+    }
   }, []);
 
   useEffect(() => {

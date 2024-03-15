@@ -3,7 +3,7 @@ import { getUser } from '../../api/service/user';
 
 const GetAuthor = ({ userId }) => {
   const [user, setUser] = useState(null);
-  console.log(userId);
+  // console.log(userId);
 
   useEffect(() => {
     async function fetchData() {

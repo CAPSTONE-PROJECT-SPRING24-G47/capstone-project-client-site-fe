@@ -3,7 +3,7 @@ import { createBlog, deleteABlog, getABlog, getBlogs } from '..';
 export const addBlog = async (data) => {
   try {
     const res = await createBlog(data);
-    console.log(res);
+    // console.log(res);
     return res;
   } catch (error) {
     console.error(
@@ -16,7 +16,7 @@ export const addBlog = async (data) => {
 export const getListBlogs = async (blogId) => {
   try {
     const res = await getBlogs(blogId);
-    console.log(res);
+    // console.log(res);
     return res;
   } catch (error) {
     console.error(
@@ -29,7 +29,7 @@ export const getListBlogs = async (blogId) => {
 export const getBlog = async (blogId) => {
   try {
     const res = await getABlog(blogId);
-    console.log(res);
+    // console.log(res);
     return res.data;
   } catch (error) {
     console.error(
@@ -42,7 +42,7 @@ export const getBlog = async (blogId) => {
 export const deleteBlog = async (blogId) => {
   try {
     const res = await deleteABlog(blogId);
-    console.log(res);
+    // console.log(res);
     return res;
   } catch (error) {
     console.error(
