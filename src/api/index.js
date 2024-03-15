@@ -19,6 +19,8 @@ export const resetPassword = (resetPwdData) =>
 
 export const googleSignIn = (data) => API.post(`/auth/google-auth`, data);
 
+export const getAUser = (userId) => API.get(`/users/${userId}`);
+
 export const changePwd = (userId, password) =>
   API.post(`users/${userId}/change-password?newPass=${password}`);
 
@@ -26,4 +28,5 @@ export const createBlog = (data) => API.post(`/blogs`, data);
 
 export const getBlogCategories = () => API.get('/blog-category');
 export const getBlogs = () => API.get('/blogs');
-export const getBlog = (blogId) => API.get(`/blogs/${blogId}`);
+export const getABlog = (blogId) => API.get(`/blogs/${blogId}`);
+export const deleteABlog = (blogId) => API.delete(`/blogs/${blogId}`);

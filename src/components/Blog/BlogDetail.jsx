@@ -7,10 +7,14 @@ import LikeIcon from '../Icons/LikeIcon';
 import RightArrowIcon from '../Icons/RightArrowIcon';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
 import WrenchIcon from '../Icons/WrenchIcon';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { getBlog } from '../../api/service/blog';
+import GetAuthor from './GetAuthor';
+import FormattedDate from '../FormattedDate';
 
 const BlogDetail = () => {
   const [user, setUser] = useState(null);
+  const [blog, setBlog] = useState(null);
 
   useEffect(() => {
     const userLS = fetchUserFromLocalStorage();
@@ -19,6 +23,22 @@ const BlogDetail = () => {
     }
   }, []);
 
+  const { blogId } = useParams();
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await getBlog(blogId);
+      console.log(response);
+      if (response) {
+        setBlog(response.data[0]);
+      }
+    }
+    fetchData();
+  }, [blogId]);
+  // console.log(blog?.userId);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [blogId]);
   return (
     <div className="relative h-full bg-bg-color px-10 py-7">
       <div className="absolute right-8 top-14 rounded-full bg-primary-color p-1 font-semibold">
@@ -28,72 +48,30 @@ const BlogDetail = () => {
       <div className="py-7 text-text-color/40">Category Category Category</div>
       <div className="flex justify-center gap-20">
         {/* blog */}
-        <section className={`${user ? 'w-full' : 'w-5/6'}`}>
+        <section
+          className={`${user?.userId == blog?.userId ? 'w-full' : 'w-5/6'}`}
+        >
           {/* title */}
-          <h1 className=" text-4xl font-bold">
-            Có bức ảnh nào nhìn vào khiến người ta cười không ngừng được không?
-          </h1>
+          <h1 className=" text-4xl font-bold">{blog?.title}</h1>
           <div className="flex gap-7 py-5">
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center gap-1">
               <ClockIcon />
-              upload date
+              {<FormattedDate date={blog?.createdAt} />}
             </div>
-            {!user && (
-              <div className="flex items-center justify-center">
-                <SolidUserIcon />
-                upload user
-              </div>
-            )}
+            <button className="flex items-center justify-center gap-1">
+              <SolidUserIcon />
+              <GetAuthor userId={blog?.userId} />
+              {/* {user?.lastName + ' ' + user?.firstName} */}
+            </button>
           </div>
           {/* blog content */}
-          <div className="flex flex-col gap-7 border-y-[1px] border-text-color/20 py-7 text-lg">
-            <p>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Animi
-              quisquam voluptate molestias facilis inventore aliquid
-              reprehenderit nobis architecto totam necessitatibus saepe ab
-              explicabo qui quam error, praesentium perferendis deserunt. Minima
-              consequuntur tenetur expedita aut, officiis doloremque nesciunt
-              facere quasi quisquam quod deleniti! Expedita nisi praesentium
-              ipsa illum, assumenda deserunt, laboriosam quae incidunt eius
-              perferendis ipsum laborum, corporis aut fuga repellat ratione
-              asperiores sed rem. Officiis, eius quo? Aperiam ut hic nobis
-              excepturi. Velit optio consequuntur atque assumenda, est sed
-              placeat magni, officiis modi beatae hic. Eos commodi quo
-              recusandae ad veritatis odio consequatur ipsa tempore architecto
-              amet iste, animi dicta deserunt quibusdam obcaecati sit nemo non
-              dolorem. Delectus esse quis voluptatum sunt doloribus quia sint,
-              illum ipsa nam natus, quas adipisci veniam vel soluta fugit
-              necessitatibus, molestiae earum repudiandae? Expedita, consectetur
-              harum cupiditate maxime similique cumque adipisci laudantium
-              repellendus provident veniam. Dicta vel asperiores inventore
-              consequatur, a dolores praesentium? Provident.
-            </p>
-            <p>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Animi
-              quisquam voluptate molestias facilis inventore aliquid
-              reprehenderit nobis architecto totam necessitatibus saepe ab
-              explicabo qui quam error, praesentium perferendis deserunt. Minima
-              consequuntur tenetur expedita aut, officiis doloremque nesciunt
-              facere quasi quisquam quod deleniti! Expedita nisi praesentium
-              ipsa illum, assumenda deserunt, laboriosam quae incidunt eius
-              perferendis ipsum laborum, corporis aut fuga repellat ratione
-              asperiores sed rem. Officiis, eius quo? Aperiam ut hic nobis
-              excepturi. Velit optio consequuntur atque assumenda, est sed
-              placeat magni, officiis modi beatae hic. Eos commodi quo
-              recusandae ad veritatis odio consequatur ipsa tempore architecto
-              amet iste, animi dicta deserunt quibusdam obcaecati sit nemo non
-              dolorem. Delectus esse quis voluptatum sunt doloribus quia sint,
-              illum ipsa nam natus, quas adipisci veniam vel soluta fugit
-              necessitatibus, molestiae earum repudiandae? Expedita, consectetur
-              harum cupiditate maxime similique cumque adipisci laudantium
-              repellendus provident veniam. Dicta vel asperiores inventore
-              consequatur, a dolores praesentium? Provident.
-            </p>
+          <div className="flex w-full flex-col items-center justify-center gap-7 border-y-[1px] border-text-color/20 py-7 text-lg">
+            <p dangerouslySetInnerHTML={{ __html: blog?.blogContent }}></p>
           </div>
           {/* share + like/ Sửa, xóa */}
-          {user ? (
+          {user?.userId === blog?.userId ? (
             <div className="flex justify-between">
-              <Link to={`/blog-update`} className="flex gap-1 pt-5">
+              <Link to={`/blog-update/${blogId}`} className="flex gap-1 pt-5">
                 <WrenchIcon />
                 SỬA/XÓA
               </Link>
@@ -119,21 +97,31 @@ const BlogDetail = () => {
           )}
           {/* prev/next blog button */}
           <div
-            className={`my-8 flex justify-between gap-10 py-2 ${user ? 'bg-bg-secondary-color' : ''}`}
+            className={`my-8 flex justify-between gap-10 py-2 ${user?.userId === blog?.userId ? 'bg-bg-secondary-color' : ''}`}
           >
             {/* prev blog */}
-            <button className="flex items-center">
-              <PrevIcon />
-              <div className="flex flex-col gap-2 text-start">
-                <h4 className="text-xl">Bài trước</h4>
-                <div className="font-bold">
-                  Có bức ảnh nào nhìn vào khiến người ta cười không ngừng được
-                  không?
+            {/* chua xong */}
+            {blogId > 0 && (
+              <Link
+                to={`/blog/${parseInt(blogId) - 1}`}
+                className="flex items-center"
+              >
+                <PrevIcon />
+                <div className="flex flex-col gap-2 text-start">
+                  <h4 className="text-xl">Bài trước</h4>
+                  <div className="font-bold">
+                    Có bức ảnh nào nhìn vào khiến người ta cười không ngừng được
+                    không?
+                  </div>
                 </div>
-              </div>
-            </button>
+              </Link>
+            )}
             {/* next blog */}
-            <button className="flex flex-row-reverse items-center">
+            <Link
+              to={`/blog/${parseInt(blogId) + 1}`}
+              className="flex flex-row-reverse items-center"
+              // onClick={window.location.reload()}
+            >
               <NextIcon />
               <div className="flex flex-col gap-2 text-end">
                 <h4 className="text-xl">Bài sau</h4>
@@ -142,10 +130,12 @@ const BlogDetail = () => {
                   không?
                 </div>
               </div>
-            </button>
+            </Link>
           </div>
           {/* comment section */}
-          <div className={`${user ? 'bg-bg-secondary-color px-12' : ''} `}>
+          <div
+            className={`${user?.userId === blog?.userId ? 'bg-bg-secondary-color px-12' : ''} `}
+          >
             <h1 className="py-10 text-4xl font-bold">
               Bình luận về bài viết này
             </h1>
@@ -159,14 +149,14 @@ const BlogDetail = () => {
                   // cols="30"
                   // rows="10"
                   placeholder="Để lại bình luận của bạn"
-                  className={`h-16 w-full resize-none border-[1px] border-text-color/40 ${user ? 'bg-bg-secondary-color' : 'bg-bg-color'} p-1`}
+                  className={`h-16 w-full resize-none border-[1px] border-text-color/40 ${user?.userId === blog?.userId ? 'bg-bg-secondary-color' : 'bg-bg-color'} p-1`}
                 ></textarea>
               </div>
               {/* comment */}
               <div className="flex gap-5">
                 <img src="../../assets/fuji.jpg" alt="abc" />
                 <div
-                  className={`h-16 w-full ${user ? 'bg-bg-secondary-color' : 'bg-bg-color'} px-2`}
+                  className={`h-16 w-full ${user?.userId === blog?.userId ? 'bg-bg-secondary-color' : 'bg-bg-color'} px-2`}
                 >
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   Praesentium voluptatum blanditiis sit doloremque eius officia
@@ -178,7 +168,7 @@ const BlogDetail = () => {
           </div>
         </section>
         {/* blog tuong tu */}
-        {!user && (
+        {user?.userId !== blog?.userId && (
           <section className="w-1/6">
             <h1 className=" text-xl font-bold leading-10">
               Các bài viết tương tự

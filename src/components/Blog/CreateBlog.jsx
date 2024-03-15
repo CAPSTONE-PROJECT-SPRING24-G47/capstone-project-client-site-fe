@@ -36,6 +36,7 @@ const CreateBlog = () => {
   // const [listCategories, setListCategories] = useState([]);
   // const [options, setOptions] = useState([]);
   const [blogData, setBlogData] = useState(null);
+  const [response, setResponse] = useState();
 
   const handleBlogCategoryIdChange = (e) => {
     setBlogCategoryId(e.target.value);
@@ -64,7 +65,7 @@ const CreateBlog = () => {
           photoURL: 'photo5',
         },
       ],
-      blog_BlogCatagories: [{ blogCategoryId }, { blogCategoryId: '2' }],
+      blog_BlogCatagories: [{ blogCategoryId }],
     });
   };
 
@@ -85,10 +86,10 @@ const CreateBlog = () => {
 
   useEffect(() => {
     async function fetchData() {
-      console.log('>>>>>data: ', blogData);
       if (blogData) {
-        const response = await addBlog(blogData);
-        console.log('>>>response: ', response);
+        const res = await addBlog(blogData);
+        console.log('>>>response: ', res);
+        setResponse(res);
         // if (response) {
         //   // setIsChangeSuccess(true);
         // }
@@ -102,7 +103,7 @@ const CreateBlog = () => {
 
   return (
     <div className="bg-bg-color px-3 py-10">
-      <Link to={`../blog-detail`}>
+      <Link to={`../blog`}>
         <BackIcon />
       </Link>
       <div className="my-5 flex w-full justify-center gap-14">
@@ -137,12 +138,13 @@ const CreateBlog = () => {
           </div>
 
           <div className=" flex w-full justify-end">
-            <button
+            <Link
+              // to={!title || !blogContent || !user || !response ? `` : `/blogs`}
               onClick={handleSubmitBlogData}
               className="mt-4 rounded-xl bg-secondary-color px-2 py-1 text-xl font-bold text-bg-color hover:bg-secondary-color/80"
             >
               Đăng
-            </button>
+            </Link>
           </div>
         </section>
         {/* Author */}

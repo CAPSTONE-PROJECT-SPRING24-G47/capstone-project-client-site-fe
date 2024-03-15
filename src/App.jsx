@@ -39,10 +39,10 @@ function App() {
             )}
           </Route>
         )}
-        <Route path="blog-detail" element={<BlogDetail />} />
-        <Route path="blog-list-individual" element={<BlogIndividualList />} />
+        <Route path={`blog/:blogId`} element={<BlogDetail />} />
+        <Route path="blog-individual" element={<BlogIndividualList />} />
         <Route path="blog" element={<BlogList />} />
-        <Route path="blog-update" element={<UpdateBlog />} />
+        <Route path="blog-update/:blogId" element={<UpdateBlog />} />
         <Route path="blog-create" element={<CreateBlog />} />
         <Route path="trip-plan" element={<TripPlan />} />
         <Route path="explore" element={<Explore />} />

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { BackIcon } from '../Auth';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
+import { deleteBlog, getBlog } from '../../api/service/blog';
 
 const UpdateBlog = () => {
   const toolbarOptions = [
@@ -32,6 +33,9 @@ const UpdateBlog = () => {
   const [blogContent, setBlogContent] = useState('');
   const [user, setUser] = useState(null);
   const [blogCategoryId, setBlogCategoryId] = useState();
+  const [blog, setBlog] = useState(null);
+  const [isConfirm, setIsConfirm] = useState(false);
+  const [isPopUp, setIsPopUp] = useState(false);
 
   const handleBlogCategoryIdChange = (e) => {
     setBlogCategoryId(e.target.value);
@@ -50,13 +54,54 @@ const UpdateBlog = () => {
       setUser(userLS);
     }
   }, []);
-  // console.log(blogCategoryId);
+
+  const { blogId } = useParams();
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await getBlog(blogId);
+      console.log(response);
+      if (response) {
+        setBlog(response.data[0]);
+        setTitle(blog?.title);
+        setBlogContent(blog?.blogContent);
+      }
+    }
+    fetchData();
+  }, []);
+  console.log(blog);
 
   // console.log(blogContent.replace(/<[^>]*>/g, ''));
-  console.log(blogContent);
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await getBlog(blogId);
+      console.log(response);
+      if (response) {
+      }
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (isConfirm && blogId) {
+        const response = await deleteBlog(blogId);
+        // if (response.isSuccess) {
+        //   setToggleBan((state) => !state);
+        // }
+      }
+    }
+    fetchData();
+  }, [isConfirm]);
+
   return (
     <div className="bg-bg-color px-3 py-10">
-      <Link to={`../blog-detail`}>
+      {/* <div
+        className="absolute inset-0 bg-[#03121A] opacity-50 backdrop-blur-[20px]"
+        onClick={() => setIsPopUp(false)}
+      /> */}
+      <Link to={`/blog/${blog?.blogId}`}>
         <BackIcon />
       </Link>
       <div className="my-5 flex w-full justify-center gap-14">

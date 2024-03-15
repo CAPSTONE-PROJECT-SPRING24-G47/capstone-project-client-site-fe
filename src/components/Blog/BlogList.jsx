@@ -4,15 +4,32 @@ import FilterIcon from '../Icons/FilterIcon';
 import ClockIcon from '../Icons/ClockIcon';
 import SolidUserIcon from '../Icons/SolidUserIcon';
 import HeadingBlogList from './HeadingBlogList';
+import { getListBlogs } from '../../api/service/blog';
+import { Link } from 'react-router-dom';
+import FormattedDate from '../FormattedDate';
+import { getUser } from '../../api/service/user';
+import GetAuthor from './GetAuthor';
 
 const BlogList = () => {
   const [user, setUser] = useState(null);
+  const [listBlogs, setListBlogs] = useState([]);
 
   useEffect(() => {
     const userLS = fetchUserFromLocalStorage();
     if (userLS) {
       setUser(userLS);
     }
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await getListBlogs();
+
+      if (response) {
+        setListBlogs(response.data);
+      }
+    }
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -28,206 +45,33 @@ const BlogList = () => {
         </button>
         {/* list blog */}
         <div className="grid grid-cols-3 gap-20 py-9">
-          <div className="">
-            {/* <img src="../../assets/2_rx7.jpg" alt="abc" /> */}
-            <div className="h-44 w-full rounded-xl bg-blogBackground"></div>
-            <div className="mt-1">Category</div>
-            <h3 className="py-3 text-2xl font-bold">
-              Có bức ảnh nào nhìn vào khiến người ta cười không ngừng được
-              không?
-            </h3>
-            <p className="pb-3">
-              Có mấy bức ảnh trông vào nhìn rất kì kiểu như là chắc phải có thế
-              lực nào đó chụp ....
-            </p>
-            <div className="flex gap-7">
-              <div className="flex items-center justify-center">
-                <ClockIcon />
-                upload date
-              </div>
-              {!user && (
-                <div className="flex items-center justify-center">
-                  <SolidUserIcon />
-                  upload user
+          {/* listUsers?.map((user, index) => {
+                    return user.roleId !== 1 && <UserTableData user={user} />;
+                  }) */}
+          {listBlogs?.map((blog, index) => {
+            return (
+              <Link to={`../blog/${blog.blogId}`} className="">
+                {/* <img src="../../assets/2_rx7.jpg" alt="abc" /> */}
+                <div className="h-44 w-full rounded-xl bg-blogBackground"></div>
+                <div className="mt-2 uppercase">Chỗ ở</div>
+                <h3 className="py-2 text-2xl font-bold">{blog.title}</h3>
+                <p className="pb-3">{blog.content}</p>
+                <div className="flex gap-7">
+                  <div className="flex items-center justify-center gap-1">
+                    <ClockIcon />
+                    {<FormattedDate date={blog.createdAt} />}
+                  </div>
+                  {/* {!user && ( */}
+                  <div className="flex items-center justify-center gap-1">
+                    <SolidUserIcon />
+                    <GetAuthor userId={blog.userId} />
+                    {/* {user?.lastName + ' ' + user?.firstName} */}
+                  </div>
+                  {/* )} */}
                 </div>
-              )}
-            </div>
-          </div>
-          <div className="">
-            {/* <img src="../../assets/2_rx7.jpg" alt="abc" /> */}
-            <div className="h-44 w-full rounded-xl bg-blogBackground"></div>
-            <div className="mt-1">Category</div>
-            <h3 className="py-3 text-2xl font-bold">
-              Có bức ảnh nào nhìn vào khiến người ta cười không ngừng được
-              không?
-            </h3>
-            <p className="pb-3">
-              Có mấy bức ảnh trông vào nhìn rất kì kiểu như là chắc phải có thế
-              lực nào đó chụp ....
-            </p>
-            <div className="flex gap-7">
-              <div className="flex items-center justify-center">
-                <ClockIcon />
-                upload date
-              </div>
-              {!user && (
-                <div className="flex items-center justify-center">
-                  <SolidUserIcon />
-                  upload user
-                </div>
-              )}
-            </div>
-          </div>{' '}
-          <div className="">
-            {/* <img src="../../assets/2_rx7.jpg" alt="abc" /> */}
-            <div className="h-44 w-full rounded-xl bg-blogBackground"></div>
-            <div className="mt-1">Category</div>
-            <h3 className="py-3 text-2xl font-bold">
-              Có bức ảnh nào nhìn vào khiến người ta cười không ngừng được
-              không?
-            </h3>
-            <p className="pb-3">
-              Có mấy bức ảnh trông vào nhìn rất kì kiểu như là chắc phải có thế
-              lực nào đó chụp ....
-            </p>
-            <div className="flex gap-7">
-              <div className="flex items-center justify-center">
-                <ClockIcon />
-                upload date
-              </div>
-              {!user && (
-                <div className="flex items-center justify-center">
-                  <SolidUserIcon />
-                  upload user
-                </div>
-              )}
-            </div>
-          </div>{' '}
-          <div className="">
-            {/* <img src="../../assets/2_rx7.jpg" alt="abc" /> */}
-            <div className="h-44 w-full rounded-xl bg-blogBackground"></div>
-            <div className="mt-1">Category</div>
-            <h3 className="py-3 text-2xl font-bold">
-              Có bức ảnh nào nhìn vào khiến người ta cười không ngừng được
-              không?
-            </h3>
-            <p className="pb-3">
-              Có mấy bức ảnh trông vào nhìn rất kì kiểu như là chắc phải có thế
-              lực nào đó chụp ....
-            </p>
-            <div className="flex gap-7">
-              <div className="flex items-center justify-center">
-                <ClockIcon />
-                upload date
-              </div>
-              {!user && (
-                <div className="flex items-center justify-center">
-                  <SolidUserIcon />
-                  upload user
-                </div>
-              )}
-            </div>
-          </div>{' '}
-          <div className="">
-            {/* <img src="../../assets/2_rx7.jpg" alt="abc" /> */}
-            <div className="h-44 w-full rounded-xl bg-blogBackground"></div>
-            <div className="mt-1">Category</div>
-            <h3 className="py-3 text-2xl font-bold">
-              Có bức ảnh nào nhìn vào khiến người ta cười không ngừng được
-              không?
-            </h3>
-            <p className="pb-3">
-              Có mấy bức ảnh trông vào nhìn rất kì kiểu như là chắc phải có thế
-              lực nào đó chụp ....
-            </p>
-            <div className="flex gap-7">
-              <div className="flex items-center justify-center">
-                <ClockIcon />
-                upload date
-              </div>
-              {!user && (
-                <div className="flex items-center justify-center">
-                  <SolidUserIcon />
-                  upload user
-                </div>
-              )}
-            </div>
-          </div>{' '}
-          <div className="">
-            {/* <img src="../../assets/2_rx7.jpg" alt="abc" /> */}
-            <div className="h-44 w-full rounded-xl bg-blogBackground"></div>
-            <div className="mt-1">Category</div>
-            <h3 className="py-3 text-2xl font-bold">
-              Có bức ảnh nào nhìn vào khiến người ta cười không ngừng được
-              không?
-            </h3>
-            <p className="pb-3">
-              Có mấy bức ảnh trông vào nhìn rất kì kiểu như là chắc phải có thế
-              lực nào đó chụp ....
-            </p>
-            <div className="flex gap-7">
-              <div className="flex items-center justify-center">
-                <ClockIcon />
-                upload date
-              </div>
-              {!user && (
-                <div className="flex items-center justify-center">
-                  <SolidUserIcon />
-                  upload user
-                </div>
-              )}
-            </div>
-          </div>{' '}
-          <div className="">
-            {/* <img src="../../assets/2_rx7.jpg" alt="abc" /> */}
-            <div className="h-44 w-full rounded-xl bg-blogBackground"></div>
-            <div className="mt-1">Category</div>
-            <h3 className="py-3 text-2xl font-bold">
-              Có bức ảnh nào nhìn vào khiến người ta cười không ngừng được
-              không?
-            </h3>
-            <p className="pb-3">
-              Có mấy bức ảnh trông vào nhìn rất kì kiểu như là chắc phải có thế
-              lực nào đó chụp ....
-            </p>
-            <div className="flex gap-7">
-              <div className="flex items-center justify-center">
-                <ClockIcon />
-                upload date
-              </div>
-              {!user && (
-                <div className="flex items-center justify-center">
-                  <SolidUserIcon />
-                  upload user
-                </div>
-              )}
-            </div>
-          </div>{' '}
-          <div className="">
-            {/* <img src="../../assets/2_rx7.jpg" alt="abc" /> */}
-            <div className="h-44 w-full rounded-xl bg-blogBackground"></div>
-            <div className="mt-1">Category</div>
-            <h3 className="py-3 text-2xl font-bold">
-              Có bức ảnh nào nhìn vào khiến người ta cười không ngừng được
-              không?
-            </h3>
-            <p className="pb-3">
-              Có mấy bức ảnh trông vào nhìn rất kì kiểu như là chắc phải có thế
-              lực nào đó chụp ....
-            </p>
-            <div className="flex gap-7">
-              <div className="flex items-center justify-center">
-                <ClockIcon />
-                upload date
-              </div>
-              {!user && (
-                <div className="flex items-center justify-center">
-                  <SolidUserIcon />
-                  upload user
-                </div>
-              )}
-            </div>
-          </div>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </div>
