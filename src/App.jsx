@@ -13,6 +13,9 @@ import { useContext, useEffect } from 'react';
 import { fetchUserFromLocalStorage } from './utils/fetchUserFromLocalStorage';
 import { UserContext } from './Contexts/UserContext';
 import ProfileLayout from './layouts/ProfileLayout';
+import RestaurantDetail from './pages/DataDetailPage/LocationDetail';
+import LocationReview from './pages/LocationReview';
+import LocationDetail from './pages/DataDetailPage/LocationDetail';
 
 function App() {
   const { setUser, user } = useContext(UserContext);
@@ -32,11 +35,31 @@ function App() {
         {/* trang mới thêm vào đây */}
         <Route index element={<HomePage />} />
         {user && (
-          <Route path="profile" element={<ProfileLayout />}>
-            <Route path="information" element={<UserProfile />} />
-            <Route path="change-password" element={<UserProfile />} />
-          </Route>
+          <>
+            <Route path="profile" element={<ProfileLayout />}>
+              <Route path="information" element={<UserProfile />} />
+              <Route path="change-password" element={<UserProfile />} />
+            </Route>
+            <Route path="/restaurantReview/:id" element={<LocationReview />} />
+            <Route
+              path="/accommodationReview/:id"
+              element={<LocationReview />}
+            />
+            <Route
+              path="/touristAttractionReview/:id"
+              element={<LocationReview />}
+            />
+          </>
         )}
+        <Route path="RestaurantDetail/:id" element={<LocationDetail />}></Route>
+        <Route
+          path="AccommodationDetail/:id"
+          element={<LocationDetail />}
+        ></Route>
+        <Route
+          path="TouristAttractionDetail/:id"
+          element={<LocationDetail />}
+        ></Route>
         <Route path="trip-plan" element={<TripPlan />} />
         <Route path="explore" element={<Explore />} />
         <Route path="*" element={<NotFound404 />} />
