@@ -16,12 +16,12 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   };
 
   return (
-    <div className="bottom-0 flex justify-center bg-bg-secondary-color p-4">
+    <div className="bottom-0 flex justify-center gap-2 bg-bg-color px-3 pb-10 pt-7">
       <div>
         <button
           onClick={handlePrevPage}
           disabled={currentPage === 1}
-          className="cursor-pointer rounded border px-4 py-2 hover:bg-blue-200"
+          className="flex h-full cursor-pointer items-center justify-center rounded p-2 hover:bg-blue-200"
         >
           <svg
             width="40"
@@ -41,13 +41,13 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         </button>
       </div>
 
-      <ul className="flex space-x-2 ">
+      <ul className="flex items-center space-x-2">
         {pages.map((page) => (
           <li
             key={page}
-            className={`cursor-pointer rounded border px-4 py-2 ${
+            className={`flex h-3/4 cursor-pointer items-center justify-center rounded border px-4 py-0  ${
               currentPage === page
-                ? 'border-1 border-accent-color bg-white text-black'
+                ? 'border-1 border-secondary-color bg-white text-black'
                 : 'hover:bg-blue-200'
             }`}
             onClick={() => onPageChange(page)}
@@ -61,7 +61,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         <button
           onClick={handleNextPage}
           disabled={currentPage === totalPages}
-          className="cursor-pointer rounded border px-4 py-2 hover:bg-blue-200"
+          className="flex h-full cursor-pointer items-center justify-center rounded p-2 hover:bg-blue-200"
         >
           <svg
             width="40"

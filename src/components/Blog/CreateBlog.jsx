@@ -6,6 +6,8 @@ import 'react-quill/dist/quill.snow.css';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
 import { addBlog } from '../../api/service/blog';
 
+import defaultImage from '../../assets/default.jpg';
+
 const CreateBlog = () => {
   const toolbarOptions = [
     ['bold', 'italic', 'underline', 'strike'], // toggled buttons
@@ -37,6 +39,27 @@ const CreateBlog = () => {
   // const [options, setOptions] = useState([]);
   const [blogData, setBlogData] = useState(null);
   const [response, setResponse] = useState();
+  const [coverImage, setCoverImage] = useState(defaultImage);
+  const [imageFile, setImageFile] = useState(null);
+  const [errors, setErrors] = useState({});
+
+  const handleImageFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      let imageFile = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (x) => {
+        const image = x.target.result;
+        setImageFile(imageFile);
+        setCoverImage(image);
+      };
+      reader.readAsDataURL(imageFile);
+    } else {
+      setImageFile(null);
+      setCoverImage(defaultImage);
+    }
+  };
+  // console.log(coverImage);
+  // console.log(coverImage);
 
   const handleBlogCategoryIdChange = (e) => {
     setBlogCategoryId(e.target.value);
@@ -47,6 +70,15 @@ const CreateBlog = () => {
   };
   const handleBlogContentChange = (content) => {
     setBlogContent(content);
+  };
+
+  const validate = () => {
+    let temp = {};
+    temp.title = title == '' ? false : true;
+    temp.blogContent = blogContent == '' ? false : true;
+    temp.blogCategoryId = blogCategoryId == 0 ? false : true;
+    temp.coverImage = coverImage == defaultImage ? false : true;
+    setErrors(temp);
   };
 
   const handleSubmitBlogData = () => {
@@ -169,18 +201,31 @@ const CreateBlog = () => {
               className="w-full rounded-lg bg-secondary-color px-1 py-2 opacity-90"
             >
               <option value={0}>Chọn</option>
-              <option value={1}>Chỗ ở</option>
-              <option value={2}>Nhà hàng</option>
-              <option value={3}>Trải nghiệm</option>
+              <option value={1}>Du lịch một mình</option>
+              <option value={2}>Trải nghiệm lần đầu</option>
+              <option value={3}>Lệ hội</option>
             </select>
           </div>
           {/* picture */}
           <div className="w-full">
             <h1 className="mb-7 text-lg font-bold">Ảnh bìa</h1>
-            <div className="flex h-32 w-full items-center justify-center rounded-xl bg-bg-color">
-              <button className="w-1/2 bg-text-color/10 px-3 py-1 text-lg font-bold">
+            <div className="flex h-fit w-full items-center justify-center bg-bg-color">
+              <img src={coverImage} alt="Cover_image" className="rounded-lg" />
+            </div>
+            <div className="mt-3 flex w-full justify-center">
+              <label
+                for="fileInput"
+                className="custom-file-upload rounded-md bg-[#D9D9D9] px-2 py-1 text-xl font-bold"
+              >
                 Thêm +
-              </button>
+              </label>
+              <input
+                onChange={handleImageFileChange}
+                id="fileInput"
+                type="file"
+                accept="image/*"
+                className="hidden"
+              />
             </div>
           </div>
         </section>

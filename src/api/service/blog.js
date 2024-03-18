@@ -1,4 +1,10 @@
-import { createBlog, deleteABlog, getABlog, getBlogs } from '..';
+import {
+  createBlog,
+  createBlogComment,
+  deleteABlog,
+  getABlog,
+  getBlogs,
+} from '..';
 
 export const addBlog = async (data) => {
   try {
@@ -47,6 +53,19 @@ export const deleteBlog = async (blogId) => {
   } catch (error) {
     console.error(
       'Create blog failed:',
+      error.response ? error.response.data : error.message
+    );
+  }
+};
+
+export const addBlogComment = async (data) => {
+  try {
+    const res = await createBlogComment(data);
+    // console.log(res);
+    return res;
+  } catch (error) {
+    console.error(
+      'Add comment failed:',
       error.response ? error.response.data : error.message
     );
   }

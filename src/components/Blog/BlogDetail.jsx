@@ -8,22 +8,29 @@ import RightArrowIcon from '../Icons/RightArrowIcon';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
 import WrenchIcon from '../Icons/WrenchIcon';
 import { Link, useParams } from 'react-router-dom';
-import { getBlog } from '../../api/service/blog';
+import { addBlogComment, getBlog } from '../../api/service/blog';
 import FormattedDate from '../FormattedDate';
 import { useContext } from 'react';
 import { BlogContext } from '../../Contexts/BlogContext';
-import SendIcon from '../Icons/SendIcon';
+import { getListBlogComments } from '../../api/service/comment';
+import { getUser } from '../../api/service/user';
 
 const BlogDetail = () => {
-  const { limitBlog } = useContext(BlogContext);
+  // const { limitBlog } = useContext(BlogContext);
+
+  const { blogId } = useParams();
 
   // const lastBlogId = limitBlog[limitBlog.length - 1];
   // console.log(limitBlog);
 
   const [user, setUser] = useState(null);
+  const [commentedUser, setCommentedUser] = useState(null);
   const [blog, setBlog] = useState(null);
   const [commentContent, setCommentContent] = useState('');
-
+  const [comment, setComment] = useState(null);
+  const [listComments, setListComments] = useState([]);
+  const [blogLink, setBlogLink] = useState('');
+  console.log(blog);
   const handleCommentContentChange = (e) => {
     setCommentContent(e.target.value);
   };
@@ -34,7 +41,14 @@ const BlogDetail = () => {
   //   "commentContentContent": "string"
   // }
 
-  const handleSubmitData = (e) => {};
+  const handleSubmitData = (e) => {
+    setComment({
+      userId: user?.userId,
+      blogId,
+      // stars: 5,
+      commentContent,
+    });
+  };
 
   useEffect(() => {
     const userLS = fetchUserFromLocalStorage();
@@ -42,8 +56,6 @@ const BlogDetail = () => {
       setUser(userLS);
     }
   }, []);
-
-  const { blogId } = useParams();
 
   useEffect(() => {
     async function fetchData() {
@@ -56,6 +68,62 @@ const BlogDetail = () => {
     fetchData();
   }, [blogId]);
   // console.log(blog?.userId);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (user) {
+        if (comment) {
+          const res = await addBlogComment(comment);
+          console.log('>>>response: ', res);
+        }
+      } else {
+        console.log('Đăng nhập đã');
+      }
+    }
+    fetchData();
+  }, [comment]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const res = await getListBlogComments();
+      // console.log('>>>response: ', res);
+      setListComments(res.data);
+    }
+    fetchData();
+  }, []);
+
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     const response = await getUser(comment?.userId);
+
+  //     if (response) {
+  //       setCommentedUser(response?.data?.data[0]);
+  //     }
+  //   }
+  //   fetchData();
+  // }, []);
+
+  useEffect(() => {
+    var htmlString = blog?.blogContent;
+    // Parse HTML string
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(htmlString, 'text/html');
+
+    // Get individual elements
+    var elements = doc.body.children;
+
+    // Convert NodeList to array for easy manipulation
+    var elementsArray = Array.from(elements);
+
+    // Extract content of each element
+    var contents = elementsArray.map(function (element) {
+      return element.outerHTML;
+    });
+
+    // Display the contents
+    console.log(contents);
+  }, [blog]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [blogId]);
@@ -65,11 +133,11 @@ const BlogDetail = () => {
         Hoạt động
       </div>
       {/* category */}
-      <div className="py-7 text-text-color">
+      <div className="flex gap-1 py-7 text-text-color">
         {blog?.blog_BlogCatagories.map((category) => {
           return (
-            <div className="w-fit rounded-lg bg-primary-color/50 px-1">
-              {category.blogCategoryName + ' '}
+            <div className="w-fit rounded-lg bg-secondary-color/50 px-1">
+              {category.blogCategoryName}
             </div>
           );
         })}
@@ -93,7 +161,9 @@ const BlogDetail = () => {
           </div>
           {/* blog content */}
           <div className="flex w-full flex-col items-center justify-center gap-7 border-y-[1px] border-text-color/20 py-7 text-lg">
-            <p dangerouslySetInnerHTML={{ __html: blog?.blogContent }}></p>
+            <p dangerouslySetInnerHTML={{ __html: blog?.blogContent }}>
+              {/* <img src={`${''}`} alt="" /> */}
+            </p>
           </div>
           {/* share + like/ Sửa, xóa */}
           {user?.userId === blog?.userId ? (
@@ -123,43 +193,6 @@ const BlogDetail = () => {
             </>
           )}
           {/* prev/next blog button */}
-          <div
-            className={`my-8 flex ${blogId >= 2 ? 'justify-between' : 'justify-end'} gap-10 py-2 ${user?.userId === blog?.userId ? 'bg-bg-secondary-color' : ''}`}
-          >
-            {/* prev blog */}
-            {/* chua xong */}
-            {blogId >= 2 && (
-              <Link
-                to={`/blog/${parseInt(blogId) - 1}`}
-                className="flex items-center"
-              >
-                <PrevIcon />
-                <div className="flex flex-col gap-2 text-start">
-                  <h4 className="text-xl">Bài trước</h4>
-                  <div className="font-bold">
-                    Có bức ảnh nào nhìn vào khiến người ta cười không ngừng được
-                    không?
-                  </div>
-                </div>
-              </Link>
-            )}
-            {/* next blog */}
-            {blogId <= 20 && (
-              <Link
-                to={`/blog/${parseInt(blogId) + 1}`}
-                className={`flex flex-row-reverse items-center ${blogId >= 2 ? '' : 'w-1/2'}`}
-              >
-                <NextIcon />
-                <div className="flex flex-col gap-2 text-end">
-                  <h4 className="text-xl">Bài sau</h4>
-                  <div className="font-bold">
-                    Có bức ảnh nào nhìn vào khiến người ta cười không ngừng được
-                    không?
-                  </div>
-                </div>
-              </Link>
-            )}
-          </div>
           {/* comment section */}
           <div
             className={`${user?.userId === blog?.userId ? 'bg-bg-secondary-color px-12' : ''}`}
@@ -186,25 +219,30 @@ const BlogDetail = () => {
                     className={`h-16 w-full resize-none border-[1px] border-text-color/40 ${user?.userId === blog?.userId ? 'bg-bg-secondary-color' : 'bg-bg-color'} p-1`}
                   ></textarea>
                 </div>
-                <button className="mb-5 self-end rounded-lg bg-primary-color/30 px-1 hover:bg-primary-color/70">
-                  Bình luận
+                <button
+                  onClick={handleSubmitData}
+                  type="submit"
+                  className="mb-5 self-end rounded-lg bg-primary-color/30 px-1 hover:bg-primary-color/70"
+                >
+                  Đăng
                 </button>
               </div>
               {/* comment by user */}
-              <div className="flex gap-5">
-                <img
-                  className="h-[45px] w-[45px] rounded-full"
-                  src={`${user?.pictureProfile ? user?.pictureProfile : 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'}`}
-                ></img>
-                <div
-                  className={`h-16 w-full ${user?.userId === blog?.userId ? 'bg-bg-secondary-color' : 'bg-bg-color'} px-2`}
-                >
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Praesentium voluptatum blanditiis sit doloremque eius officia
-                  aliquam dolores labore at, quae hic est quia consequuntur
-                  dignissimos cumque corporis necessitatibus molestias odio!
-                </div>
-              </div>
+              {listComments?.map((comment) => {
+                return (
+                  <div className="flex gap-5">
+                    <img
+                      className="h-[45px] w-[45px] rounded-full"
+                      src={`${user?.pictureProfile ? user?.pictureProfile : 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'}`}
+                    ></img>
+                    <div
+                      className={`h-16 w-full whitespace-pre-line break-all ${user?.userId === blog?.userId ? 'bg-bg-secondary-color' : 'bg-bg-color'} px-2`}
+                    >
+                      {comment.commentContent}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>

@@ -7,7 +7,6 @@ import HeadingBlogList from './HeadingBlogList';
 import { getListBlogs } from '../../api/service/blog';
 import { Link } from 'react-router-dom';
 import FormattedDate from '../FormattedDate';
-import GetAuthor from './GetAuthor';
 import { BlogContext } from '../../Contexts/BlogContext';
 import FindIcon from '../Icons/FindIcon';
 import Pagination from '../Pagination';
@@ -18,7 +17,7 @@ const BlogList = () => {
   const [user, setUser] = useState(null);
   const [listBlogs, setListBlogs] = useState([]);
 
-  const blogDataPerPage = 12; // Số lượng nhà hàng trên mỗi trang
+  const blogDataPerPage = 9; // Số lượng nhà hàng trên mỗi trang
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(listBlogs.length / blogDataPerPage);
 
@@ -59,7 +58,7 @@ const BlogList = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [currentPage]);
   return (
     <div className="bg-bg-color">
       <HeadingBlogList title={'Trải nghiệm chân thực về Nhật Bản'} />
@@ -68,7 +67,7 @@ const BlogList = () => {
           {/* <FilterIcon /> */}
           {/* <div>Sắp xếp theo</div> */}
         </button>
-        <div className="relative flex w-full items-center justify-end text-lg font-bold">
+        <div className="relative flex w-full items-center justify-end text-lg font-medium">
           <select className="rounded-s-xl bg-secondary-color/70 py-[8.1px]">
             <option value="" className="font-medium">
               Tất cả
@@ -106,8 +105,8 @@ const BlogList = () => {
                 <div className="mt-2 flex gap-2 text-sm uppercase">
                   {blog.blog_BlogCatagories.map((category) => {
                     return (
-                      <div className="rounded-lg bg-primary-color/50 px-1">
-                        {category.blogCategoryName + ' '}
+                      <div className="rounded-lg bg-secondary-color/50 px-1">
+                        {category.blogCategoryName}
                       </div>
                     );
                   })}
