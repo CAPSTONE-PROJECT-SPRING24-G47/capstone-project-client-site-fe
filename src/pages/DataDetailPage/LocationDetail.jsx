@@ -73,36 +73,42 @@ const LocationDetail = () => {
 
   //Get data (restaurant, accommodation, TA)
   useEffect(() => {
-    async function fetchData() {
-      const response = await getRestaurantDetail(id);
-      if (response) {
-        const restaurant = response.data[0];
-        setRestaurantData(restaurant);
+    if (locationTypeDetail === 'RestaurantDetail') {
+      async function fetchData() {
+        const response = await getRestaurantDetail(id);
+        if (response) {
+          const restaurant = response.data[0];
+          setRestaurantData(restaurant);
+        }
       }
+      fetchData();
     }
-    fetchData();
   }, [id]);
 
   useEffect(() => {
-    async function fetchData() {
-      const response = await getAccommodationDetail(id);
-      if (response) {
-        const accommodation = response.data[0];
-        setAccommodationData(accommodation);
+    if (locationTypeDetail === 'AccommodationDetail') {
+      async function fetchData() {
+        const response = await getAccommodationDetail(id);
+        if (response) {
+          const accommodation = response.data[0];
+          setAccommodationData(accommodation);
+        }
       }
+      fetchData();
     }
-    fetchData();
   }, [id]);
 
   useEffect(() => {
-    async function fetchData() {
-      const response = await getTouristAttractionDetail(id);
-      if (response) {
-        const TAttraction = response.data[0];
-        setTouristAttractionData(TAttraction);
+    if (locationTypeDetail === 'TouristAttractionDetail') {
+      async function fetchData() {
+        const response = await getTouristAttractionDetail(id);
+        if (response) {
+          const TAttraction = response.data[0];
+          setTouristAttractionData(TAttraction);
+        }
       }
+      fetchData();
     }
-    fetchData();
   }, [id]);
 
   //Get comment
@@ -110,31 +116,32 @@ const LocationDetail = () => {
     async function fetchData() {
       if (locationTypeDetail === 'RestaurantDetail') {
         const response = await getListRestaurantComment(id);
-        console.log(response);
+        const comment = response.data.reverse();
+        console.log(comment);
         if (response) {
-          setCommentData(response.data);
+          setCommentData(comment);
         }
       }
       if (locationTypeDetail === 'AccommodationDetail') {
         const response = await getListAccommodationComment(id);
+        const comment = response.data.reverse();
         console.log(response);
         if (response) {
-          setCommentData(response.data);
+          setCommentData(comment);
         }
       }
       if (locationTypeDetail === 'TouristAttractionDetail') {
         const response = await getListTouristAttractionComment(id);
+        const comment = response.data.reverse();
         console.log(response);
         if (response) {
-          setCommentData(response.data);
+          setCommentData(comment);
         }
       }
       setIsConfirm(false);
     }
     fetchData();
   }, [id, toggleDelete]);
-
-  console.log(commentData);
 
   //Set form data để hiện detail
   useEffect(() => {
@@ -234,7 +241,7 @@ const LocationDetail = () => {
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
   console.log(`Loading items from ${itemOffset} to ${endOffset}`);
-  const currentItems = commentData.slice(itemOffset, endOffset);
+  const currentItems = commentData.reverse().slice(itemOffset, endOffset);
   const pageCount = Math.ceil(commentData.length / itemsPerPage);
 
   // Invoke when user click to request another page.
@@ -476,7 +483,9 @@ const LocationDetail = () => {
               </p>
             )}
             {detailData.price && (
-              <p className="pl-2 pt-5 font-bold">Mức giá: {detailData.price}</p>
+              <p className="pl-2 pt-5 font-bold">
+                Mức giá: {detailData.price}VND
+              </p>
             )}
 
             <div className="flex flex-row gap-3 pl-2 pt-4">
@@ -579,7 +588,9 @@ const LocationDetail = () => {
                     fill="#0F172A"
                   />
                 </svg>
-                <p className="font-bold">{detailData.website}</p>
+                <a className="font-bold" href={detailData.website}>
+                  {detailData.website}
+                </a>
               </div>
             </div>
           </div>

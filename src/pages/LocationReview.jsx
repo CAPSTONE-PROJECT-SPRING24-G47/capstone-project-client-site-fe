@@ -40,36 +40,42 @@ const LocationReview = () => {
   };
   //Get data (restaurant, accommodation, TA)
   useEffect(() => {
-    async function fetchData() {
-      const response = await getRestaurantDetail(id);
-      if (response) {
-        const restaurant = response.data[0];
-        setRestaurantData(restaurant);
+    if (locationTypeReview === 'restaurantReview') {
+      async function fetchData() {
+        const response = await getRestaurantDetail(id);
+        if (response) {
+          const restaurant = response.data[0];
+          setRestaurantData(restaurant);
+        }
       }
+      fetchData();
     }
-    fetchData();
   }, [id]);
 
   useEffect(() => {
-    async function fetchData() {
-      const response = await getAccommodationDetail(id);
-      if (response) {
-        const accommodation = response.data[0];
-        setAccommodationData(accommodation);
+    if (locationTypeReview === 'accommodationReview') {
+      async function fetchData() {
+        const response = await getAccommodationDetail(id);
+        if (response) {
+          const accommodation = response.data[0];
+          setAccommodationData(accommodation);
+        }
       }
+      fetchData();
     }
-    fetchData();
   }, [id]);
 
   useEffect(() => {
-    async function fetchData() {
-      const response = await getTouristAttractionDetail(id);
-      if (response) {
-        const TAttraction = response.data[0];
-        setTouristAttractionData(TAttraction);
+    if (locationTypeReview === 'touristAttractionReview') {
+      async function fetchData() {
+        const response = await getTouristAttractionDetail(id);
+        if (response) {
+          const TAttraction = response.data[0];
+          setTouristAttractionData(TAttraction);
+        }
       }
+      fetchData();
     }
-    fetchData();
   }, [id]);
   //Set form data để hiện detail
   useEffect(() => {
@@ -194,7 +200,7 @@ const LocationReview = () => {
           {/* <img src="" alt="" /> */}
           <div className="h-[250px] w-[250px] bg-white"></div>
           <p className="text-3xl font-bold">{detailData.name}</p>
-          <p>{detailData.address}</p>
+          <p className="font-bold">{detailData.address}</p>
         </div>
         <div className=" w-[35%] items-center justify-items-center">
           <p className="text-2xl font-bold">Đánh giá trải nghiệm của bạn</p>
