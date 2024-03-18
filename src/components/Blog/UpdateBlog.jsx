@@ -5,6 +5,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
 import { deleteBlog, getBlog } from '../../api/service/blog';
+import ActionPopUp from './ActionPopUp';
 
 const UpdateBlog = () => {
   const toolbarOptions = [
@@ -96,7 +97,8 @@ const UpdateBlog = () => {
   }, [isConfirm]);
 
   return (
-    <div className="bg-bg-color px-3 py-10">
+    <div className="relative bg-bg-color px-3 py-10">
+      {/* <ActionPopUp /> */}
       {/* <div
         className="absolute inset-0 bg-[#03121A] opacity-50 backdrop-blur-[20px]"
         onClick={() => setIsPopUp(false)}

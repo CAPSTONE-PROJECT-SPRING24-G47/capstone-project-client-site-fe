@@ -9,18 +9,32 @@ import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage
 import WrenchIcon from '../Icons/WrenchIcon';
 import { Link, useParams } from 'react-router-dom';
 import { getBlog } from '../../api/service/blog';
-import GetAuthor from './GetAuthor';
 import FormattedDate from '../FormattedDate';
 import { useContext } from 'react';
 import { BlogContext } from '../../Contexts/BlogContext';
+import SendIcon from '../Icons/SendIcon';
 
 const BlogDetail = () => {
   const { limitBlog } = useContext(BlogContext);
 
   // const lastBlogId = limitBlog[limitBlog.length - 1];
   // console.log(limitBlog);
+
   const [user, setUser] = useState(null);
   const [blog, setBlog] = useState(null);
+  const [commentContent, setCommentContent] = useState('');
+
+  const handleCommentContentChange = (e) => {
+    setCommentContent(e.target.value);
+  };
+
+  // {
+  //   "userId": 5,
+  //   "blogId": 2,
+  //   "commentContentContent": "string"
+  // }
+
+  const handleSubmitData = (e) => {};
 
   useEffect(() => {
     const userLS = fetchUserFromLocalStorage();
@@ -51,7 +65,15 @@ const BlogDetail = () => {
         Hoạt động
       </div>
       {/* category */}
-      <div className="py-7 text-text-color/40">Category Category Category</div>
+      <div className="py-7 text-text-color">
+        {blog?.blog_BlogCatagories.map((category) => {
+          return (
+            <div className="w-fit rounded-lg bg-primary-color/50 px-1">
+              {category.blogCategoryName + ' '}
+            </div>
+          );
+        })}
+      </div>
       <div className="flex justify-center gap-20">
         {/* blog */}
         <section
@@ -66,7 +88,6 @@ const BlogDetail = () => {
             </div>
             <button className="flex items-center justify-center gap-1">
               <SolidUserIcon />
-              {/* <GetAuthor userId={blog?.userId} /> */}
               {blog?.user.lastName + ' ' + blog?.user.firstName}
             </button>
           </div>
@@ -88,7 +109,7 @@ const BlogDetail = () => {
             </div>
           ) : (
             <>
-              <div className="flex flex-col gap-3 border-b-[1px] border-text-color/20 py-3">
+              {/* <div className="flex flex-col gap-3 border-b-[1px] border-text-color/20 py-3">
                 <div>Chia sẻ</div>
                 <div className="rounded-lg bg-secondary-color/50 text-center">
                   social
@@ -97,7 +118,7 @@ const BlogDetail = () => {
                   <LikeIcon />
                   Thích
                 </button>
-              </div>
+              </div> */}
               <div className="py-3 text-text-color/50">Báo vi phạm</div>
             </>
           )}
@@ -141,27 +162,40 @@ const BlogDetail = () => {
           </div>
           {/* comment section */}
           <div
-            className={`${user?.userId === blog?.userId ? 'bg-bg-secondary-color px-12' : ''} `}
+            className={`${user?.userId === blog?.userId ? 'bg-bg-secondary-color px-12' : ''}`}
           >
             <h1 className="py-10 text-4xl font-bold">
               Bình luận về bài viết này
             </h1>
             <div className="ml-5">
-              {/* comment textarea */}
-              <div className="mb-5 flex gap-6">
-                <img src="../../assets/fuji.jpg" alt="abc" />
-                <textarea
-                  name=""
-                  id="comment"
-                  // cols="30"
-                  // rows="10"
-                  placeholder="Để lại bình luận của bạn"
-                  className={`h-16 w-full resize-none border-[1px] border-text-color/40 ${user?.userId === blog?.userId ? 'bg-bg-secondary-color' : 'bg-bg-color'} p-1`}
-                ></textarea>
+              {/* comment content */}
+              <div className="flex flex-col">
+                <div className="mb-3 flex gap-6">
+                  <img
+                    className="h-[45px] w-[45px] rounded-full"
+                    src={`${user?.pictureProfile ? user?.pictureProfile : 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'}`}
+                  ></img>
+                  <textarea
+                    name=""
+                    id="commentContent"
+                    value={commentContent}
+                    onChange={handleCommentContentChange}
+                    // cols="30"
+                    // rows="10"
+                    placeholder="Để lại bình luận của bạn"
+                    className={`h-16 w-full resize-none border-[1px] border-text-color/40 ${user?.userId === blog?.userId ? 'bg-bg-secondary-color' : 'bg-bg-color'} p-1`}
+                  ></textarea>
+                </div>
+                <button className="mb-5 self-end rounded-lg bg-primary-color/30 px-1 hover:bg-primary-color/70">
+                  Bình luận
+                </button>
               </div>
-              {/* comment */}
+              {/* comment by user */}
               <div className="flex gap-5">
-                <img src="../../assets/fuji.jpg" alt="abc" />
+                <img
+                  className="h-[45px] w-[45px] rounded-full"
+                  src={`${user?.pictureProfile ? user?.pictureProfile : 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'}`}
+                ></img>
                 <div
                   className={`h-16 w-full ${user?.userId === blog?.userId ? 'bg-bg-secondary-color' : 'bg-bg-color'} px-2`}
                 >
