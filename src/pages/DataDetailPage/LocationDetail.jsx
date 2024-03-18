@@ -252,7 +252,7 @@ const LocationDetail = () => {
 
   function Comment({ currentItems }) {
     return (
-      <div className="w[100%]">
+      <div className="w-[80%]">
         {currentItems &&
           currentItems.map((item) => (
             <div className="mt-12 flex w-[100%] flex-row border-b-2 border-dotted border-black/25 pb-4">
@@ -267,11 +267,36 @@ const LocationDetail = () => {
                   </p>
                   {userData.userId == item.userId && (
                     <div className="mr-[12%] flex flex-row gap-2">
-                      <button className="border-r-2 border-primary-color pr-2 text-primary-color">
-                        Sửa
-                      </button>
+                      {locationTypeDetail === 'RestaurantDetail' && (
+                        <Link
+                          to={`/updateRestaurantReview/${id}/${item.restaurantCommentId}`}
+                        >
+                          <button className="border-r-2 border-primary-color pr-2 text-primary-color">
+                            Sửa
+                          </button>
+                        </Link>
+                      )}
+                      {locationTypeDetail === 'AccommodationDetail' && (
+                        <Link
+                          to={`/updateAccommodationReview/${id}/${item.accommodationCommentId}`}
+                        >
+                          <button className="border-r-2 border-primary-color pr-2 text-primary-color">
+                            Sửa
+                          </button>
+                        </Link>
+                      )}
+                      {locationTypeDetail === 'TouristAttractionDetail' && (
+                        <Link
+                          to={`/updateTouristAttractionReview/${id}/${item.touristAttractionCommentId}`}
+                        >
+                          <button className="border-r-2 border-primary-color pr-2 text-primary-color">
+                            Sửa
+                          </button>
+                        </Link>
+                      )}
+
                       <button
-                        className="text-sub-color"
+                        className="pb-3 text-sub-color"
                         onClick={() => {
                           setIsDeletePopUp(true);
                           if (locationTypeDetail === 'RestaurantDetail') {
@@ -325,9 +350,10 @@ const LocationDetail = () => {
                     <p>{FormatDate(item.createdAt)}</p>
                   </div>
                 </div>
-                <p className="w-[full] min-w-[960px] font-bold">
+                <p className="w-[full] min-w-[960px] break-all font-bold">
                   {item.commentContent}
                 </p>
+
                 <div className="flex w-[full] flex-row gap-4 rounded-tr-lg">
                   <div className=" h-[150px] w-[25%]  bg-gray-300 text-center ">
                     <p className="py-auto">Ảnh</p>
@@ -474,7 +500,7 @@ const LocationDetail = () => {
           <p className="-ml-[64%] mb-8 border-l-4 border-black pl-4 text-3xl font-bold">
             Mô tả địa điểm
           </p>
-          <div className="relative h-[auto] w-[80%] text-left">
+          <div className="h-[auto] w-[80%] text-left">
             <p className=" pl-2 text-2xl font-bold">{detailData.description}</p>
 
             {detailData.menu && (

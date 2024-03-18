@@ -4,8 +4,10 @@ import {
   getTouristAttraction,
   getTouristAttractionCategories,
   getTouristAttractionCategoryDetail,
+  getTouristAttractionComment,
   getTouristAttractionComments,
   getTouristAttractions,
+  updateTouristAttractionComment,
 } from '..';
 
 export const getListTACategories = async () => {
@@ -88,6 +90,31 @@ export const deleteTACommentDetail = async (id) => {
   } catch (error) {
     console.error(
       'Get comment failed:',
+      error.response ? error.response.data : error.message
+    );
+  }
+};
+
+export const updateTACommentDetail = async (id, data) => {
+  try {
+    const res = await updateTouristAttractionComment(id, data);
+
+    return res.data;
+  } catch (error) {
+    console.error(
+      'Add Accommodation failed:',
+      error.response ? error.response.data : error.message
+    );
+  }
+};
+
+export const getTACommentDetail = async (id) => {
+  try {
+    const res = await getTouristAttractionComment(id);
+    return res.data;
+  } catch (error) {
+    console.error(
+      'Get TA comment failed:',
       error.response ? error.response.data : error.message
     );
   }

@@ -1,23 +1,28 @@
-import React, { useState } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import ReactStars from 'react-rating-stars-component';
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   addRestaurantComment,
+  getRestaurantCommentDetail,
   getRestaurantDetail,
+  updateRestaurantCommentDetail,
 } from '../api/services/restaurant';
 import {
   addAccommodationComment,
+  getAccommodationCommentDetail,
   getAccommodationDetail,
+  updateAccommodationCommentDetail,
 } from '../api/services/accommodation';
 import {
   addTouristAttractionComment,
+  getTACommentDetail,
   getTouristAttractionDetail,
+  updateTACommentDetail,
 } from '../api/services/touristAttraction';
+import ReactStars from 'react-rating-stars-component';
 
-const LocationReview = () => {
+const UpdateReview = () => {
   const userData = JSON.parse(localStorage.getItem('user'));
-  const { id } = useParams();
+  const { id, commentId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = location;
@@ -27,20 +32,28 @@ const LocationReview = () => {
   const [restaurantData, setRestaurantData] = useState(null);
   const [accommodationData, setAccommodationData] = useState(null);
   const [touristAttractionData, setTouristAttractionData] = useState(null);
+  const [formdata, setFormdata] = useState({
+    stars: 0,
+    commentContent: null,
+    userId: userData.userId,
+    restaurantId: id,
+    accommodationId: id,
+    touristAttractionId: id,
+  });
   const handleBack = () => {
-    if (locationTypeReview === 'restaurantReview') {
+    if (locationTypeReview === 'updateRestaurantReview') {
       navigate(`/RestaurantDetail/${id}`);
     }
-    if (locationTypeReview === 'accommodationReview') {
+    if (locationTypeReview === 'updateAccommodationReview') {
       navigate(`/AccommodationDetail/${id}`);
     }
-    if (locationTypeReview === 'touristAttractionReview') {
+    if (locationTypeReview === 'updateTouristAttractionReview') {
       navigate(`/TouristAttractionDetail/${id}`);
     }
   };
   //Get data (restaurant, accommodation, TA)
   useEffect(() => {
-    if (locationTypeReview === 'restaurantReview') {
+    if (locationTypeReview === 'updateRestaurantReview') {
       async function fetchData() {
         const response = await getRestaurantDetail(id);
         if (response) {
@@ -53,7 +66,7 @@ const LocationReview = () => {
   }, [id]);
 
   useEffect(() => {
-    if (locationTypeReview === 'accommodationReview') {
+    if (locationTypeReview === 'updateAccommodationReview') {
       async function fetchData() {
         const response = await getAccommodationDetail(id);
         if (response) {
@@ -66,7 +79,7 @@ const LocationReview = () => {
   }, [id]);
 
   useEffect(() => {
-    if (locationTypeReview === 'touristAttractionReview') {
+    if (locationTypeReview === 'updateTouristAttractionReview') {
       async function fetchData() {
         const response = await getTouristAttractionDetail(id);
         if (response) {
@@ -79,7 +92,7 @@ const LocationReview = () => {
   }, [id]);
   //Set form data để hiện detail
   useEffect(() => {
-    if (locationTypeReview === 'restaurantReview') {
+    if (locationTypeReview === 'updateRestaurantReview') {
       setDetailData({
         name: restaurantData?.restaurantName ?? '',
         description: restaurantData?.restaurantDescription ?? '',
@@ -89,9 +102,8 @@ const LocationReview = () => {
         website: restaurantData?.restaurantWebsite ?? '',
         price: restaurantData?.priceRange,
       });
-      console.log(detailData);
     }
-    if (locationTypeReview === 'accommodationReview') {
+    if (locationTypeReview === 'updateAccommodationReview') {
       setDetailData({
         name: accommodationData?.accommodationName ?? '',
         description: accommodationData?.accommodationDescription ?? '',
@@ -100,9 +112,8 @@ const LocationReview = () => {
         website: accommodationData?.accommodationWebsite ?? '',
         price: accommodationData?.priceRange,
       });
-      console.log(detailData);
     }
-    if (locationTypeReview === 'touristAttractionReview') {
+    if (locationTypeReview === 'updateTouristAttractionReview') {
       setDetailData({
         name: touristAttractionData?.touristAttractionName ?? '',
         description: touristAttractionData?.touristAttractionDescription ?? '',
@@ -111,67 +122,118 @@ const LocationReview = () => {
         website: touristAttractionData?.touristAttractionWebsite ?? '',
         price: touristAttractionData?.priceRange,
       });
-      console.log(detailData);
     }
   }, [restaurantData, accommodationData, touristAttractionData]);
-  const [formdata, setFormdata] = useState({
-    stars: 0,
-    commentContent: null,
-    userId: userData.userId,
-    restaurantId: id,
-    accommodationId: id,
-    touristAttractionId: id,
-  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleAddComment = async (event) => {
-    event.preventDefault();
-    if (locationTypeReview === 'restaurantReview') {
+  //Get comment detail
+  useEffect(() => {
+    if (locationTypeReview === 'updateRestaurantReview') {
+      async function fetchData() {
+        const response = await getRestaurantCommentDetail(commentId);
+        if (response) {
+          const comment = response.data[0];
+          setFormdata({
+            stars: comment.stars,
+            commentContent: comment.commentContent,
+            userId: userData.userId,
+            restaurantId: comment.restaurantId,
+          });
+        }
+      }
+      fetchData();
+    }
+  }, [commentId]);
+  useEffect(() => {
+    if (locationTypeReview === 'updateAccommodationReview') {
+      async function fetchData() {
+        const response = await getAccommodationCommentDetail(commentId);
+        if (response) {
+          const comment = response.data[0];
+          setFormdata({
+            stars: comment.stars,
+            commentContent: comment.commentContent,
+            userId: userData.userId,
+            accommodationId: comment.accommodationId,
+          });
+        }
+      }
+      fetchData();
+    }
+  }, [commentId]);
+  useEffect(() => {
+    if (locationTypeReview === 'updateTouristAttractionReview') {
+      async function fetchData() {
+        const response = await getTACommentDetail(commentId);
+        if (response) {
+          const comment = response.data[0];
+          setFormdata({
+            stars: comment.stars,
+            commentContent: comment.commentContent,
+            userId: userData.userId,
+            touristAttractionId: comment.touristAttractionId,
+          });
+        }
+      }
+      fetchData();
+    }
+  }, [commentId]);
+
+  //Hàm update
+  const handleUpdateComment = async () => {
+    if (locationTypeReview === 'updateRestaurantReview') {
       try {
-        const response = await addRestaurantComment(formdata);
-        if (response.isSuccess) {
+        const response = await updateRestaurantCommentDetail(
+          commentId,
+          formdata
+        );
+        console.log(response);
+        if (response) {
           navigate(`/RestaurantDetail/${id}`);
         }
         console.log(response);
       } catch (error) {
-        console.error('Error while adding comment:', error);
+        console.error('Error while update comment:', error);
       }
     }
-    if (locationTypeReview === 'accommodationReview') {
+    if (locationTypeReview === 'updateAccommodationReview') {
       try {
-        const response = await addAccommodationComment(formdata);
-        if (response.isSuccess) {
+        const response = await updateAccommodationCommentDetail(
+          commentId,
+          formdata
+        );
+        if (response) {
           navigate(`/AccommodationDetail/${id}`);
         }
         console.log(response);
       } catch (error) {
-        console.error('Error while adding comment:', error);
+        console.error('Error while update comment:', error);
       }
     }
-    if (locationTypeReview === 'touristAttractionReview') {
+    if (locationTypeReview === 'updateTouristAttractionReview') {
       try {
-        const response = await addTouristAttractionComment(formdata);
-        if (response.isSuccess) {
+        const response = await updateTACommentDetail(commentId, formdata);
+        if (response) {
           navigate(`/TouristAttractionDetail/${id}`);
         }
         console.log(response);
       } catch (error) {
-        console.error('Error while adding comment:', error);
+        console.error('Error while update comment:', error);
       }
     }
     console.log(formdata);
   };
 
   const ratingChanged = (newRating) => {
-    setFormdata({
-      ...formdata,
-      stars: Number(newRating),
-    });
-    console.log(newRating);
+    setFormdata((prevFormdata) => ({
+      ...prevFormdata,
+      stars: newRating,
+    }));
   };
+
   return (
     <div className=" bg-bg-color">
       <div className="pl-4 pt-4">
@@ -191,7 +253,7 @@ const LocationReview = () => {
           />
         </svg>
         <p className="ml-[4%] mt-[1%] text-4xl font-bold">
-          CHIA SẺ TRẢI NGHIỆM CỦA BẠN
+          CHỈNH SỬA ĐÁNH GIÁ CỦA BẠN
         </p>
       </div>
 
@@ -210,6 +272,7 @@ const LocationReview = () => {
             color="#8DCADC"
             size={50}
             a11y={true}
+            value={formdata?.stars}
             emptyIcon={<i className="far fa-star"></i>}
             fullIcon={<i className="fa fa-star"></i>}
             activeColor="#48C75E"
@@ -217,13 +280,14 @@ const LocationReview = () => {
           <p className="mb-4 text-2xl font-bold">Chia sẻ trải nghiệm của bạn</p>
           <textarea
             required
-            className="h-[200px] w-full rounded-[10px] bg-[#c8d8ca] px-4 py-2 text-2xl"
+            className="h-[200px] min-h-[200px] w-full rounded-[10px] bg-[#c8d8ca] px-4 py-2 text-2xl"
             onChange={(e) =>
               setFormdata({
                 ...formdata,
                 commentContent: e.target.value,
               })
             }
+            value={formdata.commentContent}
           ></textarea>
 
           <p className="mb-4 text-2xl font-bold">Thêm ảnh</p>
@@ -234,19 +298,14 @@ const LocationReview = () => {
             >
               Thêm +
             </label>
-            <input
-              id="fileInput"
-              type="file"
-              className="hidden"
-              accept="image/*"
-            />
+            <input id="fileInput" type="file" className="hidden" />
           </div>
           <div className="flex w-full items-center justify-center pb-4">
             <button
               className="rounded-[15px] bg-primary-color p-2 text-2xl font-bold text-white hover:bg-bg-color hover:text-primary-color"
-              onClick={handleAddComment}
+              onClick={() => handleUpdateComment()}
             >
-              Viết đánh giá
+              Lưu đánh giá
             </button>
           </div>
         </div>
@@ -255,4 +314,4 @@ const LocationReview = () => {
   );
 };
 
-export default LocationReview;
+export default UpdateReview;

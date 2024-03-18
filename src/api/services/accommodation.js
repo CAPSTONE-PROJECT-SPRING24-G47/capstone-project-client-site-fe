@@ -4,8 +4,10 @@ import {
   getAccommodation,
   getAccommodationCategories,
   getAccommodationCategoryDetail,
+  getAccommodationComment,
   getAccommodationComments,
   getAccommodations,
+  updateAccommodationComment,
 } from '..';
 
 export const getListAccommodationCategories = async () => {
@@ -88,6 +90,31 @@ export const deleteAccommodationCommentDetail = async (id) => {
   } catch (error) {
     console.error(
       'Get restaurant failed:',
+      error.response ? error.response.data : error.message
+    );
+  }
+};
+
+export const updateAccommodationCommentDetail = async (id, data) => {
+  try {
+    const res = await updateAccommodationComment(id, data);
+
+    return res.data;
+  } catch (error) {
+    console.error(
+      'Update Accommodation failed:',
+      error.response ? error.response.data : error.message
+    );
+  }
+};
+
+export const getAccommodationCommentDetail = async (id) => {
+  try {
+    const res = await getAccommodationComment(id);
+    return res.data;
+  } catch (error) {
+    console.error(
+      'Get Accommodation comment failed:',
       error.response ? error.response.data : error.message
     );
   }

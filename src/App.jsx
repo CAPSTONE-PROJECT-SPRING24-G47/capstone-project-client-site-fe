@@ -16,6 +16,7 @@ import ProfileLayout from './layouts/ProfileLayout';
 import RestaurantDetail from './pages/DataDetailPage/LocationDetail';
 import LocationReview from './pages/LocationReview';
 import LocationDetail from './pages/DataDetailPage/LocationDetail';
+import UpdateReview from './pages/UpdateReview';
 
 function App() {
   const { setUser, user } = useContext(UserContext);
@@ -48,6 +49,18 @@ function App() {
             <Route
               path="/touristAttractionReview/:id"
               element={<LocationReview />}
+            />
+            <Route
+              path="/updateRestaurantReview/:id/:commentId"
+              element={<UpdateReview />}
+            />
+            <Route
+              path="/updateAccommodationReview/:id/:commentId"
+              element={<UpdateReview />}
+            />
+            <Route
+              path="/updateTouristAttractionReview/:id/:commentId"
+              element={<UpdateReview />}
             />
           </>
         )}

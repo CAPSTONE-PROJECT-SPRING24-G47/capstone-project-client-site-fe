@@ -38,8 +38,14 @@ export const createAccommodationComment = (data) =>
 export const getAccommodationComments = (id) =>
   API.get(`/accommodation-comment/${id}/get-comment-by-accommodationId`);
 
+export const getAccommodationComment = (id) =>
+  API.get(`/accommodation-comment/${id}`);
+
 export const deleteAccommodationComment = (id) =>
   API.delete(`/accommodation-comment/${id}`);
+
+export const updateAccommodationComment = (id, data) =>
+  API.put(`/accommodation-comment/${id}`, data);
 
 //restaurant
 export const getRestaurants = () => API.get('/restaurants');
@@ -65,6 +71,9 @@ export const createRestaurantComment = (data) =>
 export const deleteRestaurantComment = (id) =>
   API.delete(`/restaurant-comment/${id}`);
 
+export const updateRestaurantComment = (id, data) =>
+  API.put(`/restaurant-comment/${id}`, data);
+
 //tourist attraction
 export const getTouristAttractionCategories = () =>
   API.get(`/touristattraction-category`);
@@ -85,8 +94,14 @@ export const getTouristAttractionComments = (id) =>
     `/touristattraction-comment/${id}/get-comment-by-touristAttractionId`
   );
 
+export const getTouristAttractionComment = (id) =>
+  API.get(`/touristattraction-comment/${id}`);
+
 export const createTouristAttractionComment = (data) =>
   API.post('/touristattraction-comment', data);
+
+export const updateTouristAttractionComment = (id, data) =>
+  API.put(`/touristattraction-comment/${id}`, data);
 
 export const deleteTAComment = (id) =>
   API.delete(`/touristattraction-comment/${id}`);

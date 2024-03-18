@@ -7,6 +7,7 @@ import {
   getRestaurantComment,
   getRestaurantComments,
   getRestaurants,
+  updateRestaurantComment,
 } from '..';
 
 export const getListRestaurantCategories = async () => {
@@ -96,6 +97,19 @@ export const deleteRestaurantCommentDetail = async (id) => {
 export const addRestaurantComment = async (data) => {
   try {
     const res = await createRestaurantComment(data);
+
+    return res.data;
+  } catch (error) {
+    console.error(
+      'Add restaurant failed:',
+      error.response ? error.response.data : error.message
+    );
+  }
+};
+
+export const updateRestaurantCommentDetail = async (id, data) => {
+  try {
+    const res = await updateRestaurantComment(id, data);
 
     return res.data;
   } catch (error) {
