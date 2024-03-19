@@ -6,7 +6,7 @@ import 'react-quill/dist/quill.snow.css';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
 import { addBlog } from '../../api/service/blog';
 
-import defaultImage from '../../assets/default.jpg';
+import defaultImage from '../../assets/fuji.jpg';
 
 const CreateBlog = () => {
   const toolbarOptions = [
@@ -210,7 +210,13 @@ const CreateBlog = () => {
           <div className="w-full">
             <h1 className="mb-7 text-lg font-bold">Ảnh bìa</h1>
             <div className="flex h-fit w-full items-center justify-center bg-bg-color">
-              <img src={coverImage} alt="Cover_image" className="rounded-lg" />
+              <img
+                src={coverImage}
+                alt="Cover_image"
+                className="rounded-lg"
+                // height={100}
+                // width={200}
+              />
             </div>
             <div className="mt-3 flex w-full justify-center">
               <label
