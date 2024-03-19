@@ -43,7 +43,7 @@ const CreateBlog = () => {
   const [coverImage, setCoverImage] = useState(defaultImage);
   // const [imageFile, setImageFile] = useState(null);
   // const [errors, setErrors] = useState({});
-  const [isPopUp, setIsPopUp] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const handleImageFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -119,7 +119,7 @@ const CreateBlog = () => {
         const res = await addBlog(blogData);
         console.log('>>>response: ', res);
         setResponse(res);
-        setIsPopUp(true);
+        setIsSuccess(true);
         // if (response) {
         //   // setIsChangeSuccess(true);
         // }
@@ -144,29 +144,22 @@ const CreateBlog = () => {
 
   return (
     <div className="bg-bg-color px-3 py-10">
-      {isPopUp && (
+      {isSuccess && (
         <div className="fixed inset-0 z-[99] flex items-center justify-center">
           <div
             className="absolute inset-0 bg-[#03121A] opacity-50 backdrop-blur-[20px]"
-            onClick={() => setIsPopUp(false)}
+            onClick={() => setIsSuccess(false)}
           />
-          <div className="flex flex-col items-center justify-center">
+          <div className="z-50 flex h-[360px] w-96 flex-col items-center justify-center gap-10 rounded-xl bg-bg-color">
             <>
               <SuccessIconBig />
             </>
-            <h2 className="mt-8 text-2xl font-semibold">
+            <h2 className="mt-3 text-2xl font-semibold">
               Chúc mừng bạn đã thành công!
             </h2>
-            <h5 className="mb-4 text-xl font-medium">
-              Bấm <span className="text-accent-color">Tiếp tục</span> để đăng
-              nhập
-            </h5>
             <Link
               to={'/blog-individual'}
-              onClick={(e) => {
-                e.preventDefault();
-              }}
-              className="h-11 w-1/2 rounded-2xl bg-secondary-color font-semibold text-bg-color hover:bg-gradient-to-b hover:from-secondary-color hover:to-accent-color"
+              className="flex h-11 w-1/2 items-center justify-center rounded-2xl bg-secondary-color font-semibold text-bg-color hover:bg-gradient-to-b hover:from-secondary-color hover:to-accent-color"
             >
               Tiếp tục
             </Link>
@@ -208,13 +201,18 @@ const CreateBlog = () => {
           </div>
 
           <div className=" flex w-full justify-end">
-            <Link
-              // to={!title || !blogContent || !user || !response ? `` : `/blogs`}
+            <button
+              disabled={
+                !title ||
+                !blogContent ||
+                blogCategoryId == 0 ||
+                coverImage == defaultImage
+              }
               onClick={handleSubmitBlogData}
-              className="mt-4 rounded-xl bg-secondary-color px-2 py-1 text-xl font-bold text-bg-color hover:bg-secondary-color/80"
+              className="mt-4 rounded-xl bg-secondary-color px-2 py-1 text-xl font-bold text-bg-color hover:bg-secondary-color/80 disabled:bg-secondary-color/70 disabled:hover:bg-none"
             >
               Đăng
-            </Link>
+            </button>
           </div>
         </section>
         {/* Author */}
