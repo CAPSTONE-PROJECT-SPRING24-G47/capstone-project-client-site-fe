@@ -9,7 +9,7 @@ import useSignIn from '../../hooks/useSignIn';
 import useSendVerifyData from '../../hooks/useSendVerifyData';
 import useSendEmailForgetPwd from '../../hooks/useSendEmailForgetPwd';
 import useHandleForgetPwd from '../../hooks/useHandleForgetPwd';
-import useHandleResetPwd from '../../hooks/usehandleResetPwd';
+import useHandleResetPwd from '../../hooks/useHandleResetPwd';
 import Loading from '../Loading';
 import { motion } from 'framer-motion';
 
