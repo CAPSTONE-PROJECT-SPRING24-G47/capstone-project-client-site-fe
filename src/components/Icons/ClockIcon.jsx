@@ -3,14 +3,14 @@ import React from 'react';
 const ClockIcon = () => {
   return (
     <svg
-      width="20"
-      height="20"
-      viewBox="0 0 20 20"
+      width="10"
+      height="11"
+      viewBox="0 0 10 11"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        d="M10 5V10H13.75M17.5 10C17.5 14.1421 14.1421 17.5 10 17.5C5.85786 17.5 2.5 14.1421 2.5 10C2.5 5.85786 5.85786 2.5 10 2.5C14.1421 2.5 17.5 5.85786 17.5 10Z"
+        d="M5 3V5.5H6.875M8.75 5.5C8.75 7.57107 7.07107 9.25 5 9.25C2.92893 9.25 1.25 7.57107 1.25 5.5C1.25 3.42893 2.92893 1.75 5 1.75C7.07107 1.75 8.75 3.42893 8.75 5.5Z"
         stroke="#0F172A"
         stroke-width="1.5"
         stroke-linecap="round"

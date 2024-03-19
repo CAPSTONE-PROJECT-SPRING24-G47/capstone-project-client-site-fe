@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
-import FilterIcon from '../Icons/FilterIcon';
 import ClockIcon from '../Icons/ClockIcon';
 import SolidUserIcon from '../Icons/SolidUserIcon';
 import HeadingBlogList from './HeadingBlogList';
@@ -14,7 +13,7 @@ import Pagination from '../Pagination';
 const BlogList = () => {
   const { setLimitBlog } = useContext(BlogContext);
 
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const [listBlogs, setListBlogs] = useState([]);
 
   const blogDataPerPage = 9; // Số lượng nhà hàng trên mỗi trang
@@ -30,18 +29,18 @@ const BlogList = () => {
     setCurrentPage(newPage);
   };
 
-  useEffect(() => {
-    const userLS = fetchUserFromLocalStorage();
-    if (userLS) {
-      setUser(userLS);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const userLS = fetchUserFromLocalStorage();
+  //   if (userLS) {
+  //     setUser(userLS);
+  //   }
+  // }, []);
 
   useEffect(() => {
     async function fetchData() {
       const response = await getListBlogs();
       if (response) {
-        setListBlogs(response.data);
+        setListBlogs(response.data.reverse());
       }
     }
     fetchData();
@@ -101,19 +100,43 @@ const BlogList = () => {
             return (
               <Link to={`../blog/${blog.blogId}`} className="">
                 {/* <img src="../../assets/2_rx7.jpg" alt="abc" /> */}
-                <div className="h-44 w-full rounded-xl bg-blogBackground"></div>
-                <div className="mt-2 flex gap-2 text-sm uppercase">
+                <div className="max-h-4/5 flex h-44 w-full items-center justify-center bg-bg-color">
+                  <img
+                    src={blog.blogPhotos[0].photoURL}
+                    alt="Cover_image"
+                    className="h-full w-full rounded-lg object-cover"
+                    // height={100}
+                    // width={200}
+                  />
+                </div>
+                <div className="mt-2 flex flex-wrap gap-2 text-[11px] uppercase">
                   {blog.blog_BlogCatagories.map((category) => {
                     return (
-                      <div className="rounded-lg bg-secondary-color/50 px-1">
+                      <div className="rounded-lg bg-secondary-color/50 p-1">
                         {category.blogCategoryName}
                       </div>
                     );
                   })}
                 </div>
-                <h3 className="py-2 text-2xl font-bold">{blog.title}</h3>
-                <p className="pb-3">{blog.content}</p>
-                <div className="flex gap-7">
+                <h3
+                  className={`py-2 text-2xl font-bold ${blog.title.length > 39 ? '' : 'mb-8'}`}
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      blog.title.length > 39
+                        ? blog.title.substr(0, 40) + '...'
+                        : blog.title.substr(0, 40),
+                  }}
+                ></h3>
+                <p
+                  className={`pb-3 text-base ${blog.blogContent.length > 79 ? '' : 'mb-6'}`}
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      blog.blogContent.length > 79
+                        ? blog.blogContent.substr(0, 80) + '...'
+                        : blog.blogContent.substr(0, 80),
+                  }}
+                ></p>
+                <div className="flex gap-7 text-sm opacity-70">
                   <div className="flex items-center justify-center gap-1">
                     <ClockIcon />
                     {<FormattedDate date={blog.createdAt} />}

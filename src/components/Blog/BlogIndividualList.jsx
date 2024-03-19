@@ -7,6 +7,7 @@ import FilterIcon from '../Icons/FilterIcon';
 import { getListBlogs } from '../../api/service/blog';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
 import FormattedDate from '../FormattedDate';
+import FindIcon from '../Icons/FindIcon';
 
 const BlogIndividualList = () => {
   const [user, setUser] = useState(null);
@@ -29,7 +30,7 @@ const BlogIndividualList = () => {
       const response = await getListBlogs();
 
       if (response) {
-        setListBlogs(response.data);
+        setListBlogs(response.data.reverse());
       }
     }
     fetchData();
@@ -43,27 +44,68 @@ const BlogIndividualList = () => {
         <div className="flex">
           <Link
             to={`/blog-create`}
-            className="flex w-32 justify-center rounded-xl bg-primary-color px-2 py-1 text-xl font-semibold text-bg-color hover:bg-primary-color/80"
+            className="flex w-32 items-center justify-center rounded-xl bg-primary-color px-2 py-0 text-xl font-semibold text-bg-color hover:bg-primary-color/80"
           >
             Thêm mới
           </Link>
-          <button className="flex w-full items-center justify-end gap-1 font-bold">
-            <FilterIcon />
-            <div>Sắp xếp theo</div>
-          </button>
+          <div className="relative flex w-full items-center justify-end text-lg font-medium">
+            <select className="rounded-s-xl bg-secondary-color/70 py-[8.1px]">
+              <option value="" className="font-medium">
+                Tất cả
+              </option>
+              <option value="title" className="font-medium">
+                Tiêu đề
+              </option>
+              <option value="category" className="font-medium">
+                Danh mục
+              </option>
+              <option value="createdAt" className="font-medium">
+                Ngày tạo
+              </option>
+              <option value="name" className="font-medium">
+                Tên
+              </option>
+            </select>
+            <input
+              type="text"
+              className="rounded-e-xl bg-secondary-color/70 py-[9px] pl-3 pr-9 leading-4 placeholder:text-text-color"
+              placeholder="Tìm kiếm"
+            />
+            <FindIcon />
+          </div>
         </div>
         {/* item */}
         {listBlogs?.map((blog, index) => {
           return (
             blog.userId === user.userId && (
               <div className="flex gap-20">
-                <div className="h-44 w-1/4 rounded-xl bg-blogBackground"></div>
+                {/* <div className="h-44 w-1/4 rounded-xl bg-blogBackground"></div> */}
+                <div className="h-44 w-1/3 rounded-xl">
+                  <img
+                    src={blog.blogPhotos[0].photoURL}
+                    alt="Cover_image"
+                    className="h-full w-full rounded-lg object-cover"
+                    // height={100}
+                    // width={200}
+                  />
+                </div>
                 <div className="w-2/3">
-                  <h3 className="pb-3 text-2xl font-bold">{blog.title}</h3>
+                  <h3
+                    className={`pb-3 text-2xl font-bold ${blog.title.length > 69 ? '' : 'pb-8'}`}
+                    dangerouslySetInnerHTML={{
+                      __html:
+                        blog.title.length > 69
+                          ? blog.title.substr(0, 70) + '...'
+                          : blog.title.substr(0, 70),
+                    }}
+                  ></h3>
                   <p
                     className="pb-3"
                     dangerouslySetInnerHTML={{
-                      __html: blog.blogContent.substr(0, 140) + '...',
+                      __html:
+                        blog.blogContent.length > 139
+                          ? blog.blogContent.substr(0, 140) + '...'
+                          : blog.blogContent.substr(0, 140),
                     }}
                   ></p>
                   <div className="flex justify-between">

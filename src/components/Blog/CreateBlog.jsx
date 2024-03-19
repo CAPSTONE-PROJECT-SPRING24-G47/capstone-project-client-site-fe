@@ -4,9 +4,10 @@ import { BackIcon } from '../Auth';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
-import { addBlog } from '../../api/service/blog';
+import { addBlog, getListBlogCategories } from '../../api/service/blog';
 
 import defaultImage from '../../assets/fuji.jpg';
+import SuccessIconBig from '../Auth/Icons/SuccessIconBig';
 
 const CreateBlog = () => {
   const toolbarOptions = [
@@ -35,13 +36,14 @@ const CreateBlog = () => {
   const [blogContent, setBlogContent] = useState('');
   const [user, setUser] = useState(null);
   const [blogCategoryId, setBlogCategoryId] = useState();
-  // const [listCategories, setListCategories] = useState([]);
+  const [listCategories, setListCategories] = useState([]);
   // const [options, setOptions] = useState([]);
   const [blogData, setBlogData] = useState(null);
   const [response, setResponse] = useState();
   const [coverImage, setCoverImage] = useState(defaultImage);
-  const [imageFile, setImageFile] = useState(null);
-  const [errors, setErrors] = useState({});
+  // const [imageFile, setImageFile] = useState(null);
+  // const [errors, setErrors] = useState({});
+  const [isPopUp, setIsPopUp] = useState(false);
 
   const handleImageFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -49,7 +51,7 @@ const CreateBlog = () => {
       const reader = new FileReader();
       reader.onload = (x) => {
         const image = x.target.result;
-        setImageFile(imageFile);
+        // setImageFile(imageFile);
         setCoverImage(image);
       };
       reader.readAsDataURL(imageFile);
@@ -58,6 +60,7 @@ const CreateBlog = () => {
       setCoverImage(defaultImage);
     }
   };
+
   // console.log(coverImage);
   // console.log(coverImage);
 
@@ -88,13 +91,7 @@ const CreateBlog = () => {
       blogContent,
       blogPhotos: [
         {
-          photoURL: 'photo1',
-        },
-        {
-          photoURL: 'photo3',
-        },
-        {
-          photoURL: 'photo5',
+          photoURL: coverImage,
         },
       ],
       blog_BlogCatagories: [{ blogCategoryId }],
@@ -122,6 +119,7 @@ const CreateBlog = () => {
         const res = await addBlog(blogData);
         console.log('>>>response: ', res);
         setResponse(res);
+        setIsPopUp(true);
         // if (response) {
         //   // setIsChangeSuccess(true);
         // }
@@ -129,13 +127,53 @@ const CreateBlog = () => {
     }
     fetchData();
   }, [blogData]);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (listCategories) {
+        const res = await getListBlogCategories();
+        // console.log(res);
+        setListCategories(res);
+      }
+    }
+    fetchData();
+  }, []);
   // console.log(blogCategoryId);
   // console.log(blogContent.replace(/<[^>]*>/g, ''));
   // console.log(blogContent);
 
   return (
     <div className="bg-bg-color px-3 py-10">
-      <Link to={`../blog`}>
+      {isPopUp && (
+        <div className="fixed inset-0 z-[99] flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-[#03121A] opacity-50 backdrop-blur-[20px]"
+            onClick={() => setIsPopUp(false)}
+          />
+          <div className="flex flex-col items-center justify-center">
+            <>
+              <SuccessIconBig />
+            </>
+            <h2 className="mt-8 text-2xl font-semibold">
+              Chúc mừng bạn đã thành công!
+            </h2>
+            <h5 className="mb-4 text-xl font-medium">
+              Bấm <span className="text-accent-color">Tiếp tục</span> để đăng
+              nhập
+            </h5>
+            <Link
+              to={'/blog-individual'}
+              onClick={(e) => {
+                e.preventDefault();
+              }}
+              className="h-11 w-1/2 rounded-2xl bg-secondary-color font-semibold text-bg-color hover:bg-gradient-to-b hover:from-secondary-color hover:to-accent-color"
+            >
+              Tiếp tục
+            </Link>
+          </div>
+        </div>
+      )}
+      <Link to={`/blog-individual`}>
         <BackIcon />
       </Link>
       <div className="my-5 flex w-full justify-center gap-14">
@@ -193,6 +231,7 @@ const CreateBlog = () => {
           {/* danh muc */}
           <div className="mb-14 w-full">
             <h1 className="mb-7 text-xl font-bold">Danh mục</h1>
+
             <select
               name=""
               id="blogCategoryId"
@@ -201,19 +240,25 @@ const CreateBlog = () => {
               className="w-full rounded-lg bg-secondary-color px-1 py-2 opacity-90"
             >
               <option value={0}>Chọn</option>
-              <option value={1}>Du lịch một mình</option>
-              <option value={2}>Trải nghiệm lần đầu</option>
-              <option value={3}>Lệ hội</option>
+              {listCategories.map((category) => {
+                return (
+                  <option value={category.blogCategoryId}>
+                    {`${category.blogCategoryName}`}
+                  </option>
+                );
+              })}
             </select>
           </div>
           {/* picture */}
-          <div className="w-full">
-            <h1 className="mb-7 text-lg font-bold">Ảnh bìa</h1>
-            <div className="flex h-fit w-full items-center justify-center bg-bg-color">
+          <div className="flex w-full flex-col items-center">
+            <div className="flex w-full justify-start">
+              <h1 className="mb-7 text-lg font-bold">Ảnh bìa</h1>
+            </div>
+            <div className="max-h-4/5 flex h-[112px] w-[192px] items-center justify-center bg-bg-color">
               <img
                 src={coverImage}
                 alt="Cover_image"
-                className="rounded-lg"
+                className="h-full w-full rounded-lg object-cover"
                 // height={100}
                 // width={200}
               />

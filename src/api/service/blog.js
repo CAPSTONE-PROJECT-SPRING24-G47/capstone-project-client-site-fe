@@ -3,6 +3,7 @@ import {
   createBlogComment,
   deleteABlog,
   getABlog,
+  getBlogCategories,
   getBlogs,
 } from '..';
 
@@ -19,14 +20,26 @@ export const addBlog = async (data) => {
   }
 };
 
-export const getListBlogs = async (blogId) => {
+export const getListBlogs = async () => {
   try {
-    const res = await getBlogs(blogId);
+    const res = await getBlogs();
     // console.log(res);
     return res;
   } catch (error) {
     console.error(
-      'Create blog failed:',
+      'Get list blog failed:',
+      error.response ? error.response.data : error.message
+    );
+  }
+};
+export const getListBlogCategories = async () => {
+  try {
+    const res = await getBlogCategories();
+    // console.log(res);
+    return res.data;
+  } catch (error) {
+    console.error(
+      'Get list blog category failed:',
       error.response ? error.response.data : error.message
     );
   }
