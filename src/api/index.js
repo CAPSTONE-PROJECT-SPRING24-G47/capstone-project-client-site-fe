@@ -107,6 +107,8 @@ export const deleteTAComment = (id) =>
   API.delete(`/touristattraction-comment/${id}`);
 
 //user
+export const updateUser = (id, data) =>
+  API.put(`/users/${id}/update-profile`, data);
 
 export const getUsers = () => API.get('/users');
 

@@ -1,4 +1,4 @@
-import { getUsers } from '..';
+import { getUsers, updateUser } from '..';
 
 export const getListUsers = async () => {
   try {
@@ -7,6 +7,19 @@ export const getListUsers = async () => {
   } catch (error) {
     console.error(
       'Get user failed:',
+      error.response ? error.response.data : error.message
+    );
+  }
+};
+
+export const updateUserDetail = async (id, data) => {
+  try {
+    const res = await updateUser(id, data);
+
+    return res.data;
+  } catch (error) {
+    console.error(
+      'update user failed:',
       error.response ? error.response.data : error.message
     );
   }

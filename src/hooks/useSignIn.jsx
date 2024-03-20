@@ -16,6 +16,8 @@ const useSignIn = () => {
       const user = res.data.data ? res.data.data[0] : null;
       user && localStorage.setItem('user', JSON.stringify(user));
 
+      console.log(user);
+
       setUser(user);
       setResponse(res.data);
       console.log(res.data.data ? res.data.data[0] : null);
