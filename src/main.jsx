@@ -7,6 +7,7 @@ import { UserProvider } from './Contexts/UserContext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { FormProvider } from './Contexts/FormContext';
 import { BrowserRouter } from 'react-router-dom';
+import { AddPlaceProvider } from './Contexts/AddPlaceContext';
 import { CommentProvider } from './Contexts/CommentContext';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -17,7 +18,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <FormProvider>
             <CommentProvider>
               <UserProvider>
-                <App />
+                <AddPlaceProvider>
+                  <App />
+                </AddPlaceProvider>
               </UserProvider>
             </CommentProvider>
           </FormProvider>
