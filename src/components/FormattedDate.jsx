@@ -2,6 +2,8 @@ import React from 'react';
 
 const FormattedDate = ({ date }) => {
   const createdAt = new Date(date);
+  const hours = createdAt.getHours();
+  const minutes = createdAt.getMinutes();
   const year = createdAt.getFullYear();
   let month = createdAt.getMonth() + 1; // Months start at 0
   let day = createdAt.getDate();

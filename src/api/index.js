@@ -24,13 +24,18 @@ export const getAUser = (userId) => API.get(`/users/${userId}`);
 export const changePwd = (userId, password) =>
   API.post(`users/${userId}/change-password?newPass=${password}`);
 
-export const createBlogComment = (data) => API.post(`/blog-comment`, data);
-
 export const createBlog = (data) => API.post(`/blogs`, data);
-
 export const getBlogs = () => API.get('/blogs');
 export const getABlog = (blogId) => API.get(`/blogs/${blogId}`);
 export const deleteABlog = (blogId) => API.delete(`/blogs/${blogId}`);
 
 export const getBlogCategories = () => API.get('/blog-category');
+
+export const createBlogComment = (data) => API.post(`/blog-comment`, data);
 export const getBlogComments = () => API.get('/blog-comment');
+export const getCommentByBlogId = (blogId) =>
+  API.get(`/blog-comment/${blogId}`);
+export const getCommentsByBlogId = (blogId) =>
+  API.get(`/blog-comment/${blogId}/get-comment-by-blogId`);
+export const deleteBlogComment = (commentId) =>
+  API.delete(`/blog-comment/${commentId}`);

@@ -4,8 +4,14 @@ import { Link, useParams } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
-import { deleteBlog, getBlog } from '../../api/service/blog';
+import {
+  deleteBlog,
+  getBlog,
+  getListBlogCategories,
+} from '../../api/service/blog';
 import ActionPopUp from './ActionPopUp';
+import FormattedTime from './FormattedTime';
+import SuccessIconBig from '../Auth/Icons/SuccessIconBig';
 
 const UpdateBlog = () => {
   const toolbarOptions = [
@@ -37,6 +43,34 @@ const UpdateBlog = () => {
   const [blog, setBlog] = useState(null);
   const [isConfirm, setIsConfirm] = useState(false);
   const [isPopUp, setIsPopUp] = useState(false);
+  const [listCategories, setListCategories] = useState([]);
+  // const [options, setOptions] = useState([]);
+  const [blogData, setBlogData] = useState(null);
+  const [response, setResponse] = useState();
+  const [coverImage, setCoverImage] = useState(null);
+  // const [imageFile, setImageFile] = useState(null);
+  // const [errors, setErrors] = useState({});
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const handleImageFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      let imageFile = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (x) => {
+        const image = x.target.result;
+        // setImageFile(imageFile);
+        setCoverImage(image);
+      };
+      reader.readAsDataURL(imageFile);
+    } else {
+      setImageFile(null);
+      // setCoverImage(defaultImage);
+    }
+  };
+
+  // const handleSetIsPopUp=()=>{
+  //   setIsPopUp
+  // }
 
   const handleBlogCategoryIdChange = (e) => {
     setBlogCategoryId(e.target.value);
@@ -47,6 +81,20 @@ const UpdateBlog = () => {
   };
   const handleBlogContentChange = (content) => {
     setBlogContent(content);
+  };
+
+  const handleSubmitBlogData = () => {
+    setBlogData({
+      userId: user?.userId,
+      title,
+      blogContent,
+      blogPhotos: [
+        {
+          photoURL: coverImage,
+        },
+      ],
+      blog_BlogCatagories: [{ blogCategoryId }],
+    });
   };
 
   useEffect(() => {
@@ -66,28 +114,22 @@ const UpdateBlog = () => {
         setBlog(response.data[0]);
         setTitle(blog?.title);
         setBlogContent(blog?.blogContent);
+        // setCoverImage(blog?.blogPhotos[0]);
       }
     }
     fetchData();
   }, []);
-  console.log(blog);
 
+  // console.log(blog);
+  // console.log(coverImage);
   // console.log(blogContent.replace(/<[^>]*>/g, ''));
-
-  useEffect(() => {
-    async function fetchData() {
-      const response = await getBlog(blogId);
-      console.log(response);
-      if (response) {
-      }
-    }
-    fetchData();
-  }, []);
 
   useEffect(() => {
     async function fetchData() {
       if (isConfirm && blogId) {
         const response = await deleteBlog(blogId);
+        console.log(response);
+        setIsSuccess(true);
         // if (response.isSuccess) {
         //   setToggleBan((state) => !state);
         // }
@@ -96,20 +138,80 @@ const UpdateBlog = () => {
     fetchData();
   }, [isConfirm]);
 
+  useEffect(() => {
+    async function fetchData() {
+      if (listCategories) {
+        const res = await getListBlogCategories();
+        // console.log(res);
+        setListCategories(res);
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
     <div className="relative bg-bg-color px-3 py-10">
-      {/* <ActionPopUp /> */}
-      {/* <div
-        className="absolute inset-0 bg-[#03121A] opacity-50 backdrop-blur-[20px]"
-        onClick={() => setIsPopUp(false)}
-      /> */}
+      {isPopUp && (
+        <div className="fixed inset-0 z-[99] flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-[#03121A] opacity-50 backdrop-blur-[20px]"
+            onClick={() => setIsPopUp(false)}
+          />
+          {!isSuccess && (
+            <div className="z-[99] flex flex-col gap-10 rounded-xl bg-bg-secondary-color p-9">
+              <h5 className="text-3xl font-semibold">
+                Bạn có chắc muốn xóa Blog này không?
+              </h5>
+              <div className="flex items-center justify-end gap-5 text-2xl font-medium">
+                <button
+                  className="w-1/5 rounded-xl bg-accent-color px-1 py-px text-center text-bg-color"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsConfirm(true);
+                    // setIsPopUp(false);
+                  }}
+                >
+                  Xác nhận
+                </button>
+                <button
+                  className="w-1/6 rounded-xl bg-bg-color py-px text-accent-color"
+                  onClick={() => setIsPopUp(false)}
+                >
+                  Hủy
+                </button>
+              </div>
+            </div>
+          )}
+          {isSuccess && (
+            <div className="z-50 flex h-[360px] w-96 flex-col items-center justify-center gap-10 rounded-xl bg-bg-color">
+              <>
+                <SuccessIconBig />
+              </>
+              <h2 className="mt-3 text-2xl font-semibold">
+                Chúc mừng bạn đã thành công!
+              </h2>
+              <Link
+                to={'/blog-individual'}
+                className="flex h-11 w-1/2 items-center justify-center rounded-2xl bg-secondary-color font-semibold text-bg-color hover:bg-gradient-to-b hover:from-secondary-color hover:to-accent-color"
+              >
+                Tiếp tục
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
       <Link to={`/blog/${blog?.blogId}`}>
         <BackIcon />
       </Link>
       <div className="my-5 flex w-full justify-center gap-14">
         {/* content */}
         <section className="relative w-9/12 rounded-xl bg-bg-secondary-color px-7 pb-7 pt-12">
-          <button className="absolute right-8 top-5 rounded-xl bg-sub-color px-2 py-1 text-xl text-bg-color hover:bg-sub-color/80">
+          <button
+            onClick={() => {
+              setIsPopUp(true);
+            }}
+            className="absolute right-8 top-5 rounded-xl bg-sub-color px-2 py-1 text-xl text-bg-color hover:bg-sub-color/80"
+          >
             Xóa
           </button>
 
@@ -140,9 +242,17 @@ const UpdateBlog = () => {
               />
             </div>
           </div>
-
-          <div className="mt-4 font-medium">
-            Chỉnh sửa lần cuối: 23:31 06/03/2024
+          <div className="flex items-center justify-between">
+            <div className="mt-4 font-medium">
+              <FormattedTime time={blog?.createdAt} />
+            </div>
+            <button
+              disabled={!title || !blogContent}
+              onClick={''}
+              className="mt-4 rounded-xl bg-secondary-color px-2 py-1 text-xl font-bold text-bg-color hover:bg-gradient-to-b hover:from-secondary-color hover:to-accent-color disabled:bg-secondary-color/70 disabled:hover:bg-none"
+            >
+              Cập nhật
+            </button>
           </div>
         </section>
         {/* Author */}
@@ -167,23 +277,45 @@ const UpdateBlog = () => {
               className="w-full rounded-lg bg-secondary-color px-1 py-2 opacity-90"
             >
               <option value={0}>Chọn</option>
-              <option value={1}>Chỗ ở</option>
-              <option value={2}>Nhà hàng</option>
-              <option value={3}>Trải nghiệm</option>
+              {listCategories.map((category) => {
+                return (
+                  <option value={category.blogCategoryId}>
+                    {`${category.blogCategoryName}`}
+                  </option>
+                );
+              })}
             </select>
           </div>
           {/* picture */}
-          <div className="w-full">
-            <h1 className="mb-7 text-lg font-bold">Ảnh bìa</h1>
-            <div className="flex h-32 w-full items-center justify-center rounded-xl bg-bg-color">
-              <button className="w-1/2 bg-text-color/10 px-3 py-1 text-lg font-bold">
+          <div className="flex w-full flex-col items-center">
+            <div className="flex w-full justify-start">
+              <h1 className="mb-7 text-lg font-bold">Ảnh bìa</h1>
+            </div>
+            <div className="max-h-4/5 flex h-[112px] w-[192px] items-center justify-center bg-bg-color">
+              <img
+                src={coverImage}
+                alt="Cover_image"
+                className="h-full w-full rounded-lg object-cover"
+                // height={100}
+                // width={200}
+              />
+            </div>
+            <div className="mt-3 flex w-full justify-center">
+              <label
+                for="fileInput"
+                className="custom-file-upload rounded-md bg-[#D9D9D9] px-2 py-1 text-xl font-bold"
+              >
                 Thêm +
-              </button>
+              </label>
+              <input
+                onChange={handleImageFileChange}
+                id="fileInput"
+                type="file"
+                accept="image/*"
+                className="hidden"
+              />
             </div>
           </div>
-          <button className="w-3/5 rounded-xl bg-secondary-color p-1 text-2xl text-bg-color hover:bg-secondary-color/80">
-            Cập nhật
-          </button>
         </section>
       </div>
     </div>

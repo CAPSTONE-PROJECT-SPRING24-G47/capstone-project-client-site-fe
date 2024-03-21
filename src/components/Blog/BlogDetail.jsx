@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import ClockIcon from '../Icons/ClockIcon';
 import SolidUserIcon from '../Icons/SolidUserIcon';
-import PrevIcon from '../Icons/PrevIcon';
-import NextIcon from '../Icons/NextIcon';
-import LikeIcon from '../Icons/LikeIcon';
 import RightArrowIcon from '../Icons/RightArrowIcon';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
 import WrenchIcon from '../Icons/WrenchIcon';
 import { Link, useParams } from 'react-router-dom';
-import { addBlogComment, getBlog } from '../../api/service/blog';
+import { getBlog } from '../../api/service/blog';
 import FormattedDate from '../FormattedDate';
 import { useContext } from 'react';
 import { BlogContext } from '../../Contexts/BlogContext';
-import { getListBlogComments } from '../../api/service/comment';
+import {
+  addBlogComment,
+  getListBlogComments,
+  getListBlogCommentsByBlogId,
+} from '../../api/service/comment';
 import { getUser } from '../../api/service/user';
 
 const BlogDetail = () => {
@@ -25,12 +26,14 @@ const BlogDetail = () => {
 
   const [user, setUser] = useState(null);
   const [commentedUser, setCommentedUser] = useState(null);
+  const [commentByBlogId, setCommentByBlogId] = useState(null);
+  const [blogAuthor, setBlogAuthor] = useState(null);
   const [blog, setBlog] = useState(null);
   const [commentContent, setCommentContent] = useState('');
   const [comment, setComment] = useState(null);
   const [listComments, setListComments] = useState([]);
   const [blogLink, setBlogLink] = useState('');
-  console.log(blog);
+  // console.log(blog);
   const handleCommentContentChange = (e) => {
     setCommentContent(e.target.value);
   };
@@ -60,14 +63,13 @@ const BlogDetail = () => {
   useEffect(() => {
     async function fetchData() {
       const response = await getBlog(blogId);
-      console.log(response);
+      // console.log(response);
       if (response) {
         setBlog(response.data[0]);
       }
     }
     fetchData();
   }, [blogId]);
-  // console.log(blog?.userId);
 
   useEffect(() => {
     async function fetchData() {
@@ -85,20 +87,28 @@ const BlogDetail = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await getListBlogComments();
-      // console.log('>>>response: ', res);
-      setListComments(res.data);
+      const res = await getUser(blog?.userId);
+      setBlogAuthor(res?.data?.data[0]);
+    }
+    fetchData();
+  }, [blog]);
+  // console.log(blogAuthor);
+  console.log(blog?.blogId);
+
+  useEffect(() => {
+    async function fetchData() {
+      const res = await getListBlogCommentsByBlogId(blogId);
+      // console.log(res);
+      setListComments(res);
     }
     fetchData();
   }, []);
+  // console.log(listComments);
 
   // useEffect(() => {
   //   async function fetchData() {
-  //     const response = await getUser(comment?.userId);
-
-  //     if (response) {
-  //       setCommentedUser(response?.data?.data[0]);
-  //     }
+  //     const res = await getUser(blog?.userId);
+  //     setBlogAuthor(res?.data?.data[0]);
   //   }
   //   fetchData();
   // }, []);
@@ -121,12 +131,13 @@ const BlogDetail = () => {
     });
 
     // Display the contents
-    console.log(contents);
+    // console.log(contents);
   }, [blog]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [blogId]);
+
   return (
     <div className="relative h-full bg-bg-color px-10 py-7">
       <div className="absolute right-8 top-14 rounded-full bg-primary-color p-1 font-semibold">
@@ -178,19 +189,7 @@ const BlogDetail = () => {
               </Link> */}
             </div>
           ) : (
-            <>
-              {/* <div className="flex flex-col gap-3 border-b-[1px] border-text-color/20 py-3">
-                <div>Chia sẻ</div>
-                <div className="rounded-lg bg-secondary-color/50 text-center">
-                  social
-                </div>
-                <button className="flex w-fit gap-1 rounded-lg border-[1px] border-text-color/50 bg-bg-secondary-color px-[2px] py-1">
-                  <LikeIcon />
-                  Thích
-                </button>
-              </div> */}
-              <div className="py-3 text-text-color/50">Báo vi phạm</div>
-            </>
+            <div className="py-3 text-text-color/50">Báo vi phạm</div>
           )}
           {/* prev/next blog button */}
           {/* comment section */}
@@ -233,11 +232,27 @@ const BlogDetail = () => {
                   <div className="flex gap-5">
                     <img
                       className="h-[45px] w-[45px] rounded-full"
-                      src={`${user?.pictureProfile ? user?.pictureProfile : 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'}`}
+                      src={`${commentedUser?.pictureProfile ? commentedUser?.pictureProfile : 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'}`}
                     ></img>
                     <div
-                      className={`h-16 w-full whitespace-pre-line break-all ${user?.userId === blog?.userId ? 'bg-bg-secondary-color' : 'bg-bg-color'} px-2`}
+                      className={`0 mb-11 h-fit w-full whitespace-pre-line break-all border-b-[1px] border-text-color/20 pb-[2px] pl-0 ${user?.userId === blog?.userId ? 'bg-bg-secondary-color' : 'bg-bg-color'} px-2`}
                     >
+                      <div className="flex justify-between">
+                        <div className="text-xl font-semibold">
+                          {commentedUser?.lastName +
+                            ' ' +
+                            commentedUser?.firstName}
+                        </div>
+                        {user?.userId === comment?.userId && (
+                          <div className="flex gap-1">
+                            <button className="text-primary-color">Sửa</button>
+                            <div>|</div>
+                            <button onClick={''} className="text-sub-color">
+                              Xóa
+                            </button>
+                          </div>
+                        )}
+                      </div>
                       {comment.commentContent}
                     </div>
                   </div>

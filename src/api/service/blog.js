@@ -70,16 +70,3 @@ export const deleteBlog = async (blogId) => {
     );
   }
 };
-
-export const addBlogComment = async (data) => {
-  try {
-    const res = await createBlogComment(data);
-    // console.log(res);
-    return res;
-  } catch (error) {
-    console.error(
-      'Add comment failed:',
-      error.response ? error.response.data : error.message
-    );
-  }
-};

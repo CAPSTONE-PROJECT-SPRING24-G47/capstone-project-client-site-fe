@@ -75,15 +75,6 @@ const CreateBlog = () => {
     setBlogContent(content);
   };
 
-  const validate = () => {
-    let temp = {};
-    temp.title = title == '' ? false : true;
-    temp.blogContent = blogContent == '' ? false : true;
-    temp.blogCategoryId = blogCategoryId == 0 ? false : true;
-    temp.coverImage = coverImage == defaultImage ? false : true;
-    setErrors(temp);
-  };
-
   const handleSubmitBlogData = () => {
     setBlogData({
       userId: user?.userId,
@@ -98,20 +89,14 @@ const CreateBlog = () => {
     });
   };
 
-  // useEffect(() => {
-  //   const updatedOptions = listCategories.map((category) => ({
-  //     value: category.blogCategoryId,
-  //     label: category.blogCategoryName,
-  //   }));
-  //   setOptions(updatedOptions);
-  // }, [listCategories]);
-
   useEffect(() => {
     const userLS = fetchUserFromLocalStorage();
     if (userLS) {
       setUser(userLS);
     }
   }, []);
+
+  console.log(blogData);
 
   useEffect(() => {
     async function fetchData() {
@@ -181,7 +166,7 @@ const CreateBlog = () => {
               value={title}
               onChange={handleTitleChange}
               placeholder="Nhập tiêu đề blog của bạn"
-              className="w-full rounded-lg bg-bg-color px-1 py-2"
+              className="w-full rounded-lg bg-bg-color px-2 py-2"
             />
           </div>
           {/* noi dung */}
@@ -209,7 +194,7 @@ const CreateBlog = () => {
                 coverImage == defaultImage
               }
               onClick={handleSubmitBlogData}
-              className="mt-4 rounded-xl bg-secondary-color px-2 py-1 text-xl font-bold text-bg-color hover:bg-secondary-color/80 disabled:bg-secondary-color/70 disabled:hover:bg-none"
+              className="mt-4 rounded-xl bg-secondary-color px-2 py-1 text-xl font-bold text-bg-color hover:bg-gradient-to-b hover:from-secondary-color hover:to-accent-color disabled:bg-secondary-color/70 disabled:hover:bg-none"
             >
               Đăng
             </button>
