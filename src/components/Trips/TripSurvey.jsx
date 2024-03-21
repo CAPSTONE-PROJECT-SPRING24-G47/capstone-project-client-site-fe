@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import autoImage from '../../assets/trip_builder_auto.jpg';
 import { motion } from 'framer-motion';
 import TripSurveySearchBar from './TripSurveySearchBar';
 import PrevArrowIcon from './Icons/PrevArrowIcon';
 import NextArrowIcon from './Icons/NextArrowIcon';
 import Calendar from './Calendar';
-import BudgetInput from './BudgetInput';
 import PriceLevelRectangle from './PriceLevelRectangle';
 import CategoryRectangle from './CategoryRectangle';
 import ErrorPopup from './ErrorPopup';
 import { getSearchResult } from '../../api/services/search';
 import SearchResult from './SearchResult';
+import { FormContext } from '../../Contexts/FormContext';
 
 const searchMode = [
   { typeNum: 1, name: 'Vùng', property: 'RegionName', type: 'Regions' },
@@ -41,7 +41,9 @@ const TripSurvey = ({
   touristAttractionOption,
   setTouristAttractionOption,
   touristAttractionCategories,
+  handleSubmit,
 }) => {
+  const { setIsLoading } = useContext(FormContext);
   const [isFocus, setIsFocus] = useState(false);
   const [searchLocation, setSearchLocation] = useState({
     typeNum: 3,
@@ -59,11 +61,18 @@ const TripSurvey = ({
 
   const handleChooseLocation = (e) => {
     const newLocation = {
-      regionId: +e.target.closest('div#clickme').getAttribute('regionId'),
-      prefectureId: +e.target
-        .closest('div#clickme')
-        .getAttribute('prefectureId'),
-      cityId: +e.target.closest('div#clickme').getAttribute('cityId'),
+      regionId:
+        e.target.closest('div#clickme').getAttribute('regionId') !== null
+          ? +e.target.closest('div#clickme').getAttribute('regionId')
+          : null,
+      prefectureId:
+        e.target.closest('div#clickme').getAttribute('prefectureId') !== null
+          ? +e.target.closest('div#clickme').getAttribute('prefectureId')
+          : null,
+      cityId:
+        e.target.closest('div#clickme').getAttribute('cityId') !== null
+          ? +e.target.closest('div#clickme').getAttribute('cityId')
+          : null,
       name: e.target.closest('div#clickme').getAttribute('name'),
     };
 
@@ -460,7 +469,10 @@ const TripSurvey = ({
             width: '250px',
           }}
           transition={{ duration: 0.1 }}
-          onClick={() => {}}
+          onClick={() => {
+            handleSubmit();
+            setIsLoading(true);
+          }}
           className="absolute inset-y-0 right-0 flex w-[200px] cursor-pointer select-none items-center justify-center px-4"
         >
           <div className="flex items-center justify-center">

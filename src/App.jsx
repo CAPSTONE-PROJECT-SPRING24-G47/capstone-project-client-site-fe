@@ -7,6 +7,7 @@ import {
   UserProfile,
   TripBuilder,
   TripBuilderManual,
+  TripDetail,
 } from './pages';
 import NotFound404 from './components/NotFound404';
 import { useContext, useEffect } from 'react';
@@ -39,6 +40,7 @@ function App() {
         )}
         <Route path="trip-plan" element={<TripPlan />} />
         <Route path="explore" element={<Explore />} />
+        <Route path="trip/:id" element={<TripDetail />} />
         <Route path="*" element={<NotFound404 />} />
       </Route>
       <Route path="/trip-builder" element={<TripBuilder />} />

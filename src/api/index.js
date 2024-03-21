@@ -32,3 +32,23 @@ export const getTouristAttractionCategories = () =>
 
 //search
 export const search = (searchData) => API.post(`/search`, searchData);
+
+//trip
+export const addTrip = (tripData) => API.post(`/trip`, tripData);
+
+export const getTrip = (id) => API.get(`/trip/${id}`);
+
+export const updateTrip = (id, data) => API.put(`/trip/${id}`, data);
+
+export const deleteTripAcc = (id) => API.delete(`/trip-accommodation/${id}`);
+
+export const deleteTripRes = (id) => API.delete(`/trip-restaurant/${id}`);
+
+export const deleteTripTA = (id) =>
+  API.delete(`/trip-tourist-attraction/${id}`);
+
+export const addTripAcc = (data) => API.post(`/trip-accommodation`, data);
+
+export const addTripRes = (data) => API.post(`/trip-restaurant`, data);
+
+export const addTripTA = (data) => API.post(`/trip-tourist-attraction`, data);
