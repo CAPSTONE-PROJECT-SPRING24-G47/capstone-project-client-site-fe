@@ -91,7 +91,11 @@ const SearchPlaceResult = ({ data, trip, handleIsAction }) => {
               <AccommodationIcon />
             )}
             <div className="text-[14px]">
-              {type === 'restaurants' ? 'Nhà hàng' : 'Địa điểm giải trí'}
+              {type === 'restaurants'
+                ? 'Nhà hàng'
+                : type === 'touristAttractions'
+                  ? 'Địa điểm giải trí'
+                  : 'Nơi ở'}
             </div>
           </div>
           <div className="flex items-start gap-3">
