@@ -7,6 +7,7 @@ import { UserProvider } from './Contexts/UserContext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { FormProvider } from './Contexts/FormContext';
 import { BrowserRouter } from 'react-router-dom';
+import { AddPlaceProvider } from './Contexts/AddPlaceContext';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -15,7 +16,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <NavProvider>
           <FormProvider>
             <UserProvider>
-              <App />
+              <AddPlaceProvider>
+                <App />
+              </AddPlaceProvider>
             </UserProvider>
           </FormProvider>
         </NavProvider>
