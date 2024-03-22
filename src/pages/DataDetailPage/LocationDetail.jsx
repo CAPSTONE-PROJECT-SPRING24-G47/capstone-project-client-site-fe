@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import avatarImage from '../../assets/trip_builder_manual.jpg';
+import avatarImage from '../../assets/trip_builder_manual_1.jpeg';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import { useState } from 'react';
