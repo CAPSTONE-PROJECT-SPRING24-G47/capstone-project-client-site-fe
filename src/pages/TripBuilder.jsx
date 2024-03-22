@@ -13,6 +13,7 @@ import { fetchUserFromLocalStorage } from '../utils/fetchUserFromLocalStorage';
 import { createTrip } from '../api/services/trip';
 import { FormContext } from '../Contexts/FormContext';
 import TripLoading from '../components/Trips/TripLoading';
+import TripSurveyForManual from '../components/Trips/TripSurveyForManual';
 
 const millisecondsInADay = 1000 * 60 * 60 * 24;
 
@@ -21,9 +22,10 @@ const TripBuilder = () => {
   const { setIsLoading, isLoading } = useContext(FormContext);
   const navigate = useNavigate();
   const [isError, setIsError] = useState(false);
+  // const [isTripAuto, setIsTripAuto] = useState(false);
   const [isLocationPopup, setIsLocationPopup] = useState(false);
   const [isTripSelection, setIsTripSelection] = useState(true);
-  const [mode, setMode] = useState(null);
+  const [mode, setMode] = useState('auto');
   const [progress, setProgress] = useState(1);
   const [accommodationCategories, setAccommodationCategories] = useState([]);
   const [restaurantCategories, setRestaurantCategories] = useState([]);
@@ -157,20 +159,24 @@ const TripBuilder = () => {
               <PrevArrowIcon colorFill={'#8DCADC'} className={'h-10 w-10'} />
             </Link>
 
-            <p
-              onClick={() => {
-                if (!isTripSelection) setIsLocationPopup(true);
-              }}
-              className={`${!isTripSelection && 'cursor-pointer'}`}
-            >
-              {isTripSelection
-                ? 'CHỌN CÁCH LÊN KẾ HOẠCH CỦA BẠN'
-                : location.length !== 0
-                  ? `Điểm đến: ${location.length === 1 ? location[0].name : ''} 
+            {mode === 'auto' && (
+              <p
+                onClick={() => {
+                  if (!isTripSelection) setIsLocationPopup(true);
+                }}
+                className={`${!isTripSelection && 'cursor-pointer'}`}
+              >
+                {isTripSelection
+                  ? 'CHỌN CÁCH LÊN KẾ HOẠCH CỦA BẠN'
+                  : location.length !== 0
+                    ? `Điểm đến: ${location.length === 1 ? location[0].name : ''} 
                 ${location.length === 2 ? `${location[0].name}, ${location[1].name}` : ''} 
                 ${location.length > 2 ? `${location[0].name}, ${location[1].name} (+${location.length - 2})` : ''}`
-                  : 'Lựa chọn cho mình một điểm đến'}
-            </p>
+                    : 'Lựa chọn cho mình một điểm đến'}
+              </p>
+            )}
+
+            {mode === 'manual' && <p>TẠO CHUYẾN ĐI THỦ CÔNG</p>}
           </div>
           {isLocationPopup && (
             <>
@@ -192,6 +198,7 @@ const TripBuilder = () => {
                 }
                 isAuto={true}
                 setMode={setMode}
+                // setIsTripAuto={setIsTripAuto}
               />
               <TripSelection
                 setIsTripSelection={setIsTripSelection}
@@ -200,6 +207,7 @@ const TripBuilder = () => {
                 description={'Tạo lịch trình với các địa điểm bạn yêu thích'}
                 isAuto={false}
                 setMode={setMode}
+                // setIsTripAuto={setIsTripAuto}
               />
             </div>
           )}
@@ -253,6 +261,7 @@ const TripBuilder = () => {
               handleSubmit={handleSubmit}
             />
           )}
+          {!isTripSelection && mode === 'manual' && <TripSurveyForManual />}
         </>
       )}
       {isLoading && (

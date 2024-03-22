@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Calendar from '../TripDetail/Calendar';
 import CloseIcon from '../Auth/Icons/CloseIcon';
-import LocationPopup from '../Trips/LocationPopup';
 import SearchLocationBar from './SearchLocationBar';
 import { getSearchResult } from '../../api/services/search';
 import SearchResult from './SearchResult';
@@ -11,6 +10,7 @@ import { getListAccommodationCategories } from '../../api/services/accommodation
 import { getListRestaurantCategories } from '../../api/services/restaurant';
 import { getListTACategories } from '../../api/services/touristAttraction';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
+import LocationPopup from './LocationPopup';
 
 const millisecondsInADay = 1000 * 60 * 60 * 24;
 const priceLevelData = [
