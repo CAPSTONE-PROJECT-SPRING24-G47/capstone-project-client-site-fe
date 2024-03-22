@@ -2,11 +2,31 @@ import React, { useEffect, useState } from 'react';
 import manualImage from '../../assets/trip_builder_manual_1.jpeg';
 import { motion } from 'framer-motion';
 import Calendar from './Calendar';
+import { createTrip } from '../../api/services/trip';
+import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
+import { useNavigate } from 'react-router-dom';
 
 const millisecondsInADay = 1000 * 60 * 60 * 24;
 
-const TripSurveyForManual = () => {
-  const [data, setData] = useState({});
+const TripSurveyForManual = ({ setIsError, setIsLoading }) => {
+  const user = fetchUserFromLocalStorage();
+  const navigate = useNavigate();
+
+  const [data, setData] = useState({
+    userId: user.userId,
+    title: '',
+    description: '',
+    startDate: '2024-03-10T02:49:25.736Z',
+    endDate: '2024-03-10T02:49:25.736Z',
+    duration: 0,
+    isPublic: true,
+    restaurantPriceLevel: 'string',
+    accommodationPriceLevel: 'string',
+    trip_Locations: [],
+    touristAttractionCategories: [],
+    restaurantCategories: [],
+    accommodationCategories: [],
+  });
   const [isInputTouched, setIsInputTouched] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
   const [title, setTitle] = useState('');
@@ -18,12 +38,23 @@ const TripSurveyForManual = () => {
   });
   const [duration, setDuration] = useState(null);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (title.length === 0) {
       setIsEmpty(true);
       return;
     }
+
     console.log(data);
+
+    const response = await createTrip(data);
+    if (response) {
+      if (response.isSuccess) {
+        setIsLoading(false);
+        navigate(`/trip/${response.data[0].tripId}`);
+      } else {
+        setIsError(true);
+      }
+    }
   };
 
   const handleChangeTitle = (e) => {

@@ -261,7 +261,12 @@ const TripBuilder = () => {
               handleSubmit={handleSubmit}
             />
           )}
-          {!isTripSelection && mode === 'manual' && <TripSurveyForManual />}
+          {!isTripSelection && mode === 'manual' && (
+            <TripSurveyForManual
+              setIsError={setIsError}
+              setIsLoading={setIsLoading}
+            />
+          )}
         </>
       )}
       {isLoading && (
