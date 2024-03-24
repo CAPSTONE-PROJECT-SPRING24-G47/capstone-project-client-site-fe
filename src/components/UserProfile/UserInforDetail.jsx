@@ -60,7 +60,7 @@ const UserProfileDetail = () => {
       formData.append('firstName', updateUser.firstName);
       formData.append('photo', imgSrc);
       const response = await updateUserDetail(user.userId, formData);
-      console.log(response);
+      console.log(formData.get('photo'));
       if (response) {
         setIsUpdate(false);
       }
