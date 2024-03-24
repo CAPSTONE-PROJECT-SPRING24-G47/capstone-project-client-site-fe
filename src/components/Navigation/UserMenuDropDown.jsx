@@ -5,7 +5,6 @@ import LogOutIcon from '../Icons/LogOutIcon';
 import { motion } from 'framer-motion';
 import KeyIcon from '../Icons/KeyIcon';
 
-//bg-opacity-10 backdrop-blur-[20px]
 const UserMenuDropDown = () => {
   return (
     <motion.div

@@ -48,7 +48,7 @@ export const updateTripById = async (id, data) => {
 
 export const deleteTripAccById = async (id) => {
   try {
-    const res = await deleteTripAcc(id, data);
+    const res = await deleteTripAcc(id);
     return res.data;
   } catch (error) {
     console.error(
