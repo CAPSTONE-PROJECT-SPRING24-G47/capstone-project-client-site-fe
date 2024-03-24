@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CloseIcon from '../Auth/Icons/CloseIcon';
 import { getSearchResult } from '../../api/services/search';
 import SearchPlaceResult from './SearchPlaceResult';
+import { useSearchParams } from 'react-router-dom';
 
 const placeTypeData = [
   { typeNum: 1, name: 'Nơi ở' },
@@ -15,9 +16,8 @@ const AddPopup = ({
   trip,
   handleIsAction,
   tripDays,
-  setTripDays,
 }) => {
-  console.log(tripDays);
+  const [dayChoose, setDayChoose] = useState(dayNum);
   const [searchData, setSearchData] = useState({
     value: '',
     type: 'Accommodations',
@@ -32,12 +32,8 @@ const AddPopup = ({
     }));
   };
 
-  const handleUpdateTripDays = () => {
-    tripDays.forEach((tripDay) => {
-      if (tripDay.dayNum === dayNum) {
-        setTripDays((prevState) => ({ ...prevState }));
-      }
-    });
+  const handleChangeDay = (e) => {
+    setDayChoose(+e.target.value);
   };
 
   const handleChooseMode = (e) => {
@@ -88,7 +84,11 @@ const AddPopup = ({
         </div>
         <div className="flex items-center justify-start gap-7">
           <div className="text-2xl font-bold">Thêm địa điểm mới</div>
-          <select className="h-full rounded-lg bg-bg-color p-2 text-sm outline-none ring-[1px] ring-secondary-color focus:ring-[2px] focus:ring-secondary-color">
+          <select
+            disabled={searchData.type === 'Accommodations'}
+            onChange={handleChangeDay}
+            className="h-full rounded-lg bg-bg-color p-2 text-sm outline-none ring-[1px] ring-secondary-color focus:ring-[2px] focus:ring-secondary-color"
+          >
             {tripDays.map((item) => (
               <option value={item.dayNum} selected={item.dayNum === dayNum}>
                 <div>Ngày {item.dayNum}</div>
@@ -125,6 +125,7 @@ const AddPopup = ({
                 data={data}
                 trip={trip}
                 handleIsAction={handleIsAction}
+                dayChoose={dayChoose}
               />
             ))}
           </div>

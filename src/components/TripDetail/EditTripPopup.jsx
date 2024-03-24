@@ -143,8 +143,7 @@ const EditTripPopup = ({ setIsPopupEdit, trip, handleIsAction }) => {
   const handleSubmit = async () => {
     console.log(updateData);
     const response = await updateTripById(trip.tripId, updateData);
-    console.log(response);
-    // handleIsAction();
+    if (response) handleIsAction();
     // setIsPopupEdit(false);
   };
 

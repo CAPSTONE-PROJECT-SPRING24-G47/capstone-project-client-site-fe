@@ -1,8 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import TripDayList from './TripDayList';
 import TripInfor from './TripInfor';
 import TripList from './TripList';
-import { deleteTripResById, deleteTripTAById } from '../../api/services/trip';
+import { useSearchParams } from 'react-router-dom';
 
 const TripContent = ({
   setDayNum,
@@ -12,9 +12,13 @@ const TripContent = ({
   setIsPopupEdit,
   setIsAddPopup,
   handleIsAction,
+  tripListRef,
+  isUpdateMode,
+  setIsUpdateMode,
+  resetIsDeleteProperties,
+  handleDeletePlace,
 }) => {
-  const tripListRef = useRef(null);
-  const [isUpdateMode, setIsUpdateMode] = useState(false);
+  const [params, _setParams] = useSearchParams();
 
   const scrollToDay = (dayNum) => {
     const index = tripDays.findIndex((day) => day.dayNum === dayNum);
@@ -26,78 +30,21 @@ const TripContent = ({
     }
   };
 
-  const resetIsDeleteProperties = () => {
-    const updatedTripDays = tripDays.map((tripDay) => ({
-      ...tripDay,
-      restaurants: {
-        ...tripDay.restaurants,
-        restaurantsForDay: tripDay.restaurants.restaurantsForDay.map(
-          (restaurant) => ({
-            ...restaurant,
-            isDelete: false,
-          })
-        ),
-      },
-      attractions: {
-        ...tripDay.attractions,
-        attractionsForDay: tripDay.attractions.attractionsForDay.map(
-          (attraction) => ({
-            ...attraction,
-            isDelete: false,
-          })
-        ),
-      },
-    }));
-
-    setTripDays(updatedTripDays);
-  };
-
-  const handleDeletePlace = async () => {
-    const deletedRestaurants = [];
-    const deletedAttractions = [];
-
-    tripDays.forEach((day) => {
-      if (day.restaurants) {
-        day.restaurants.restaurantsForDay.forEach((restaurant) => {
-          if (restaurant.isDelete) {
-            deletedRestaurants.push(restaurant);
-          }
-        });
-      }
-
-      if (day.attractions) {
-        day.attractions.attractionsForDay.forEach((attraction) => {
-          if (attraction.isDelete) {
-            deletedAttractions.push(attraction);
-          }
-        });
-      }
-    });
-
-    if (deletedRestaurants.length === 0 && deletedAttractions.length === 0) {
-      setIsUpdateMode(false);
-      return;
-    } else {
-      deletedRestaurants.forEach(async (restaurant) => {
-        const response = await deleteTripResById(restaurant.id);
-        if (response) handleIsAction();
-      });
-
-      deletedAttractions.forEach(async (attraction) => {
-        const response = await deleteTripTAById(attraction.id);
-        if (response) handleIsAction();
-      });
-    }
-  };
-
   return (
-    <div className="flex w-full justify-between gap-10 px-24">
-      <div className="flex w-full flex-col gap-5">
+    <div className="flex w-full justify-between gap-10 px-24 pb-12">
+      <div className="flex w-full flex-col gap-10">
         {/* Ngày và nút sửa */}
-        <div className="flex h-fit w-full items-center justify-between gap-10">
-          <div className="w-[70%]">
-            <TripDayList tripDays={tripDays} scrollToDay={scrollToDay} />
-          </div>
+        <div
+          className={`flex h-fit w-full items-center justify-between gap-10`}
+        >
+          {+params.get('filter') !== 2 && (
+            <div className="w-[70%]">
+              <TripDayList tripDays={tripDays} scrollToDay={scrollToDay} />
+            </div>
+          )}
+          {+params.get('filter') === 2 && (
+            <div className="text-2xl font-bold">Danh sách chỗ ở</div>
+          )}
           {isUpdateMode ? (
             <div className="flex w-fit gap-2">
               <div
@@ -127,7 +74,9 @@ const TripContent = ({
         </div>
 
         {/* Thông tin Trip */}
-        <TripInfor trip={trip} setIsPopupEdit={setIsPopupEdit} />
+        {+params.get('filter') === 1 && (
+          <TripInfor trip={trip} setIsPopupEdit={setIsPopupEdit} />
+        )}
 
         {/* List các ngày */}
         <TripList

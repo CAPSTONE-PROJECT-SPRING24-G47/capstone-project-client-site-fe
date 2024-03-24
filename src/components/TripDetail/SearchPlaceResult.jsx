@@ -9,10 +9,11 @@ import {
   addTripResById,
   addTripTAById,
 } from '../../api/services/trip';
-import { AddPlaceContext } from '../../Contexts/AddPlaceContext';
+import { AlertContext } from '../../Contexts/AlertContext';
 
-const SearchPlaceResult = ({ data, trip, handleIsAction }) => {
-  const { setPlaceId } = useContext(AddPlaceContext);
+const SearchPlaceResult = ({ data, trip, handleIsAction, dayChoose }) => {
+  const { setIsShow, setAlertData } = useContext(AlertContext);
+
   let placeName;
   let placeAddress;
   let type;
@@ -35,31 +36,80 @@ const SearchPlaceResult = ({ data, trip, handleIsAction }) => {
   }
 
   const handleAdd = async () => {
-    console.log(data);
     if (type === 'restaurants') {
       const response = await addTripResById({
         tripId: trip.tripId,
         restaurantId: placeId,
+        suggestedDay: dayChoose,
       });
-      setPlaceId(placeId);
 
-      if (response) handleIsAction();
+      if (response) {
+        if (response.isSuccess) {
+          setIsShow(true);
+          setAlertData({
+            message: response.message,
+            textColor: 'text-white',
+            backGroundColor: 'bg-primary-color',
+          });
+        } else {
+          setIsShow(true);
+          setAlertData({
+            message: response.message,
+            textColor: 'text-white',
+            backGroundColor: 'bg-sub-color',
+          });
+        }
+        handleIsAction();
+      }
     } else if (type === 'accommodations') {
       const response = await addTripAccById({
         tripId: trip.tripId,
         accommodationId: placeId,
       });
-      setPlaceId(placeId);
 
-      if (response) handleIsAction();
+      if (response) {
+        if (response.isSuccess) {
+          setIsShow(true);
+          setAlertData({
+            message: response.message,
+            textColor: 'text-white',
+            backGroundColor: 'bg-primary-color',
+          });
+        } else {
+          setIsShow(true);
+          setAlertData({
+            message: response.message,
+            textColor: 'text-white',
+            backGroundColor: 'bg-sub-color',
+          });
+        }
+        handleIsAction();
+      }
     } else if (type === 'touristAttractions') {
       const response = await addTripTAById({
         tripId: trip.tripId,
         touristAttractionId: placeId,
+        suggestedDay: dayChoose,
       });
-      setPlaceId(placeId);
 
-      if (response) handleIsAction();
+      if (response) {
+        if (response.isSuccess) {
+          setIsShow(true);
+          setAlertData({
+            message: response.message,
+            textColor: 'text-white',
+            backGroundColor: 'bg-primary-color',
+          });
+        } else {
+          setIsShow(true);
+          setAlertData({
+            message: response.message,
+            textColor: 'text-white',
+            backGroundColor: 'bg-sub-color',
+          });
+        }
+        handleIsAction();
+      }
     }
   };
 

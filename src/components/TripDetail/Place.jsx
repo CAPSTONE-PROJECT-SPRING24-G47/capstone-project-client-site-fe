@@ -3,6 +3,7 @@ import errorImage from '../../assets/error-image.png';
 import RestaurantIcon from './Icons/RestaurantIcon';
 import AttractionIcon from './Icons/AttractionIcon';
 import DeleteIcon from './Icons/DeleteIcon';
+import AccommodationIcon from './Icons/AccommodationIcon';
 
 const Place = ({
   tripDay,
@@ -12,7 +13,7 @@ const Place = ({
   index,
   length,
   isUpdateMode,
-  handleIsAction,
+  accomodationsList,
 }) => {
   const handleDeletePlace = async () => {
     if ('restaurantId' in data) {
@@ -46,12 +47,9 @@ const Place = ({
           return prevTripDay;
         });
       });
-
-      // response = await deleteTripResById(data.id);
     } else if ('touristAttractionId' in data) {
       const attractionIdToDelete = data.touristAttractionId;
 
-      console.log(attractionIdToDelete);
       const updatedAttractions = tripDay.attractions.attractionsForDay.map(
         (attraction) => {
           if (attraction.touristAttractionId === attractionIdToDelete) {
@@ -80,9 +78,36 @@ const Place = ({
           return prevTripDay;
         });
       });
+    } else if ('accommodationId' in data) {
+      const accommodationIdToDelete = data.accommodationId;
+
+      const updatedAccommodation = accomodationsList.map((accommodation) => {
+        if (accommodation.accommodationId === accommodationIdToDelete) {
+          return {
+            ...accommodation,
+            isDelete: accommodation.isDelete ? false : true,
+          };
+        }
+        return accommodation;
+      });
+
+      const updatedTripDay = {
+        ...tripDay,
+        accommodations: {
+          accommodations: updatedAccommodation,
+        },
+      };
+
+      setTripDays((prevTripDays) => {
+        return prevTripDays.map((prevTripDay) => {
+          if (prevTripDay.dayNum === tripDay.dayNum) {
+            return updatedTripDay;
+          }
+          return prevTripDay;
+        });
+      });
     }
   };
-
   return (
     <div className="relative flex w-full justify-between gap-5">
       {isUpdateMode && (
@@ -110,9 +135,13 @@ const Place = ({
                 ? data.restaurantPhotos === 'null'
                   ? errorImage
                   : data.restaurantPhotos
-                : data.touristAttractionPhotos === 'null'
-                  ? errorImage
-                  : data.touristAttractionPhotos
+                : type === 'accommodations'
+                  ? data.accommodationPhotos === 'null'
+                    ? errorImage
+                    : data.accommodationPhotos
+                  : data.touristAttractionPhotos === 'null'
+                    ? errorImage
+                    : data.touristAttractionPhotos
             }
           />
         </div>
@@ -120,12 +149,24 @@ const Place = ({
           <div className="text-xl font-bold">
             {type === 'restaurants'
               ? data.restaurantName
-              : data.touristAttractionName}
+              : type === 'attraction'
+                ? data.touristAttractionName
+                : data.accommodationName}
           </div>
           <div className="flex items-start gap-3">
-            {type === 'restaurants' ? <RestaurantIcon /> : <AttractionIcon />}
+            {type === 'restaurants' ? (
+              <RestaurantIcon />
+            ) : type === 'attraction' ? (
+              <AttractionIcon />
+            ) : (
+              <AccommodationIcon />
+            )}
             <div className="text-[17px]">
-              {type === 'restaurants' ? 'Nhà hàng' : 'Địa điểm giải trí'}
+              {type === 'restaurants'
+                ? 'Nhà hàng'
+                : type === 'attraction'
+                  ? 'Địa điểm giải trí'
+                  : 'Nơi ở'}
             </div>
           </div>
           <div className="flex items-start gap-3">
@@ -154,7 +195,9 @@ const Place = ({
             <div className="text-[17px]">
               {type === 'restaurants'
                 ? data.restaurantAddress
-                : data.touristAttractionAddress}
+                : type === 'attraction'
+                  ? data.touristAttractionAddress
+                  : data.accommodationAddress}
             </div>
           </div>
         </div>
