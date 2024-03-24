@@ -10,7 +10,6 @@ const Alert = () => {
       setIsShow(false);
     }, 3000);
 
-    // Clean up the timeout when component unmounts or when alert data changes
     return () => clearTimeout(timeout);
   }, [alertData, setIsShow, setAlertData]);
 
@@ -28,7 +27,7 @@ const Alert = () => {
       onClick={() => {
         setIsShow(false);
       }}
-      className={`fixed bottom-[5%] left-[2%] z-50 cursor-pointer font-semibold ${alertData.textColor} ${alertData.backGroundColor}  rounded-lg px-4 py-3 text-lg`}
+      className={`fixed bottom-[5%] left-[2%] z-50 max-w-[500px] cursor-pointer font-semibold ${alertData.textColor} ${alertData.backGroundColor}  rounded-lg px-4 py-3 text-lg`}
     >
       {alertData.message}
     </motion.div>

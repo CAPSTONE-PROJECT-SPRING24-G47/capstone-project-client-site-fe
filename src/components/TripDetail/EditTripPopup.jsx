@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Calendar from '../TripDetail/Calendar';
 import CloseIcon from '../Auth/Icons/CloseIcon';
 import SearchLocationBar from './SearchLocationBar';
@@ -11,6 +11,7 @@ import { getListRestaurantCategories } from '../../api/services/restaurant';
 import { getListTACategories } from '../../api/services/touristAttraction';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
 import LocationPopup from './LocationPopup';
+import { AlertContext } from '../../Contexts/AlertContext';
 
 const millisecondsInADay = 1000 * 60 * 60 * 24;
 const priceLevelData = [
@@ -37,6 +38,8 @@ const locationTypeData = [
 
 const EditTripPopup = ({ setIsPopupEdit, trip, handleIsAction }) => {
   const user = fetchUserFromLocalStorage();
+  const { setIsShow, setAlertData } = useContext(AlertContext);
+
   const accCategoriesId = trip.accommodationCategories
     .split(',')
     .map((category) => parseInt(category));
@@ -143,8 +146,25 @@ const EditTripPopup = ({ setIsPopupEdit, trip, handleIsAction }) => {
   const handleSubmit = async () => {
     console.log(updateData);
     const response = await updateTripById(trip.tripId, updateData);
-    if (response) handleIsAction();
-    // setIsPopupEdit(false);
+    if (response) {
+      if (response.isSuccess) {
+        setIsShow(true);
+        setAlertData({
+          message: response.message,
+          textColor: 'text-white',
+          backGroundColor: 'bg-primary-color',
+        });
+      } else {
+        setIsShow(true);
+        setAlertData({
+          message: response.message,
+          textColor: 'text-[#f08c00]',
+          backGroundColor: 'bg-[#ffe066]',
+        });
+      }
+      setIsPopupEdit(false);
+      handleIsAction();
+    }
   };
 
   const handleSearchModeChange = (e) => {
