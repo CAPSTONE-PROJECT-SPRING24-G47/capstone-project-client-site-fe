@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import avatarImage from '../../assets/trip_builder_manual_1.jpeg';
-import { Link, useParams, useLocation } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import ImageGallery from 'react-image-gallery';
 import ReactPaginate from 'react-paginate';
 import { useState } from 'react';
@@ -28,10 +28,6 @@ const TouristAttractionDetail = () => {
     setIsConfirm,
   } = useContext(CommentContext);
   const [detailData, setDetailData] = useState([]);
-  const location = useLocation();
-  const { pathname } = location;
-  const parts = pathname.split('/');
-  const locationTypeDetail = parts[1];
   const [isChecked, setIsChecked] = useState(false);
   const [listCategoryDetail, setListCategoryDetail] = useState([]);
   const [touristAttractionData, setTouristAttractionData] = useState(null);
@@ -69,9 +65,8 @@ const TouristAttractionDetail = () => {
         const TAttraction = response.data[0];
         setTouristAttractionData(TAttraction);
       }
-
-      fetchData();
     }
+    fetchData();
   }, [id]);
 
   //Get comment
@@ -98,8 +93,9 @@ const TouristAttractionDetail = () => {
       website: touristAttractionData?.touristAttractionWebsite ?? '',
       price: touristAttractionData?.priceRange,
     });
-    console.log(detailData);
   }, [touristAttractionData]);
+
+  console.log(touristAttractionData);
 
   //Get category
   useEffect(() => {
@@ -127,6 +123,22 @@ const TouristAttractionDetail = () => {
     const year = formattedCreateDay.getFullYear();
     return day + '/' + month + '/' + year;
   };
+
+  //Set image để hiển thị
+  useEffect(() => {
+    if (
+      touristAttractionData &&
+      touristAttractionData?.touristAttractionPhotos
+    ) {
+      const photoUrls = touristAttractionData?.touristAttractionPhotos.map(
+        (photo) => ({
+          original: photo.signedUrl, // Đường dẫn ảnh gốc
+          thumbnail: photo.signedUrl, // Đường dẫn ảnh thumbnail
+        })
+      );
+      setImages(photoUrls);
+    }
+  }, [touristAttractionData]);
 
   const [itemOffset, setItemOffset] = useState(0);
 
@@ -311,12 +323,18 @@ const TouristAttractionDetail = () => {
                 <p className="font-bold">{detailData.address}</p>
               </div>
             </div>
-            {/* <div className="flex gap-4">
-              <ImageGallery items={images} />
-            </div> */}
-            <button className="absolute bottom-2 right-1 h-fit rounded-full bg-secondary-color px-2 font-bold">
-              Xem thêm ảnh
-            </button>
+            {images && (
+              <div>
+                <ImageGallery
+                  items={images}
+                  infinite={true}
+                  showFullscreenButton={true}
+                  showBullets={true}
+                  showIndex={true}
+                  slideOnThumbnailOver={true}
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -339,8 +357,8 @@ const TouristAttractionDetail = () => {
               </p>
             )}
 
-            <div className="grid grid-cols-5 gap-3 pl-2 pt-4">
-              {listCategoryDetail.map((category) => (
+            <div className="flex flex-row gap-3 pl-2 pt-4">
+              {listCategoryDetail.slice(0, 7).map((category) => (
                 <p className="w-fit bg-gray-300 px-4 py-1 text-sm font-bold">
                   {category.categoryName}
                 </p>

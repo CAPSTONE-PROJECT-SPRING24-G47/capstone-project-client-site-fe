@@ -15,6 +15,7 @@ import { getListUsers } from '../../api/services/user';
 import { useContext } from 'react';
 import { CommentContext } from '../../Contexts/CommentContext';
 import DeleteCommentPopUp from '../../components/Comment/DeleteCommentPopUp';
+import 'react-image-gallery/styles/css/image-gallery.css';
 
 const RestaurantDetail = () => {
   const { id } = useParams();
@@ -62,16 +63,14 @@ const RestaurantDetail = () => {
 
   //Get data (restaurant, accommodation, TA)
   useEffect(() => {
-    if (locationTypeDetail === 'RestaurantDetail') {
-      async function fetchData() {
-        const response = await getRestaurantDetail(id);
-        if (response) {
-          const restaurant = response.data[0];
-          setRestaurantData(restaurant);
-        }
+    async function fetchData() {
+      const response = await getRestaurantDetail(id);
+      if (response) {
+        const restaurant = response.data[0];
+        setRestaurantData(restaurant);
       }
-      fetchData();
     }
+    fetchData();
   }, [id]);
 
   //Get comment
@@ -258,6 +257,17 @@ const RestaurantDetail = () => {
     handleDeleteComment();
   }, [isConfirm]);
 
+  //Set image để hiển thị
+  useEffect(() => {
+    if (restaurantData && restaurantData?.restaurantPhotos) {
+      const photoUrls = restaurantData?.restaurantPhotos.map((photo) => ({
+        original: photo.signedUrl, // Đường dẫn ảnh gốc
+        thumbnail: photo.signedUrl, // Đường dẫn ảnh thumbnail
+      }));
+      setImages(photoUrls);
+    }
+  }, [restaurantData]);
+
   return (
     <>
       {isDeletePopUp && <DeleteCommentPopUp setIsConfirm={setIsConfirm} />}
@@ -312,12 +322,18 @@ const RestaurantDetail = () => {
                 <p className="font-bold">{detailData.address}</p>
               </div>
             </div>
-            {/* <div className="flex gap-4">
-              <ImageGallery items={images} />
-            </div> */}
-            <button className="absolute bottom-2 right-1 h-fit rounded-full bg-secondary-color px-2 font-bold">
-              Xem thêm ảnh
-            </button>
+            {images && (
+              <div>
+                <ImageGallery
+                  items={images}
+                  infinite={true}
+                  showFullscreenButton={true}
+                  showBullets={true}
+                  showIndex={true}
+                  slideOnThumbnailOver={true}
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -340,8 +356,8 @@ const RestaurantDetail = () => {
               </p>
             )}
 
-            <div className="grid grid-cols-5 gap-3 pl-2 pt-4">
-              {listCategoryDetail.map((category) => (
+            <div className="flex flex-row gap-3 pl-2 pt-4">
+              {listCategoryDetail.slice(0, 7).map((category) => (
                 <p className="w-fit bg-gray-300 px-4 py-1 text-sm font-bold">
                   {category.categoryName}
                 </p>
