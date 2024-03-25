@@ -77,11 +77,15 @@ const AccommodationDetail = () => {
     fetchData();
   }, [id]);
 
+  console.log(accommodationData);
+
   useEffect(() => {
     if (accommodationData && accommodationData?.accommodationPhotos) {
       const photoUrls = accommodationData?.accommodationPhotos.map((photo) => ({
-        original: photo.signedUrl, // Đường dẫn ảnh gốc
-        thumbnail: photo.signedUrl, // Đường dẫn ảnh thumbnail
+        original:
+          photo.savedFileName !== null ? photo.signedUrl : photo.photoURL, // Đường dẫn ảnh gốc
+        thumbnail:
+          photo.savedFileName !== null ? photo.signedUrl : photo.photoURL, // Đường dẫn ảnh thumbnail
       }));
       setImages(photoUrls);
     }
