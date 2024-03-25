@@ -74,7 +74,7 @@ const TripContent = ({
         </div>
 
         {/* Thông tin Trip */}
-        {+params.get('filter') === 1 && (
+        {(+params.get('filter') === 1 || +params.get('filter') === 0) && (
           <TripInfor trip={trip} setIsPopupEdit={setIsPopupEdit} />
         )}
 

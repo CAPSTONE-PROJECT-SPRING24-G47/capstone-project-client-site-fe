@@ -14,11 +14,14 @@ import AddPopup from '../components/TripDetail/AddPopup';
 import SmallUpdateCircle from '../components/TripDetail/SmallUpdateCircle';
 import SmallUpdatePopup from '../components/TripDetail/SmallUpdatePopup';
 import { AlertContext } from '../Contexts/AlertContext';
+import ConfirmPopup from '../components/TripDetail/ConfirmPopup';
 
 const TripDetail = () => {
   const { id } = useParams();
   const { setIsShow, setAlertData } = useContext(AlertContext);
   const [params, _setParams] = useSearchParams();
+  const [isDiff, setIsDiff] = useState(false);
+  const [isConfirmPopup, setIsConfirmPopup] = useState(false);
   const [trip, setTrip] = useState(null);
   const tripListRef = useRef(null);
   const [tripDays, setTripDays] = useState([]);
@@ -43,7 +46,6 @@ const TripDetail = () => {
       const restaurants = trip.trip_Restaurants;
       const accommodations = trip.trip_Accommodations;
 
-      console.log(+params.get('filter'));
       if (+params.get('filter') === 1 || +params.get('filter') === 0) {
         for (let i = 0; i < trip.duration; i++) {
           const attractionsForDay = attractions.filter(
@@ -140,7 +142,6 @@ const TripDetail = () => {
 
     setTripDays(updatedTripDays);
   };
-  console.log();
 
   const handleDeletePlace = async () => {
     const deletedRestaurants = [];
@@ -256,6 +257,8 @@ const TripDetail = () => {
     };
   }, []);
 
+  console.log(trip);
+
   return (
     <div className="relative flex flex-col gap-10 bg-bg-secondary-color">
       {trip && (
@@ -264,9 +267,25 @@ const TripDetail = () => {
             <>
               <div className="fixed inset-x-0 z-30 h-screen w-full bg-[#03121A] opacity-50" />
               <EditTripPopup
+                isDiff={isDiff}
+                setIsDiff={setIsDiff}
                 setIsPopupEdit={setIsPopupEdit}
                 trip={trip}
                 handleIsAction={handleIsAction}
+                setIsConfirmPopup={setIsConfirmPopup}
+              />
+            </>
+          )}
+          {isDiff && isConfirmPopup && (
+            <>
+              <div className="fixed inset-x-0 !z-[49] h-screen w-full bg-[#03121A] opacity-50" />
+              <ConfirmPopup
+                content={
+                  'Những thay đổi của bạn sẽ bị mất nếu bạn thoát ra bây giờ'
+                }
+                setIsDiff={setIsDiff}
+                setIsConfirmPopup={setIsConfirmPopup}
+                setIsPopupEdit={setIsPopupEdit}
               />
             </>
           )}

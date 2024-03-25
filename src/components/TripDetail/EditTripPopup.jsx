@@ -12,6 +12,7 @@ import { getListTACategories } from '../../api/services/touristAttraction';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
 import LocationPopup from './LocationPopup';
 import { AlertContext } from '../../Contexts/AlertContext';
+import { isDiffirent } from '../../utils/compareObject';
 
 const millisecondsInADay = 1000 * 60 * 60 * 24;
 const priceLevelData = [
@@ -36,19 +37,34 @@ const locationTypeData = [
   },
 ];
 
-const EditTripPopup = ({ setIsPopupEdit, trip, handleIsAction }) => {
+const EditTripPopup = ({
+  setIsPopupEdit,
+  trip,
+  handleIsAction,
+  isDiff,
+  setIsDiff,
+  setIsConfirmPopup,
+}) => {
   const user = fetchUserFromLocalStorage();
   const { setIsShow, setAlertData } = useContext(AlertContext);
-
-  const accCategoriesId = trip.accommodationCategories
-    .split(',')
-    .map((category) => parseInt(category));
-  const resCategoriesId = trip.restaurantCategories
-    .split(',')
-    .map((category) => parseInt(category));
-  const taCategoriesId = trip.touristAttractionCategories
-    .split(',')
-    .map((category) => parseInt(category));
+  const accCategoriesId =
+    trip.accommodationCategories.length !== 0
+      ? trip.accommodationCategories
+          .split(',')
+          .map((category) => parseInt(category))
+      : [];
+  const resCategoriesId =
+    trip.restaurantCategories.length !== 0
+      ? trip.restaurantCategories
+          .split(',')
+          .map((category) => parseInt(category))
+      : [];
+  const taCategoriesId =
+    trip.touristAttractionCategories.length !== 0
+      ? trip.touristAttractionCategories
+          .split(',')
+          .map((category) => parseInt(category))
+      : [];
   const [searchResult, setSearchResult] = useState([]);
   const [accommodationCategories, setAccommodationCategories] = useState([]);
   const [restaurantCategories, setRestaurantCategories] = useState([]);
@@ -309,6 +325,13 @@ const EditTripPopup = ({ setIsPopupEdit, trip, handleIsAction }) => {
     touristAttractionOption,
   ]);
 
+  useEffect(() => {
+    setIsDiff(isDiffirent(trip, updateData));
+  }, [updateData, isDiff]);
+
+  console.log('trip', trip);
+  console.log('update', updateData);
+
   return (
     <>
       {isLocationPopup && (
@@ -321,7 +344,13 @@ const EditTripPopup = ({ setIsPopupEdit, trip, handleIsAction }) => {
         </>
       )}
       <div
-        onClick={() => setIsPopupEdit(false)}
+        onClick={() => {
+          if (!isDiff) {
+            setIsPopupEdit(false);
+            return;
+          }
+          setIsConfirmPopup(true);
+        }}
         className="fixed z-40 flex h-full w-full items-center justify-center"
       >
         <div
@@ -329,7 +358,13 @@ const EditTripPopup = ({ setIsPopupEdit, trip, handleIsAction }) => {
           className="no-scrollbar relative mb-14 flex max-h-[550px] w-[75%] flex-col gap-5 overflow-y-scroll rounded-xl bg-bg-color px-7 py-8"
         >
           <div
-            onClick={() => setIsPopupEdit(false)}
+            onClick={() => {
+              if (!isDiff) {
+                setIsPopupEdit(false);
+                return;
+              }
+              setIsConfirmPopup(true);
+            }}
             className="absolute right-3 top-3 z-[99] cursor-pointer rounded-bl-lg rounded-tr-lg bg-secondary-color p-1 text-bg-color"
           >
             <CloseIcon />
@@ -344,43 +379,7 @@ const EditTripPopup = ({ setIsPopupEdit, trip, handleIsAction }) => {
               className="rounded-lg bg-bg-color p-2 outline-none ring-[1px] focus:ring-[2px] focus:ring-accent-color"
             />
           </div>
-          <div className="flex flex-col gap-2">
-            <label className="text-lg font-semibold">Điểm đến</label>
-            <div
-              onClick={() => setIsLocationPopup(true)}
-              className="w-fit cursor-pointer hover:font-semibold hover:underline hover:underline-offset-2"
-            >
-              Thành phố Sapporo, thành phố Funabashi, thành phố Oita, và 5 điểm
-              đến khác
-            </div>
-            <div className="flex gap-2">
-              <select
-                onChange={handleSearchModeChange}
-                className="w-[20%] rounded-lg bg-bg-color p-2 outline-none ring-[1px] focus:ring-[2px] focus:ring-accent-color"
-              >
-                {locationTypeData.map((item) => (
-                  <option
-                    value={item.typeNum}
-                    property={item.property}
-                    type={item.type}
-                    selected={item.locationName === 'Thành phố'}
-                  >
-                    <div>{item.locationName}</div>
-                  </option>
-                ))}
-              </select>
-              <div className="relative w-[80%]">
-                <SearchLocationBar setSearchLocation={setSearchLocation} />
-                {searchResult.length !== 0 && (
-                  <SearchResult
-                    searchResult={searchResult}
-                    searchLocation={searchLocation}
-                    handleChooseLocation={handleChooseLocation}
-                  />
-                )}
-              </div>
-            </div>
-          </div>
+          {/* Duration */}
           <div className="flex flex-col gap-2">
             <label className="text-lg font-semibold">
               Thời gian: {duration} ngày
@@ -389,117 +388,173 @@ const EditTripPopup = ({ setIsPopupEdit, trip, handleIsAction }) => {
               <Calendar date={date} handleChangeDate={handleChangeDate} />
             </div>
           </div>
-          <div className="flex justify-between gap-10">
-            <div className="flex w-1/2 flex-col gap-2">
-              <label className="text-lg font-semibold">
-                Nhu cầu mức giá nơi ở
-              </label>
-              <select
-                onChange={handleChangeAccommodationPriceLevel}
-                className="rounded-lg bg-bg-color p-2 outline-none ring-[1px] focus:ring-[2px] focus:ring-accent-color"
-              >
-                {priceLevelData.map((item) => (
-                  <option
-                    value={item.text}
-                    selected={trip.accommodationPriceLevel === item.text}
+          {trip.isCreatedAutomatically && (
+            <>
+              {/* Location */}
+              <div className="flex flex-col gap-2">
+                <label className="text-lg font-semibold">Điểm đến</label>
+                <div
+                  onClick={() => setIsLocationPopup(true)}
+                  className="w-fit cursor-pointer hover:font-semibold hover:underline hover:underline-offset-2"
+                >
+                  {trip.trip_Locations.length === 0 &&
+                    'Không có địa điểm điểm nào'}
+                  {trip.trip_Locations.length === 1 &&
+                    trip.trip_Locations[0].locationName}
+                  {trip.trip_Locations.length === 2 &&
+                    `${trip.trip_Locations[0].locationName}, ${trip.trip_Locations[1].locationName}`}
+                  {trip.trip_Locations.length === 3 &&
+                    `${trip.trip_Locations[0].locationName}, ${trip.trip_Locations[1].locationName}, ${trip.trip_Locations[2].locationName}`}
+                  {trip.trip_Locations.length > 3 &&
+                    `${trip.trip_Locations[0].locationName}, ${trip.trip_Locations[1].locationName}, ${trip.trip_Locations[2].locationName}, và ${trip.trip_Locations.length - 3} điểm đến khác`}
+                </div>
+                <div className="flex gap-2">
+                  <select
+                    onChange={handleSearchModeChange}
+                    className="w-[20%] rounded-lg bg-bg-color p-2 outline-none ring-[1px] focus:ring-[2px] focus:ring-accent-color"
                   >
-                    <div>{item.text}</div>
-                  </option>
-                ))}
-              </select>
-            </div>
+                    {locationTypeData.map((item) => (
+                      <option
+                        value={item.typeNum}
+                        property={item.property}
+                        type={item.type}
+                        selected={item.locationName === 'Thành phố'}
+                      >
+                        <div>{item.locationName}</div>
+                      </option>
+                    ))}
+                  </select>
+                  <div className="relative w-[80%]">
+                    <SearchLocationBar setSearchLocation={setSearchLocation} />
+                    {searchResult.length !== 0 && (
+                      <SearchResult
+                        searchResult={searchResult}
+                        searchLocation={searchLocation}
+                        handleChooseLocation={handleChooseLocation}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
 
-            <div className="flex w-1/2 flex-col gap-2">
-              <label className="text-lg font-semibold">
-                Nhu cầu mức giá nhà hàng
-              </label>
-              <select
-                onChange={handleChangeRestaurantPriceLevel}
-                className="rounded-lg bg-bg-color p-2 outline-none ring-[1px] focus:ring-[2px] focus:ring-accent-color"
-              >
-                {priceLevelData.map((item) => (
-                  <option
-                    value={item.text}
-                    selected={trip.restaurantPriceLevel === item.text}
+              {/* Price Level */}
+              <div className="flex justify-between gap-10">
+                <div className="flex w-1/2 flex-col gap-2">
+                  <label className="text-lg font-semibold">
+                    Nhu cầu mức giá nơi ở
+                  </label>
+                  <select
+                    onChange={handleChangeAccommodationPriceLevel}
+                    className="rounded-lg bg-bg-color p-2 outline-none ring-[1px] focus:ring-[2px] focus:ring-accent-color"
                   >
-                    <div>{item.text}</div>
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <div className="flex gap-10">
-            <div className="flex w-full flex-col gap-3">
-              <label className="text-lg font-semibold">Tiện ích về chỗ ở</label>
-              <div className="flex h-fit items-start bg-bg-color">
-                <input
-                  onChange={handleSearchAccCategories}
-                  type="text"
-                  placeholder="Tìm tiện ích"
-                  className="flex-1 select-none rounded-lg bg-bg-color px-4 py-2 outline-none ring-[1px] focus:ring-[2px] focus:ring-accent-color"
-                />
+                    {priceLevelData.map((item) => (
+                      <option
+                        value={item.text}
+                        selected={trip.accommodationPriceLevel === item.text}
+                      >
+                        <div>{item.text}</div>
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex w-1/2 flex-col gap-2">
+                  <label className="text-lg font-semibold">
+                    Nhu cầu mức giá nhà hàng
+                  </label>
+                  <select
+                    onChange={handleChangeRestaurantPriceLevel}
+                    className="rounded-lg bg-bg-color p-2 outline-none ring-[1px] focus:ring-[2px] focus:ring-accent-color"
+                  >
+                    {priceLevelData.map((item) => (
+                      <option
+                        value={item.text}
+                        selected={trip.restaurantPriceLevel === item.text}
+                      >
+                        <div>{item.text}</div>
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
-              <div className="no-scrollbar relative flex h-[380px] flex-wrap items-start justify-start gap-5 overflow-y-scroll rounded-xl bg-bg-color p-5 ring-[1px] ring-accent-color">
-                {filteredAccCategories.map((data) => (
-                  <CategoryRectangle
-                    id={data.accommodationCategoryId}
-                    text={data.accommodationCategoryName}
-                    setAccommodationOption={setAccommodationOption}
-                    accommodationOption={accommodationOption}
-                    mode={3}
-                  />
-                ))}
+              {/* Category */}
+              <div className="flex gap-10">
+                <div className="flex w-full flex-col gap-3">
+                  <label className="text-lg font-semibold">
+                    Tiện ích về chỗ ở
+                  </label>
+                  <div className="flex h-fit items-start bg-bg-color">
+                    <input
+                      onChange={handleSearchAccCategories}
+                      type="text"
+                      placeholder="Tìm tiện ích"
+                      className="flex-1 select-none rounded-lg bg-bg-color px-4 py-2 outline-none ring-[1px] focus:ring-[2px] focus:ring-accent-color"
+                    />
+                  </div>
+                  <div className="no-scrollbar relative flex h-[380px] flex-wrap items-start justify-start gap-5 overflow-y-scroll rounded-xl bg-bg-color p-5 ring-[1px] ring-accent-color">
+                    {filteredAccCategories.map((data) => (
+                      <CategoryRectangle
+                        id={data.accommodationCategoryId}
+                        text={data.accommodationCategoryName}
+                        setAccommodationOption={setAccommodationOption}
+                        accommodationOption={accommodationOption}
+                        mode={3}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="flex w-full flex-col gap-3">
+                  <label className="text-lg font-semibold">
+                    Ẩm thực, kiểu nhà hàng
+                  </label>
+                  <div className="flex h-fit items-start bg-bg-color">
+                    <input
+                      onChange={handleSearchResCategories}
+                      type="text"
+                      placeholder="Tìm kiểu nhà hàng"
+                      className="flex-1 select-none rounded-lg bg-bg-color px-4 py-2 outline-none ring-[1px] focus:ring-[2px] focus:ring-accent-color"
+                    />
+                  </div>
+                  <div className="no-scrollbar relative flex h-[380px] flex-wrap items-start justify-start gap-5 overflow-y-scroll rounded-xl bg-bg-color p-5 ring-[1px] ring-accent-color">
+                    {filteredResCategories.map((data) => (
+                      <CategoryRectangle
+                        id={data.restaurantCategoryId}
+                        text={data.restaurantCategoryName}
+                        setRestaurantOption={setRestaurantOption}
+                        restaurantOption={restaurantOption}
+                        mode={4}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="flex w-full flex-col gap-3">
+                  <label className="text-lg font-semibold">
+                    Kiểu hoạt động giải trí
+                  </label>
+                  <div className="flex h-fit items-start bg-bg-color">
+                    <input
+                      onChange={handleSearchTACategories}
+                      type="text"
+                      placeholder="Tìm kiểu hoạt động giải trí"
+                      className="flex-1 select-none rounded-lg bg-bg-color px-4 py-2 outline-none ring-[1px] focus:ring-[2px] focus:ring-accent-color"
+                    />
+                  </div>
+                  <div className="no-scrollbar relative flex h-[380px] flex-wrap items-start justify-start gap-5 overflow-y-scroll rounded-xl bg-bg-color p-5 ring-[1px] ring-accent-color">
+                    {filteredTACategories.map((data) => (
+                      <CategoryRectangle
+                        id={data.touristAttractionCategoryId}
+                        text={data.touristAttractionCategoryName}
+                        setTouristAttractionOption={setTouristAttractionOption}
+                        touristAttractionOption={touristAttractionOption}
+                        mode={5}
+                      />
+                    ))}
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="flex w-full flex-col gap-3">
-              <label className="text-lg font-semibold">
-                Ẩm thực, kiểu nhà hàng
-              </label>
-              <div className="flex h-fit items-start bg-bg-color">
-                <input
-                  onChange={handleSearchResCategories}
-                  type="text"
-                  placeholder="Tìm kiểu nhà hàng"
-                  className="flex-1 select-none rounded-lg bg-bg-color px-4 py-2 outline-none ring-[1px] focus:ring-[2px] focus:ring-accent-color"
-                />
-              </div>
-              <div className="no-scrollbar relative flex h-[380px] flex-wrap items-start justify-start gap-5 overflow-y-scroll rounded-xl bg-bg-color p-5 ring-[1px] ring-accent-color">
-                {filteredResCategories.map((data) => (
-                  <CategoryRectangle
-                    id={data.restaurantCategoryId}
-                    text={data.restaurantCategoryName}
-                    setRestaurantOption={setRestaurantOption}
-                    restaurantOption={restaurantOption}
-                    mode={4}
-                  />
-                ))}
-              </div>
-            </div>
-            <div className="flex w-full flex-col gap-3">
-              <label className="text-lg font-semibold">
-                Kiểu hoạt động giải trí
-              </label>
-              <div className="flex h-fit items-start bg-bg-color">
-                <input
-                  onChange={handleSearchTACategories}
-                  type="text"
-                  placeholder="Tìm kiểu hoạt động giải trí"
-                  className="flex-1 select-none rounded-lg bg-bg-color px-4 py-2 outline-none ring-[1px] focus:ring-[2px] focus:ring-accent-color"
-                />
-              </div>
-              <div className="no-scrollbar relative flex h-[380px] flex-wrap items-start justify-start gap-5 overflow-y-scroll rounded-xl bg-bg-color p-5 ring-[1px] ring-accent-color">
-                {filteredTACategories.map((data) => (
-                  <CategoryRectangle
-                    id={data.touristAttractionCategoryId}
-                    text={data.touristAttractionCategoryName}
-                    setTouristAttractionOption={setTouristAttractionOption}
-                    touristAttractionOption={touristAttractionOption}
-                    mode={5}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
+            </>
+          )}
+
           <div className="flex flex-col gap-2">
             <label className="text-lg font-semibold">Mô tả chuyến đi</label>
             <textarea
