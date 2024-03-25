@@ -1,13 +1,15 @@
 import React from 'react';
-import Pills from './Pills';
+import Pills from '../Trips/Pills';
 
 const LocationPopup = ({ location, setLocation }) => {
-  const listRegions = location.filter((item) => item?.name?.includes('Vùng'));
+  const listRegions = location.filter((item) =>
+    item?.locationName?.includes('Vùng')
+  );
   const listPrefectures = location.filter((item) =>
-    item?.name?.includes('Tỉnh')
+    item?.locationName?.includes('Tỉnh')
   );
   const listCities = location.filter((item) =>
-    item?.name?.includes('Thành phố')
+    item?.locationName?.includes('Thành phố')
   );
   console.log(listCities);
 
@@ -43,7 +45,7 @@ const LocationPopup = ({ location, setLocation }) => {
             listRegions?.map((item, index) => (
               <Pills
                 key={index}
-                text={item.name}
+                text={item.locationName}
                 handleRemoveLocation={handleRemoveLocation}
                 location={item}
               />
@@ -62,7 +64,7 @@ const LocationPopup = ({ location, setLocation }) => {
             listPrefectures?.map((item, index) => (
               <Pills
                 key={index}
-                text={item.name}
+                text={item.locationName}
                 handleRemoveLocation={handleRemoveLocation}
                 location={item}
               />
@@ -81,7 +83,7 @@ const LocationPopup = ({ location, setLocation }) => {
             listCities?.map((item, index) => (
               <Pills
                 key={index}
-                text={item.name}
+                text={item.locationName}
                 handleRemoveLocation={handleRemoveLocation}
                 location={item}
               />

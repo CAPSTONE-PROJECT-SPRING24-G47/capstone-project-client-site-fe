@@ -4,7 +4,6 @@ import SakuraIcon from './Icons/SakuraIcon';
 import ClownIcon from './Icons/ClownIcon';
 import TsunamiIcon from './Icons/TsunamiIcon';
 import OnigiriIcon from './Icons/OnigiriIcon';
-import { useNavigate } from 'react-router-dom';
 
 const variants = {
   hover: { width: '200%' },
@@ -12,6 +11,7 @@ const variants = {
 };
 
 const TripSelection = ({
+  // setIsTripAuto,
   setIsTripSelection,
   btnText,
   description,
@@ -20,7 +20,6 @@ const TripSelection = ({
   setMode,
 }) => {
   const [isHover, setIsHover] = useState(false);
-  const navigate = useNavigate();
 
   return (
     <motion.div
@@ -131,7 +130,7 @@ const TripSelection = ({
             if (isAuto) {
               setMode('auto');
             } else {
-              navigate('/trip-builder-manual');
+              setMode('manual');
             }
           }}
         >

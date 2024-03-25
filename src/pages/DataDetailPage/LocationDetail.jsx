@@ -1,10 +1,14 @@
 import React, { useEffect } from 'react';
 import avatarImage from '../../assets/trip_builder_manual_1.jpeg';
-import { Link, useParams } from 'react-router-dom';
-import ImageGallery from 'react-image-gallery';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import { useState } from 'react';
-
+import {
+  deleteRestaurantCommentDetail,
+  getListRestaurantCategoryDetail,
+  getListRestaurantComment,
+  getRestaurantDetail,
+} from '../../api/services/restaurant';
 import ReactStars from 'react-rating-stars-component';
 import { getListUsers } from '../../api/services/user';
 import { useContext } from 'react';
@@ -16,9 +20,14 @@ import {
   getListAccommodationCategoryDetail,
   getListAccommodationComment,
 } from '../../api/services/accommodation';
-import 'react-image-gallery/styles/css/image-gallery.css';
+import {
+  deleteTACommentDetail,
+  getListTouristAttractionCategoryDetail,
+  getListTouristAttractionComment,
+  getTouristAttractionDetail,
+} from '../../api/services/touristAttraction';
 
-const AccommodationDetail = () => {
+const LocationDetail = () => {
   const { id } = useParams();
   const userData = JSON.parse(localStorage.getItem('user'));
   const {
@@ -30,19 +39,22 @@ const AccommodationDetail = () => {
     setIsConfirm,
   } = useContext(CommentContext);
   const [detailData, setDetailData] = useState([]);
+  const location = useLocation();
+  const { pathname } = location;
+  const parts = pathname.split('/');
+  const locationTypeDetail = parts[1];
   const [isChecked, setIsChecked] = useState(false);
   const [listCategoryDetail, setListCategoryDetail] = useState([]);
+  const [restaurantData, setRestaurantData] = useState(null);
   const [accommodationData, setAccommodationData] = useState(null);
+  const [touristAttractionData, setTouristAttractionData] = useState(null);
   const [commentData, setCommentData] = useState([]);
   const [listUsers, setListUsers] = useState(null);
   const [toggleDelete, setToggleDelete] = useState(false);
-  const [images, setImages] = useState(null);
 
   const handleClick = () => {
     setIsChecked(!isChecked);
   };
-
-  //Lấy user
   useEffect(() => {
     async function fetchData() {
       const response = await getListUsers();
@@ -60,42 +72,72 @@ const AccommodationDetail = () => {
   }
 
   //Get data (restaurant, accommodation, TA)
-
   useEffect(() => {
-    async function fetchData() {
-      const response = await getAccommodationDetail(id);
-      if (response) {
-        const accommodation = response.data[0];
-        console.log(accommodation);
-
-        setAccommodationData(accommodation);
+    if (locationTypeDetail === 'RestaurantDetail') {
+      async function fetchData() {
+        const response = await getRestaurantDetail(id);
+        if (response) {
+          const restaurant = response.data[0];
+          setRestaurantData(restaurant);
+        }
       }
+      fetchData();
     }
-    fetchData();
   }, [id]);
 
   useEffect(() => {
-    if (accommodationData && accommodationData?.accommodationPhotos) {
-      const photoUrls = accommodationData?.accommodationPhotos.map((photo) => ({
-        original:
-          photo.savedFileName !== null ? photo.signedUrl : photo.photoURL, // Đường dẫn ảnh gốc
-        thumbnail:
-          photo.savedFileName !== null ? photo.signedUrl : photo.photoURL, // Đường dẫn ảnh thumbnail
-      }));
-      setImages(photoUrls);
+    if (locationTypeDetail === 'AccommodationDetail') {
+      async function fetchData() {
+        const response = await getAccommodationDetail(id);
+        if (response) {
+          const accommodation = response.data[0];
+          setAccommodationData(accommodation);
+        }
+      }
+      fetchData();
     }
-  }, [accommodationData]);
+  }, [id]);
+
+  useEffect(() => {
+    if (locationTypeDetail === 'TouristAttractionDetail') {
+      async function fetchData() {
+        const response = await getTouristAttractionDetail(id);
+        if (response) {
+          const TAttraction = response.data[0];
+          setTouristAttractionData(TAttraction);
+        }
+      }
+      fetchData();
+    }
+  }, [id]);
 
   //Get comment
   useEffect(() => {
     async function fetchData() {
-      const response = await getListAccommodationComment(id);
-      const comment = response.data.reverse();
-      console.log(response);
-      if (response) {
-        setCommentData(comment);
+      if (locationTypeDetail === 'RestaurantDetail') {
+        const response = await getListRestaurantComment(id);
+        const comment = response.data.reverse();
+        console.log(comment);
+        if (response) {
+          setCommentData(comment);
+        }
       }
-
+      if (locationTypeDetail === 'AccommodationDetail') {
+        const response = await getListAccommodationComment(id);
+        const comment = response.data.reverse();
+        console.log(response);
+        if (response) {
+          setCommentData(comment);
+        }
+      }
+      if (locationTypeDetail === 'TouristAttractionDetail') {
+        const response = await getListTouristAttractionComment(id);
+        const comment = response.data.reverse();
+        console.log(response);
+        if (response) {
+          setCommentData(comment);
+        }
+      }
       setIsConfirm(false);
     }
     fetchData();
@@ -103,38 +145,77 @@ const AccommodationDetail = () => {
 
   //Set form data để hiện detail
   useEffect(() => {
-    setDetailData({
-      name: accommodationData?.accommodationName ?? '',
-      description: accommodationData?.accommodationDescription ?? '',
-      address: accommodationData?.accommodationAddress ?? '',
-      phone: accommodationData?.accommodationPhone ?? null,
-      website: accommodationData?.accommodationWebsite ?? '',
-      price: accommodationData?.priceRange,
-    });
-  }, [accommodationData]);
-
-  //Set image để hiển thị
-  useEffect(() => {
-    if (accommodationData && accommodationData?.accommodationPhotos) {
-      const photoUrls = accommodationData?.accommodationPhotos.map((photo) => ({
-        original: photo.signedUrl, // Đường dẫn ảnh gốc
-        thumbnail: photo.signedUrl, // Đường dẫn ảnh thumbnail
-      }));
-      setImages(photoUrls);
+    if (locationTypeDetail === 'RestaurantDetail') {
+      setDetailData({
+        name: restaurantData?.restaurantName ?? '',
+        description: restaurantData?.restaurantDescription ?? '',
+        address: restaurantData?.restaurantAddress ?? '',
+        menu: restaurantData?.restaurantMenu ?? '',
+        phone: restaurantData?.restaurantPhone ?? null,
+        website: restaurantData?.restaurantWebsite ?? '',
+        price: restaurantData?.priceRange,
+      });
+      console.log(detailData);
     }
-  }, [accommodationData]);
+    if (locationTypeDetail === 'AccommodationDetail') {
+      setDetailData({
+        name: accommodationData?.accommodationName ?? '',
+        description: accommodationData?.accommodationDescription ?? '',
+        address: accommodationData?.accommodationAddress ?? '',
+        phone: accommodationData?.accommodationPhone ?? null,
+        website: accommodationData?.accommodationWebsite ?? '',
+        price: accommodationData?.priceRange,
+      });
+      console.log(detailData);
+    }
+    if (locationTypeDetail === 'TouristAttractionDetail') {
+      setDetailData({
+        name: touristAttractionData?.touristAttractionName ?? '',
+        description: touristAttractionData?.touristAttractionDescription ?? '',
+        address: touristAttractionData?.touristAttractionAddress ?? '',
+        phone: touristAttractionData?.touristAttractionPhone ?? null,
+        website: touristAttractionData?.touristAttractionWebsite ?? '',
+        price: touristAttractionData?.priceRange,
+      });
+      console.log(detailData);
+    }
+  }, [restaurantData, accommodationData, touristAttractionData]);
 
   //Get category
   useEffect(() => {
     async function fetchData() {
-      const response = await getListAccommodationCategoryDetail(id);
-      console.log(response);
-      if (response) {
-        setListCategoryDetail(
-          response.data.map((category) => ({
-            categoryName: category?.accommodationCategoryName || '',
-          }))
-        );
+      if (locationTypeDetail === 'RestaurantDetail') {
+        const response = await getListRestaurantCategoryDetail(id);
+        console.log(response);
+        if (response) {
+          setListCategoryDetail(
+            response.data.map((category) => ({
+              categoryName: category?.restaurantCategoryName || '',
+            }))
+          );
+        }
+      }
+      if (locationTypeDetail === 'AccommodationDetail') {
+        const response = await getListAccommodationCategoryDetail(id);
+        console.log(response);
+        if (response) {
+          setListCategoryDetail(
+            response.data.map((category) => ({
+              categoryName: category?.accommodationCategoryName || '',
+            }))
+          );
+        }
+      }
+      if (locationTypeDetail === 'TouristAttractionDetail') {
+        const response = await getListTouristAttractionCategoryDetail(id);
+        console.log(response);
+        if (response) {
+          setListCategoryDetail(
+            response.data.map((category) => ({
+              categoryName: category?.touristAttractionCategoryName || '',
+            }))
+          );
+        }
       }
     }
     fetchData();
@@ -186,18 +267,49 @@ const AccommodationDetail = () => {
                   </p>
                   {userData.userId == item.userId && (
                     <div className="mr-[12%] flex flex-row gap-2">
-                      <Link
-                        to={`/updateAccommodationReview/${id}/${item.accommodationCommentId}`}
-                      >
-                        <button className="border-r-2 border-primary-color pr-2 text-primary-color">
-                          Sửa
-                        </button>
-                      </Link>
+                      {locationTypeDetail === 'RestaurantDetail' && (
+                        <Link
+                          to={`/updateRestaurantReview/${id}/${item.restaurantCommentId}`}
+                        >
+                          <button className="border-r-2 border-primary-color pr-2 text-primary-color">
+                            Sửa
+                          </button>
+                        </Link>
+                      )}
+                      {locationTypeDetail === 'AccommodationDetail' && (
+                        <Link
+                          to={`/updateAccommodationReview/${id}/${item.accommodationCommentId}`}
+                        >
+                          <button className="border-r-2 border-primary-color pr-2 text-primary-color">
+                            Sửa
+                          </button>
+                        </Link>
+                      )}
+                      {locationTypeDetail === 'TouristAttractionDetail' && (
+                        <Link
+                          to={`/updateTouristAttractionReview/${id}/${item.touristAttractionCommentId}`}
+                        >
+                          <button className="border-r-2 border-primary-color pr-2 text-primary-color">
+                            Sửa
+                          </button>
+                        </Link>
+                      )}
+
                       <button
                         className="pb-3 text-sub-color"
                         onClick={() => {
                           setIsDeletePopUp(true);
-                          setDataId(item.accommodationCommentId);
+                          if (locationTypeDetail === 'RestaurantDetail') {
+                            setDataId(item.restaurantCommentId);
+                          }
+                          if (locationTypeDetail === 'AccommodationDetail') {
+                            setDataId(item.accommodationCommentId);
+                          }
+                          if (
+                            locationTypeDetail === 'TouristAttractionDetail'
+                          ) {
+                            setDataId(item.touristAttractionCommentId);
+                          }
                         }}
                       >
                         Xóa
@@ -262,17 +374,44 @@ const AccommodationDetail = () => {
 
   const handleDeleteComment = async () => {
     let response;
-
-    try {
-      if (isConfirm) {
-        response = await deleteAccommodationCommentDetail(dataId);
-        if (response.isSuccess) {
-          setToggleDelete((state) => !state);
+    if (locationTypeDetail === 'RestaurantDetail') {
+      try {
+        if (isConfirm) {
+          response = await deleteRestaurantCommentDetail(dataId);
+          if (response.isSuccess) {
+            setToggleDelete((state) => !state);
+          }
+          console.log(response);
         }
-        console.log(response);
+      } catch (error) {
+        console.error('Error update status:', error);
       }
-    } catch (error) {
-      console.error('Error update status:', error);
+    }
+    if (locationTypeDetail === 'AccommodationDetail') {
+      try {
+        if (isConfirm) {
+          response = await deleteAccommodationCommentDetail(dataId);
+          if (response.isSuccess) {
+            setToggleDelete((state) => !state);
+          }
+          console.log(response);
+        }
+      } catch (error) {
+        console.error('Error update status:', error);
+      }
+    }
+    if (locationTypeDetail === 'TouristAttractionDetail') {
+      try {
+        if (isConfirm) {
+          response = await deleteTACommentDetail(dataId);
+          if (response.isSuccess) {
+            setToggleDelete((state) => !state);
+          }
+          console.log(response);
+        }
+      } catch (error) {
+        console.error('Error update status:', error);
+      }
     }
   };
 
@@ -334,19 +473,25 @@ const AccommodationDetail = () => {
                 <p className="font-bold">{detailData.address}</p>
               </div>
             </div>
-
-            {images && (
-              <div>
-                <ImageGallery
-                  items={images}
-                  infinite={true}
-                  showFullscreenButton={true}
-                  showBullets={true}
-                  showIndex={true}
-                  slideOnThumbnailOver={true}
-                />
+            <div className="flex gap-4">
+              {/* <img src="" alt="" /> */}
+              <div className=" h-[400px] w-[56%] rounded-l-lg bg-gray-300 text-center">
+                <p className="py-auto">Ảnh</p>
               </div>
-            )}
+              <div className="flex w-[44%] flex-col gap-2 rounded-tr-lg">
+                {/* <img src="" alt="" /> */}
+                <div className=" h-[50%]  bg-gray-300 text-center ">
+                  <p className="py-auto">Ảnh</p>
+                </div>
+                {/* <img src="" alt="" /> */}
+                <div className=" h-[50%] rounded-br-lg bg-gray-300 text-center">
+                  <p className="py-auto">Ảnh</p>
+                </div>
+              </div>
+            </div>
+            <button className="absolute bottom-2 right-1 h-fit rounded-full bg-secondary-color px-2 font-bold">
+              Xem thêm ảnh
+            </button>
           </div>
         </div>
 
@@ -358,6 +503,11 @@ const AccommodationDetail = () => {
           <div className="h-[auto] w-[80%] text-left">
             <p className=" pl-2 text-2xl font-bold">{detailData.description}</p>
 
+            {detailData.menu && (
+              <p className=" pl-2 pt-5 font-bold">
+                Thực đơn: {detailData.menu}
+              </p>
+            )}
             {detailData.price && (
               <p className="pl-2 pt-5 font-bold">
                 Mức giá: {detailData.price}VND
@@ -365,8 +515,8 @@ const AccommodationDetail = () => {
             )}
 
             <div className="flex flex-row gap-3 pl-2 pt-4">
-              {listCategoryDetail.slice(0, 7).map((category) => (
-                <p className="w-fit bg-gray-300 px-4 py-1 text-sm font-bold">
+              {listCategoryDetail.map((category) => (
+                <p className="bg-gray-300 px-4 py-1 font-bold">
                   {category.categoryName}
                 </p>
               ))}
@@ -482,11 +632,27 @@ const AccommodationDetail = () => {
               <p className="font-bold">Sắp xếp theo</p>
             </div>
 
-            <Link to={`/accommodationReview/${id}`}>
-              <button className="absolute right-[10%] top-0 rounded-[15px] bg-primary-color p-2 text-2xl font-bold text-white hover:bg-gray-100 hover:text-primary-color">
-                Viết đánh giá
-              </button>
-            </Link>
+            {locationTypeDetail === 'RestaurantDetail' && (
+              <Link to={`/restaurantReview/${id}`}>
+                <button className="absolute right-[10%] top-0 rounded-[15px] bg-primary-color p-2 text-2xl font-bold text-white hover:bg-gray-100 hover:text-primary-color">
+                  Viết đánh giá
+                </button>
+              </Link>
+            )}
+            {locationTypeDetail === 'AccommodationDetail' && (
+              <Link to={`/accommodationReview/${id}`}>
+                <button className="absolute right-[10%] top-0 rounded-[15px] bg-primary-color p-2 text-2xl font-bold text-white hover:bg-gray-100 hover:text-primary-color">
+                  Viết đánh giá
+                </button>
+              </Link>
+            )}
+            {locationTypeDetail === 'TouristAttractionDetail' && (
+              <Link to={`/touristAttractionReview/${id}`}>
+                <button className="absolute right-[10%] top-0 rounded-[15px] bg-primary-color p-2 text-2xl font-bold text-white hover:bg-gray-100 hover:text-primary-color">
+                  Viết đánh giá
+                </button>
+              </Link>
+            )}
           </div>
 
           <Comment currentItems={currentItems} />
@@ -500,10 +666,10 @@ const AccommodationDetail = () => {
             renderOnZeroPageCount={null}
             className="mt-12 flex flex-row gap-6"
             containerClassName="flex"
-            previousLinkClassName="px-4 bg-secondary-color text-white rounded"
-            nextLinkClassName="px-4 bg-secondary-color text-white rounded"
+            previousLinkClassName="py-2 px-4 bg-secondary-color text-white rounded"
+            nextLinkClassName="py-2 px-4 bg-secondary-color text-white rounded"
             breakLinkClassName="text-gray-500"
-            pageLinkClassName=" px-4 border-2 border-secondary-color font-bold text-gray-800 rounded transition-colors duration-300 ease-in-out hover:bg-secondary-color hover:text-white"
+            pageLinkClassName="py-2 px-4 border-2 border-secondary-color font-bold text-gray-800 rounded transition-colors duration-300 ease-in-out hover:bg-secondary-color hover:text-white"
             activeClassName="bg-secondary-color text-white"
           />
         </div>
@@ -512,4 +678,4 @@ const AccommodationDetail = () => {
   );
 };
 
-export default AccommodationDetail;
+export default LocationDetail;

@@ -10,9 +10,13 @@ const tripNavigationItems = [
 
 const TripNavigation = () => {
   return (
-    <div className="sticky top-[69px] z-20 flex justify-between border-b-[1px] border-accent-color border-opacity-50 bg-bg-secondary-color px-40 py-2 text-lg font-medium">
-      {tripNavigationItems.map((item) => (
-        <TripNavigationItem text={item.text} />
+    <div className="z-20 flex justify-between border-b-[1px] border-accent-color border-opacity-50 bg-bg-secondary-color px-40 py-2 text-lg font-medium">
+      {tripNavigationItems.map((item, index) => (
+        <TripNavigationItem
+          key={index}
+          text={item.text}
+          typeNum={item.typeNum}
+        />
       ))}
     </div>
   );

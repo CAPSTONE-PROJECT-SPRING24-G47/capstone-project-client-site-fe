@@ -7,8 +7,8 @@ import { UserProvider } from './Contexts/UserContext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { FormProvider } from './Contexts/FormContext';
 import { BrowserRouter } from 'react-router-dom';
-import { AddPlaceProvider } from './Contexts/AddPlaceContext';
 import { CommentProvider } from './Contexts/CommentContext';
+import { AlertProvider } from './Contexts/AlertContext';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -18,9 +18,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <FormProvider>
             <CommentProvider>
               <UserProvider>
-                <AddPlaceProvider>
+                <AlertProvider>
                   <App />
-                </AddPlaceProvider>
+                </AlertProvider>
               </UserProvider>
             </CommentProvider>
           </FormProvider>
