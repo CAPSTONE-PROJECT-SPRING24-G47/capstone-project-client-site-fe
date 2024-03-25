@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import avatarImage from '../../assets/trip_builder_manual_1.jpeg';
-import { Link, useParams, useLocation } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import ImageGallery from 'react-image-gallery';
 import ReactPaginate from 'react-paginate';
 import { useState } from 'react';
@@ -30,9 +30,6 @@ const AccommodationDetail = () => {
     setIsConfirm,
   } = useContext(CommentContext);
   const [detailData, setDetailData] = useState([]);
-  const location = useLocation();
-  const { pathname } = location;
-  const parts = pathname.split('/');
   const [isChecked, setIsChecked] = useState(false);
   const [listCategoryDetail, setListCategoryDetail] = useState([]);
   const [accommodationData, setAccommodationData] = useState(null);
@@ -77,8 +74,6 @@ const AccommodationDetail = () => {
     fetchData();
   }, [id]);
 
-  console.log(accommodationData);
-
   useEffect(() => {
     if (accommodationData && accommodationData?.accommodationPhotos) {
       const photoUrls = accommodationData?.accommodationPhotos.map((photo) => ({
@@ -90,8 +85,6 @@ const AccommodationDetail = () => {
       setImages(photoUrls);
     }
   }, [accommodationData]);
-
-  console.log(images);
 
   //Get comment
   useEffect(() => {
@@ -118,19 +111,16 @@ const AccommodationDetail = () => {
       website: accommodationData?.accommodationWebsite ?? '',
       price: accommodationData?.priceRange,
     });
-    console.log(detailData);
   }, [accommodationData]);
 
   //Set image để hiển thị
   useEffect(() => {
-    // Chỉ thực hiện khi accommodationData đã được cập nhật và có dữ liệu
-    console.log(accommodationData?.accommodationPhotos);
     if (accommodationData && accommodationData?.accommodationPhotos) {
       const photoUrls = accommodationData?.accommodationPhotos.map((photo) => ({
         original: photo.signedUrl, // Đường dẫn ảnh gốc
         thumbnail: photo.signedUrl, // Đường dẫn ảnh thumbnail
       }));
-      // setImages(photoUrls);
+      setImages(photoUrls);
     }
   }, [accommodationData]);
 
@@ -374,8 +364,8 @@ const AccommodationDetail = () => {
               </p>
             )}
 
-            <div className="grid grid-cols-5 gap-3 pl-2 pt-4">
-              {listCategoryDetail.map((category) => (
+            <div className="flex flex-row gap-3 pl-2 pt-4">
+              {listCategoryDetail.slice(0, 7).map((category) => (
                 <p className="w-fit bg-gray-300 px-4 py-1 text-sm font-bold">
                   {category.categoryName}
                 </p>
