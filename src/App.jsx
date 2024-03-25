@@ -14,10 +14,11 @@ import { useContext, useEffect } from 'react';
 import { fetchUserFromLocalStorage } from './utils/fetchUserFromLocalStorage';
 import { UserContext } from './Contexts/UserContext';
 import ProfileLayout from './layouts/ProfileLayout';
-import RestaurantDetail from './pages/DataDetailPage/LocationDetail';
+import RestaurantDetail from './pages/DataDetailPage/RestaurantDetail';
 import LocationReview from './pages/LocationReview';
-import LocationDetail from './pages/DataDetailPage/LocationDetail';
 import UpdateReview from './pages/UpdateReview';
+import AccommodationDetail from './pages/DataDetailPage/AccommodationDetail';
+import TouristAttractionDetail from './pages/DataDetailPage/TouristAttractionDetail';
 
 function App() {
   const { setUser, user } = useContext(UserContext);
@@ -65,14 +66,17 @@ function App() {
             />
           </>
         )}
-        <Route path="RestaurantDetail/:id" element={<LocationDetail />}></Route>
+        <Route
+          path="RestaurantDetail/:id"
+          element={<RestaurantDetail />}
+        ></Route>
         <Route
           path="AccommodationDetail/:id"
-          element={<LocationDetail />}
+          element={<AccommodationDetail />}
         ></Route>
         <Route
           path="TouristAttractionDetail/:id"
-          element={<LocationDetail />}
+          element={<TouristAttractionDetail />}
         ></Route>
         <Route path="trip-plan" element={<TripPlan />} />
         <Route path="explore" element={<Explore />} />
