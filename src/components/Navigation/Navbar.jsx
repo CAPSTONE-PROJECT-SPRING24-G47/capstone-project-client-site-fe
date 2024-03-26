@@ -6,7 +6,6 @@ import UserInfo from './UserInfo';
 import { UserContext } from '../../Contexts/UserContext';
 import NotificationIcon from '../UserProfile/Icons/NotificationIcon';
 import LogoIcon from '../../assets/LogoIcon';
-import ChangePassword from './ChangePassword';
 
 const buttonsInfor = [
   {

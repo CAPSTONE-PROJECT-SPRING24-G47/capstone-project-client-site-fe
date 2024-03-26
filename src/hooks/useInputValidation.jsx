@@ -4,7 +4,7 @@ import { FormContext } from '../Contexts/FormContext';
 //name: only alphabet character
 const NAME_REGEX = /^[\p{L} ]{1,20}$/u;
 //pwd: at least 6 characters, at least one uppercase letter, at least one lowercase letter, at least one digit and at least 1 special character
-const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{6,}$/;
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,64}$/;
 //email: example: abc@abc.com
 const EMAIL_REGEX = /^(?![0-9])[^@\s]+@[^\s@]+\.[^\s@]+$/;
 
@@ -37,9 +37,14 @@ const useInputValidation = (
       validationFunction = validateName;
     } else if (id === 'email' && isSignUp) {
       validationFunction = validateEmail;
-    } else if ((id === 'password' && isSignUp) || isResetPwd) {
+    } else if (
+      (id === 'password' && isSignUp) ||
+      isResetPwd ||
+      id === 'newPwd' ||
+      id === 'currentPwd'
+    ) {
       validationFunction = validatePassword;
-    } else if (id === 'confirmPassword') {
+    } else if (id === 'confirmPassword' || id === 'confirmNewPwd') {
       validationFunction = validateConfirmPassword;
     }
     if (validationFunction !== '') {
