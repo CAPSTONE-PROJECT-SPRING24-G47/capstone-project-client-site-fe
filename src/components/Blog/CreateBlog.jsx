@@ -75,47 +75,51 @@ const CreateBlog = () => {
     setBlogContent(content);
   };
 
-  // const handleCreateBlog = async () => {
-  //   try {
-  //     const stringPhoto = {
-  //       blogId: 1,
-  //       photoURL: coverImage,
-  //     };
-  //     console.log([stringPhoto]);
+  const handleCreateBlog = async () => {
+    try {
+      // const stringPhoto = {
+      //   blogId: 1,
+      //   photoURL: coverImage,
+      // };
+      // console.log([stringPhoto]);
 
-  //     const formData = new FormData();
-  //     formData.append('userId', user?.userId);
-  //     formData.append('title', title);
-  //     formData.append('blogContent', blogContent);
-  //     formData.append('blogPhotos', [JSON.stringify(stringPhoto)]);
-  //     formData.append('blog_BlogCatagories', [{ blogCategoryId }]);
+      const formData = new FormData();
+      formData.append('userId', user?.userId);
+      formData.append('title', title);
+      formData.append('blogContent', blogContent);
+      // formData.coverImage.forEach((file) => {
+      //   updateData.append(`photos`, file);
+      // });
 
-  //     // console.log(formData.get('blogPhotos'));
-  //     const response = await addBlog(formData);
-  //     console.log(response);
-  //     if (response) {
-  //       setResponse(res);
-  //       setIsSuccess(true);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error while creating user:', error);
-  //   }
-  // };
+      // formData.append('blogPhotos', [JSON.stringify(stringPhoto)]);
+      formData.append('blog_BlogCatagories', [{ blogCategoryId }]);
 
-  const handleSubmitBlogData = () => {
-    setBlogData({
-      userId: user?.userId,
-      title,
-      blogContent,
-      blogPhotos: [
-        {
-          photoURL: coverImage,
-        },
-      ],
-      blog_BlogCatagories: [{ blogCategoryId }],
-    });
+      // console.log(formData.get('blogPhotos'));
+      const response = await addBlog(formData);
+      console.log(response);
+      if (response) {
+        setResponse(res);
+        setIsSuccess(true);
+      }
+    } catch (error) {
+      console.error('Error while creating user:', error);
+    }
   };
-  console.log(blogData?.blogContent);
+
+  // const handleSubmitBlogData = () => {
+  //   setBlogData({
+  //     userId: user?.userId,
+  //     title,
+  //     blogContent,
+  //     blogPhotos: [
+  //       {
+  //         photoURL: coverImage,
+  //       },
+  //     ],
+  //     blog_BlogCatagories: [{ blogCategoryId }],
+  //   });
+  // };
+  // console.log(blogData?.blogContent);
 
   useEffect(() => {
     const userLS = fetchUserFromLocalStorage();
@@ -124,20 +128,20 @@ const CreateBlog = () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     if (blogData) {
-  //       const res = await addBlog(blogData);
-  //       console.log('>>>response: ', res);
-  //       setResponse(res);
-  //       setIsSuccess(true);
-  //       // if (response) {
-  //       //   // setIsChangeSuccess(true);
-  //       // }
-  //     }
-  //   }
-  //   fetchData();
-  // }, [blogData]);
+  useEffect(() => {
+    async function fetchData() {
+      if (blogData) {
+        const res = await addBlog(blogData);
+        console.log('>>>response: ', res);
+        setResponse(res);
+        setIsSuccess(true);
+        // if (response) {
+        //   // setIsChangeSuccess(true);
+        // }
+      }
+    }
+    fetchData();
+  }, [blogData]);
 
   useEffect(() => {
     async function fetchData() {
@@ -219,7 +223,7 @@ const CreateBlog = () => {
                 blogCategoryId == 0 ||
                 coverImage == defaultImage
               }
-              onClick={handleSubmitBlogData}
+              onClick={handleCreateBlog}
               className="mt-4 rounded-xl bg-secondary-color px-2 py-1 text-xl font-bold text-bg-color hover:bg-gradient-to-b hover:from-secondary-color hover:to-accent-color disabled:bg-secondary-color/70 disabled:hover:bg-none"
             >
               Đăng
