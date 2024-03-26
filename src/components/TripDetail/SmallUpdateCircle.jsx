@@ -8,7 +8,7 @@ const SmallUpdateCircle = ({ setShowSmallUpdatePopup }) => {
       animate={{ opacity: 1, translateY: 0 }}
       transition={{ duration: 0.1, type: 'spring', stiffness: 120 }}
       onClick={() => setShowSmallUpdatePopup((state) => !state)}
-      className="fixed bottom-[5%] right-[2%] z-20 flex h-[60px] w-[60px] cursor-pointer items-center justify-center rounded-full bg-bg-color shadow-md"
+      className="fixed bottom-[5%] right-[1%] z-20 flex h-[60px] w-[60px] cursor-pointer items-center justify-center rounded-full bg-bg-color shadow-md"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

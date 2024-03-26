@@ -19,6 +19,7 @@ import LocationReview from './pages/LocationReview';
 import UpdateReview from './pages/UpdateReview';
 import AccommodationDetail from './pages/DataDetailPage/AccommodationDetail';
 import TouristAttractionDetail from './pages/DataDetailPage/TouristAttractionDetail';
+import GGMapContainter from './components/Map/GGMapContainter';
 
 function App() {
   const { setUser, user } = useContext(UserContext);
@@ -83,6 +84,7 @@ function App() {
         <Route path="trip/:id" element={<TripDetail />} />
         <Route path="*" element={<NotFound404 />} />
       </Route>
+      <Route path="map" element={<GGMapContainter />} />
       <Route path="/trip-builder" element={<TripBuilder />} />
       <Route path="/trip-builder-manual" element={<TripBuilderManual />} />
     </Routes>

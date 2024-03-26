@@ -9,23 +9,28 @@ import { FormProvider } from './Contexts/FormContext';
 import { BrowserRouter } from 'react-router-dom';
 import { CommentProvider } from './Contexts/CommentContext';
 import { AlertProvider } from './Contexts/AlertContext';
+import { APIProvider } from '@vis.gl/react-google-maps';
+
+const API_KEY = 'AIzaSyDXQGRKZPn_L1-rHSiXcH0RARFRB-Mjnro';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-      <GoogleOAuthProvider clientId="386505745375-hcja7e078e4pjh9phsq5brjf8aen92an.apps.googleusercontent.com">
-        <NavProvider>
-          <FormProvider>
-            <CommentProvider>
-              <UserProvider>
-                <AlertProvider>
-                  <App />
-                </AlertProvider>
-              </UserProvider>
-            </CommentProvider>
-          </FormProvider>
-        </NavProvider>
-      </GoogleOAuthProvider>
+      <APIProvider apiKey={API_KEY}>
+        <GoogleOAuthProvider clientId="386505745375-hcja7e078e4pjh9phsq5brjf8aen92an.apps.googleusercontent.com">
+          <NavProvider>
+            <FormProvider>
+              <CommentProvider>
+                <UserProvider>
+                  <AlertProvider>
+                    <App />
+                  </AlertProvider>
+                </UserProvider>
+              </CommentProvider>
+            </FormProvider>
+          </NavProvider>
+        </GoogleOAuthProvider>
+      </APIProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

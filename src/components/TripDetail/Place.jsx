@@ -4,6 +4,7 @@ import RestaurantIcon from './Icons/RestaurantIcon';
 import AttractionIcon from './Icons/AttractionIcon';
 import DeleteIcon from './Icons/DeleteIcon';
 import AccommodationIcon from './Icons/AccommodationIcon';
+import { Link, useSearchParams } from 'react-router-dom';
 
 const Place = ({
   tripDay,
@@ -14,7 +15,21 @@ const Place = ({
   length,
   isUpdateMode,
   accomodationsList,
+  handleMouseOver,
 }) => {
+  const [params, _setParams] = useSearchParams();
+  let location;
+
+  if ('restaurantId' in data) {
+    location = data.restaurantLocation;
+  } else if ('touristAttractionId' in data) {
+    location = data.touristAttractionLocation;
+  } else if ('accommodationId' in data) {
+    location = data.accommodationLocation;
+  }
+
+  let [lat, lng] = location.split('-');
+
   const handleDeletePlace = async () => {
     if ('restaurantId' in data) {
       const restaurantIdToDelete = data.restaurantId;
@@ -78,7 +93,7 @@ const Place = ({
           return prevTripDay;
         });
       });
-    } else if ('accommodationId' in data) {
+    } else if ('accommodationId' in data && +params.get('filter') === 2) {
       const accommodationIdToDelete = data.accommodationId;
 
       const updatedAccommodation = accomodationsList.map((accommodation) => {
@@ -106,10 +121,49 @@ const Place = ({
           return prevTripDay;
         });
       });
+    } else if (
+      'accommodationId' in data &&
+      (+params.get('filter') === 1 || +params.get('filter') === 0)
+    ) {
+      const accommodationIdToDelete = data.accommodationId;
+
+      const updatedAccommodation =
+        tripDay.accommodations.accommodationsForDay.map((accommodation) => {
+          if (accommodation.accommodationId === accommodationIdToDelete) {
+            return {
+              ...accommodation,
+              isDelete: accommodation.isDelete ? false : true,
+            };
+          }
+          return accommodation;
+        });
+
+      const updatedTripDay = {
+        ...tripDay,
+        accommodations: {
+          ...tripDay.accommodations,
+          accommodationsForDay: updatedAccommodation,
+        },
+      };
+
+      setTripDays((prevTripDays) => {
+        return prevTripDays.map((prevTripDay) => {
+          if (prevTripDay.dayNum === tripDay.dayNum) {
+            return updatedTripDay;
+          }
+          return prevTripDay;
+        });
+      });
     }
   };
+
   return (
-    <div className="relative flex w-full justify-between gap-5">
+    <div
+      lat={lat}
+      lng={lng}
+      onMouseOver={handleMouseOver}
+      className="relative flex w-full justify-between gap-5"
+    >
       {isUpdateMode && (
         <div
           onClick={handleDeletePlace}
@@ -124,10 +178,18 @@ const Place = ({
         </div>
         {index !== length - 1 && <div className="h-full w-[0.5px] bg-black" />}
       </div>
-      <div
+      <Link
+        target="_blank"
+        to={
+          type === 'restaurants'
+            ? `/RestaurantDetail/${data.restaurantId}`
+            : type === 'attraction'
+              ? `/TouristAttractionDetail/${data.touristAttractionId}`
+              : `/AccommodationDetail/${data.accommodationId}`
+        }
         className={`mb-10 flex w-full items-center gap-4 rounded-xl bg-bg-color ${data.isDelete ? 'ring-2 ring-sub-color' : ''}`}
       >
-        <div className="h-[230px] w-[50%] overflow-hidden rounded-l-xl text-2xl font-bold">
+        <div className="h-[250px] w-[50%] overflow-hidden rounded-l-xl text-2xl font-bold">
           <img
             className="h-full w-full object-cover"
             src={
@@ -201,7 +263,7 @@ const Place = ({
             </div>
           </div>
         </div>
-      </div>
+      </Link>
     </div>
   );
 };

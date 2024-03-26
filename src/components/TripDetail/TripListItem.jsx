@@ -1,6 +1,7 @@
 import React from 'react';
 import Place from './Place';
 import AddIcon from './Icons/AddIcon';
+import { useSearchParams } from 'react-router-dom';
 
 const TripListItem = ({
   setDayNum,
@@ -9,10 +10,15 @@ const TripListItem = ({
   isUpdateMode,
   setIsAddPopup,
   handleIsAction,
+  handleMouseOver,
 }) => {
+  const [params, _setParams] = useSearchParams();
   const restaurantsLength = tripDay.restaurants.restaurantsForDay.length;
   const attractionsLength = tripDay.attractions.attractionsForDay.length;
-  const totalLength = restaurantsLength + attractionsLength;
+  const accommodationsLength =
+    tripDay?.accommodations?.accommodationsForDay?.length;
+  const totalLength =
+    restaurantsLength + attractionsLength + accommodationsLength;
 
   return (
     <div className="flex flex-col gap-7">
@@ -33,17 +39,41 @@ const TripListItem = ({
                 Thêm nhà hàng, địa điểm giải trí bạn muốn
               </div>
             )}
+          {tripDay.accommodations?.accommodationsForDay?.map(
+            (accommodation, index) => (
+              <Place
+                data={accommodation}
+                tripDay={tripDay}
+                setTripDays={setTripDays}
+                type={tripDay.accommodations?.type}
+                index={index}
+                key={index}
+                length={totalLength}
+                isUpdateMode={isUpdateMode}
+                handleIsAction={handleIsAction}
+                handleMouseOver={handleMouseOver}
+              />
+            )
+          )}
           {tripDay.restaurants?.restaurantsForDay?.map((res, index) => (
             <Place
               data={res}
               tripDay={tripDay}
               setTripDays={setTripDays}
               type={tripDay.restaurants.type}
-              index={index}
+              index={
+                +params.get('filter') === 3
+                  ? index
+                  : index +
+                    tripDay?.accommodations?.accommodationsForDay?.length
+              }
               key={index}
-              length={totalLength}
+              length={
+                +params.get('filter') === 3 ? restaurantsLength : totalLength
+              }
               isUpdateMode={isUpdateMode}
               handleIsAction={handleIsAction}
+              handleMouseOver={handleMouseOver}
             />
           ))}
           {tripDay.attractions?.attractionsForDay?.map((attraction, index) => (
@@ -52,11 +82,20 @@ const TripListItem = ({
               tripDay={tripDay}
               setTripDays={setTripDays}
               type={tripDay.attractions.type}
-              index={index + tripDay.restaurants.restaurantsForDay.length}
+              index={
+                +params.get('filter') === 4
+                  ? index
+                  : index +
+                    tripDay.restaurants.restaurantsForDay.length +
+                    tripDay.accommodations?.accommodationsForDay?.length
+              }
               key={index}
-              length={totalLength}
+              length={
+                +params.get('filter') === 4 ? attractionsLength : totalLength
+              }
               isUpdateMode={isUpdateMode}
               handleIsAction={handleIsAction}
+              handleMouseOver={handleMouseOver}
             />
           ))}
         </>

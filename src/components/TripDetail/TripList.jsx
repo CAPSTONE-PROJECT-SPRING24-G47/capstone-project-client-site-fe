@@ -12,6 +12,7 @@ const TripList = ({
   isUpdateMode,
   setIsAddPopup,
   handleIsAction,
+  handleMouseOver,
 }) => {
   const [params, _setParams] = useSearchParams();
   const accommodations = tripDays[0]?.accommodations?.accommodations;
@@ -31,6 +32,7 @@ const TripList = ({
             handleIsAction={handleIsAction}
             setTripDays={setTripDays}
             setDayNum={setDayNum}
+            handleMouseOver={handleMouseOver}
           />
         ))}
 
@@ -48,6 +50,7 @@ const TripList = ({
               length={accommodations.length}
               isUpdateMode={isUpdateMode}
               handleIsAction={handleIsAction}
+              handleMouseOver={handleMouseOver}
             />
           ))}
           {isUpdateMode && (

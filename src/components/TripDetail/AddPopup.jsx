@@ -84,19 +84,16 @@ const AddPopup = ({
         </div>
         <div className="flex items-center justify-start gap-7">
           <div className="text-2xl font-bold">Thêm địa điểm mới</div>
-          {searchData.type !== 'Accommodations' && (
-            <select
-              // disabled={searchData.type === 'Accommodations'}
-              onChange={handleChangeDay}
-              className="h-full rounded-lg bg-bg-color p-2 text-sm outline-none ring-[1px] ring-secondary-color focus:ring-[2px] focus:ring-secondary-color"
-            >
-              {tripDays.map((item) => (
-                <option value={item.dayNum} selected={item.dayNum === dayNum}>
-                  <div>Ngày {item.dayNum}</div>
-                </option>
-              ))}
-            </select>
-          )}
+          <select
+            onChange={handleChangeDay}
+            className="h-full rounded-lg bg-bg-color p-2 text-sm outline-none ring-[1px] ring-secondary-color focus:ring-[2px] focus:ring-secondary-color"
+          >
+            {tripDays.map((item) => (
+              <option value={item.dayNum} selected={item.dayNum === dayNum}>
+                <div>Ngày {item.dayNum}</div>
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="flex w-full flex-col gap-7 px-8">
