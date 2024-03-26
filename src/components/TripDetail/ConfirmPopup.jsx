@@ -16,17 +16,17 @@ const ConfirmPopup = ({
             setIsConfirmPopup(false);
             setIsPopupEdit(false);
           }}
-          className="cursor-pointer rounded-lg bg-accent-color px-3 py-2 text-lg font-semibold text-white hover:bg-accent-color/90"
+          className="cursor-pointer rounded-lg bg-sub-color px-3 py-2 text-lg font-semibold text-white hover:bg-sub-color/90"
         >
-          Xác nhận
+          Thoát
         </div>
         <div
           onClick={() => {
             setIsConfirmPopup(false);
           }}
-          className="cursor-pointer rounded-lg bg-sub-color px-3 py-2 text-lg font-semibold text-white hover:bg-sub-color/90"
+          className="cursor-pointer rounded-lg bg-accent-color px-3 py-2 text-lg font-semibold text-white hover:bg-accent-color/90"
         >
-          Hủy
+          Tiếp tục ở lại
         </div>
       </div>
     </div>

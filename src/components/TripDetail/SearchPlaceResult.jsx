@@ -62,9 +62,15 @@ const SearchPlaceResult = ({ data, trip, handleIsAction, dayChoose }) => {
         handleIsAction();
       }
     } else if (type === 'accommodations') {
+      console.log({
+        tripId: trip.tripId,
+        accommodationId: placeId,
+        suggestedDay: dayChoose,
+      });
       const response = await addTripAccById({
         tripId: trip.tripId,
         accommodationId: placeId,
+        suggestedDay: dayChoose,
       });
 
       if (response) {

@@ -397,16 +397,14 @@ const EditTripPopup = ({
                   onClick={() => setIsLocationPopup(true)}
                   className="w-fit cursor-pointer hover:font-semibold hover:underline hover:underline-offset-2"
                 >
-                  {trip.trip_Locations.length === 0 &&
-                    'Không có địa điểm điểm nào'}
-                  {trip.trip_Locations.length === 1 &&
-                    trip.trip_Locations[0].locationName}
-                  {trip.trip_Locations.length === 2 &&
-                    `${trip.trip_Locations[0].locationName}, ${trip.trip_Locations[1].locationName}`}
-                  {trip.trip_Locations.length === 3 &&
-                    `${trip.trip_Locations[0].locationName}, ${trip.trip_Locations[1].locationName}, ${trip.trip_Locations[2].locationName}`}
-                  {trip.trip_Locations.length > 3 &&
-                    `${trip.trip_Locations[0].locationName}, ${trip.trip_Locations[1].locationName}, ${trip.trip_Locations[2].locationName}, và ${trip.trip_Locations.length - 3} điểm đến khác`}
+                  {location.length === 0 && 'Không có địa điểm điểm nào'}
+                  {location.length === 1 && location[0].locationName}
+                  {location.length === 2 &&
+                    `${location[0].locationName}, ${location[1].locationName}`}
+                  {location.length === 3 &&
+                    `${location[0].locationName}, ${location[1].locationName}, ${location[2].locationName}`}
+                  {location.length > 3 &&
+                    `${location[0].locationName}, ${location[1].locationName}, ${location[2].locationName}, và ${location.length - 3} điểm đến khác`}
                 </div>
                 <div className="flex gap-2">
                   <select

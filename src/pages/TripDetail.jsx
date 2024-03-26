@@ -56,11 +56,16 @@ const TripDetail = () => {
             (restaurant) => restaurant.suggestedDay === i + 1
           );
 
+          const accommodationsForDay = accommodations.filter(
+            (restaurant) => restaurant.suggestedDay === i + 1
+          );
+
           days.push({
             filterType: '',
             dayNum: i + 1,
             attractions: { type: 'attraction', attractionsForDay },
             restaurants: { type: 'restaurants', restaurantsForDay },
+            accommodations: { type: 'accommodations', accommodationsForDay },
           });
         }
       } else if (+params.get('filter') === 2) {
@@ -164,10 +169,18 @@ const TripDetail = () => {
           }
         });
       }
+
+      if (day.accommodations) {
+        day.accommodations.accommodationsForDay?.forEach((accommodation) => {
+          if (accommodation.isDelete) {
+            deletedAccommodations.push(accommodation);
+          }
+        });
+      }
     });
 
     if (tripDays[0].accommodations) {
-      tripDays[0].accommodations?.accommodations.forEach((acc) => {
+      tripDays[0].accommodations?.accommodations?.forEach((acc) => {
         if (acc.isDelete) {
           deletedAccommodations.push(acc);
         }
@@ -256,8 +269,6 @@ const TripDetail = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
-  console.log(trip);
 
   return (
     <div className="relative flex flex-col gap-10 bg-bg-secondary-color">

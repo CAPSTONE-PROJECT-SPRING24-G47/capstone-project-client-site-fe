@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TripDayList from './TripDayList';
 import TripInfor from './TripInfor';
 import TripList from './TripList';
 import { useSearchParams } from 'react-router-dom';
+import GGMapContainter from '../Map/GGMapContainter';
 
 const TripContent = ({
   setDayNum,
@@ -19,6 +20,7 @@ const TripContent = ({
   handleDeletePlace,
 }) => {
   const [params, _setParams] = useSearchParams();
+  const [latLng, setLatLng] = useState({ lat: 0, lng: 0 });
 
   const scrollToDay = (dayNum) => {
     const index = tripDays.findIndex((day) => day.dayNum === dayNum);
@@ -28,6 +30,13 @@ const TripContent = ({
         behavior: 'smooth',
       });
     }
+  };
+
+  const handleMouseOver = (e) => {
+    e.stopPropagation();
+    const lat = parseFloat(e.currentTarget.getAttribute('lat'));
+    const lng = parseFloat(e.currentTarget.getAttribute('lng'));
+    setLatLng({ lat, lng });
   };
 
   return (
@@ -43,7 +52,9 @@ const TripContent = ({
             </div>
           )}
           {+params.get('filter') === 2 && (
-            <div className="text-2xl font-bold">Danh sách chỗ ở</div>
+            <div className="text-2xl font-bold">
+              Những nơi ở phù hợp với bạn
+            </div>
           )}
           {isUpdateMode ? (
             <div className="flex w-fit gap-2">
@@ -87,10 +98,11 @@ const TripContent = ({
           isUpdateMode={isUpdateMode}
           handleIsAction={handleIsAction}
           setDayNum={setDayNum}
+          handleMouseOver={handleMouseOver}
         />
       </div>
-      <div className="flex h-[900px] w-[700px] items-center justify-center rounded-lg bg-bg-color">
-        <p>Map</p>
+      <div className="sticky top-[110px] flex h-[550px] w-[850px] items-center justify-center overflow-hidden rounded-lg bg-bg-color">
+        <GGMapContainter tripDays={tripDays} latLng={latLng} />
       </div>
     </div>
   );
