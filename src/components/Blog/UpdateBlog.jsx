@@ -289,7 +289,7 @@ const UpdateBlog = () => {
           {/* picture */}
           <div className="flex w-full flex-col items-center">
             <div className="flex w-full justify-start">
-              <h1 className="mb-7 text-lg font-bold">Ảnh bìa</h1>
+              <h1 className="mb-7 text-lg font-bold">Thumbnail</h1>
             </div>
             <div className="max-h-4/5 flex h-[112px] w-[192px] items-center justify-center bg-bg-color">
               <img

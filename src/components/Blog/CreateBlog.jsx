@@ -75,46 +75,47 @@ const CreateBlog = () => {
     setBlogContent(content);
   };
 
-  const handleCreateBlog = async () => {
-    try {
-      const stringPhoto = {
-        blogId: 1,
-        photoURL: coverImage,
-      };
-      console.log([stringPhoto]);
+  // const handleCreateBlog = async () => {
+  //   try {
+  //     const stringPhoto = {
+  //       blogId: 1,
+  //       photoURL: coverImage,
+  //     };
+  //     console.log([stringPhoto]);
 
-      const formData = new FormData();
-      formData.append('userId', user?.userId);
-      formData.append('title', title);
-      formData.append('blogContent', blogContent);
-      formData.append('blogPhotos', [JSON.stringify(stringPhoto)]);
-      formData.append('blog_BlogCatagories', [{ blogCategoryId }]);
+  //     const formData = new FormData();
+  //     formData.append('userId', user?.userId);
+  //     formData.append('title', title);
+  //     formData.append('blogContent', blogContent);
+  //     formData.append('blogPhotos', [JSON.stringify(stringPhoto)]);
+  //     formData.append('blog_BlogCatagories', [{ blogCategoryId }]);
 
-      // console.log(formData.get('blogPhotos'));
-      const response = await addBlog(formData);
-      console.log(response);
-      if (response) {
-        setResponse(res);
-        setIsSuccess(true);
-      }
-    } catch (error) {
-      console.error('Error while creating user:', error);
-    }
-  };
-
-  // const handleSubmitBlogData = () => {
-  //   setBlogData({
-  //     userId: user?.userId,
-  //     title,
-  //     blogContent,
-  //     blogPhotos: [
-  //       {
-  //         photoURL: coverImage,
-  //       },
-  //     ],
-  //     blog_BlogCatagories: [{ blogCategoryId }],
-  //   });
+  //     // console.log(formData.get('blogPhotos'));
+  //     const response = await addBlog(formData);
+  //     console.log(response);
+  //     if (response) {
+  //       setResponse(res);
+  //       setIsSuccess(true);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error while creating user:', error);
+  //   }
   // };
+
+  const handleSubmitBlogData = () => {
+    setBlogData({
+      userId: user?.userId,
+      title,
+      blogContent,
+      blogPhotos: [
+        {
+          photoURL: coverImage,
+        },
+      ],
+      blog_BlogCatagories: [{ blogCategoryId }],
+    });
+  };
+  console.log(blogData?.blogContent);
 
   useEffect(() => {
     const userLS = fetchUserFromLocalStorage();
@@ -122,8 +123,6 @@ const CreateBlog = () => {
       setUser(userLS);
     }
   }, []);
-
-  console.log(blogData);
 
   // useEffect(() => {
   //   async function fetchData() {
@@ -220,7 +219,7 @@ const CreateBlog = () => {
                 blogCategoryId == 0 ||
                 coverImage == defaultImage
               }
-              onClick={handleCreateBlog}
+              onClick={handleSubmitBlogData}
               className="mt-4 rounded-xl bg-secondary-color px-2 py-1 text-xl font-bold text-bg-color hover:bg-gradient-to-b hover:from-secondary-color hover:to-accent-color disabled:bg-secondary-color/70 disabled:hover:bg-none"
             >
               Đăng
@@ -262,7 +261,7 @@ const CreateBlog = () => {
           {/* picture */}
           <div className="flex w-full flex-col items-center">
             <div className="flex w-full justify-start">
-              <h1 className="mb-7 text-lg font-bold">Ảnh bìa</h1>
+              <h1 className="mb-7 text-lg font-bold">Thumbnail</h1>
             </div>
             <div className="max-h-4/5 flex h-[112px] w-[192px] items-center justify-center bg-bg-color">
               <img
