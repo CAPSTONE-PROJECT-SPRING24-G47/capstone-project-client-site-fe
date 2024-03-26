@@ -16,11 +16,11 @@ const BlogList = () => {
   // const [user, setUser] = useState(null);
   const [listBlogs, setListBlogs] = useState([]);
 
-  const blogDataPerPage = 9; // Số lượng nhà hàng trên mỗi trang
+  const blogDataPerPage = 9; // Số lượng blog trên mỗi trang
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(listBlogs.length / blogDataPerPage);
 
-  // Tính toán chỉ mục của dữ liệu nhà hàng trên trang hiện tại
+  // Tính toán chỉ mục của dữ liệu blog trên trang hiện tại
   const indexOfLastBlog = currentPage * blogDataPerPage;
   const indexOfFirstBlog = indexOfLastBlog - blogDataPerPage;
   const currentBlogData = listBlogs.slice(indexOfFirstBlog, indexOfLastBlog);
