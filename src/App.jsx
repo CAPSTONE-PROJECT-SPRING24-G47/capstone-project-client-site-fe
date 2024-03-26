@@ -1,6 +1,14 @@
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import RootLayout from './layouts/RootLayout';
-import { Explore, HomePage, TripPlan, UserProfile } from './pages';
+import {
+  Explore,
+  HomePage,
+  TripPlan,
+  UserProfile,
+  TripBuilder,
+  TripBuilderManual,
+  TripDetail,
+} from './pages';
 import NotFound404 from './components/NotFound404';
 import { useContext, useEffect } from 'react';
 import { fetchUserFromLocalStorage } from './utils/fetchUserFromLocalStorage';
@@ -13,6 +21,12 @@ import CreateBlog from './components/Blog/CreateBlog';
 import BlogList from './components/Blog/BlogList';
 import BlogIndividualList from './components/Blog/BlogIndividualList';
 import BlogDetail from './components/Blog/BlogDetail';
+import RestaurantDetail from './pages/DataDetailPage/RestaurantDetail';
+import LocationReview from './pages/LocationReview';
+import UpdateReview from './pages/UpdateReview';
+import AccommodationDetail from './pages/DataDetailPage/AccommodationDetail';
+import TouristAttractionDetail from './pages/DataDetailPage/TouristAttractionDetail';
+import GGMapContainter from './components/Map/GGMapContainter';
 
 function App() {
   const { setUser, user } = useContext(UserContext);
@@ -44,10 +58,54 @@ function App() {
         <Route path="blog" element={<BlogList />} />
         <Route path="blog-update/:blogId" element={<UpdateBlog />} />
         <Route path="blog-create" element={<CreateBlog />} />
+          <>
+            <Route path="profile" element={<ProfileLayout />}>
+              <Route path="information" element={<UserProfile />} />
+              <Route path="change-password" element={<UserProfile />} />
+            </Route>
+            <Route path="/restaurantReview/:id" element={<LocationReview />} />
+            <Route
+              path="/accommodationReview/:id"
+              element={<LocationReview />}
+            />
+            <Route
+              path="/touristAttractionReview/:id"
+              element={<LocationReview />}
+            />
+            <Route
+              path="/updateRestaurantReview/:id/:commentId"
+              element={<UpdateReview />}
+            />
+            <Route
+              path="/updateAccommodationReview/:id/:commentId"
+              element={<UpdateReview />}
+            />
+            <Route
+              path="/updateTouristAttractionReview/:id/:commentId"
+              element={<UpdateReview />}
+            />
+          </>
+        )}
+        <Route
+          path="RestaurantDetail/:id"
+          element={<RestaurantDetail />}
+        ></Route>
+        <Route
+          path="AccommodationDetail/:id"
+          element={<AccommodationDetail />}
+        ></Route>
+        <Route
+          path="TouristAttractionDetail/:id"
+          element={<TouristAttractionDetail />}
+        ></Route>
         <Route path="trip-plan" element={<TripPlan />} />
         <Route path="explore" element={<Explore />} />
+        <Route path="trip/:id" element={<TripDetail />} />
         <Route path="*" element={<NotFound404 />} />
       </Route>
+      <Route path="map" element={<GGMapContainter />} />
+      <Route path="/trip-builder" element={<TripBuilder />} />
+      <Route path="/trip-builder-manual" element={<TripBuilderManual />} />
     </Routes>
   );
 }
