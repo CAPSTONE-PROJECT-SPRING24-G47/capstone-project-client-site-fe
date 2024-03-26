@@ -8,7 +8,6 @@ import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage
 import CalendarIcon from '../Icons/CalendarIcon';
 import NoteIcon from '../Icons/NoteIcon';
 
-//bg-opacity-10 backdrop-blur-[20px]
 const UserMenuDropDown = () => {
   const [user, setUser] = useState(null);
 

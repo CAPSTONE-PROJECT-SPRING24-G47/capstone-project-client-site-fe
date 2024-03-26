@@ -2,7 +2,6 @@ import { useContext } from 'react';
 import { motion } from 'framer-motion';
 import { NavContext } from '../Contexts/NavContext';
 import fujiImage from '../assets/fuji.jpg';
-import Footer from '../components/Footer';
 import Searchbar from '../components/Home/Searchbar';
 import OutstandingBlog from '../components/Home/OutstandingBlog';
 import OutstandingSection from '../components/Home/OutstandingSection';
@@ -11,9 +10,13 @@ import {
   restaurants,
   activities,
 } from '../components/Home/TestData';
+import { useNavigate } from 'react-router-dom';
+import { fetchUserFromLocalStorage } from '../utils/fetchUserFromLocalStorage';
 
 const HomePage = () => {
-  const { isPopUp } = useContext(NavContext);
+  const { setIsPopUp, isPopUp } = useContext(NavContext);
+  const user = fetchUserFromLocalStorage();
+  const navigate = useNavigate();
   const handleSearch = (searchTerm) => {
     // Xử lý tìm kiếm ở đây
     console.log('Searching for:', searchTerm);
@@ -39,9 +42,18 @@ const HomePage = () => {
             <h1 className="mb-5 text-6xl font-bold uppercase">
               Bắt đầu chuyến đi của bạn
             </h1>
-            <button className="focus:shadow-outline-blue rounded-full bg-bg-color px-3 py-2 text-xl font-bold uppercase text-accent-color hover:bg-accent-color hover:text-bg-color focus:outline-none">
+            <div
+              onClick={() => {
+                if (!user) {
+                  setIsPopUp(true);
+                  return;
+                }
+                navigate('/trip-builder');
+              }}
+              className="focus:shadow-outline-blue cursor-pointer rounded-full bg-bg-color px-3 py-2 text-xl font-bold uppercase text-accent-color hover:bg-accent-color hover:text-bg-color focus:outline-none"
+            >
               Lên kế hoạch
-            </button>
+            </div>
           </motion.div>
         </div>
       </header>
