@@ -1,8 +1,18 @@
+import { useEffect, useState } from 'react';
 import DesignedButton from './DesignedButton';
+import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
 
 const Sidebar = () => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const userLS = fetchUserFromLocalStorage();
+    if (userLS) {
+      setUser(userLS);
+    }
+  }, []);
   return (
-    <div className="sticky top-[85px] flex h-fit w-1/6 flex-col gap-5 rounded-3xl bg-bg-secondary-color p-5">
+    <div className="sticky top-[85px] flex h-fit w-1/5 flex-col gap-5 rounded-3xl bg-bg-secondary-color p-5">
       <DesignedButton
         path={'/profile/information'}
         label={'Thông tin'}
@@ -38,41 +48,28 @@ const Sidebar = () => {
           </svg>
         }
       />
-      <DesignedButton
-        path={'/profile/change-password'}
-        label={'Đổi mật khẩu'}
-        svg={
-          <svg
-            width="22"
-            height="16"
-            viewBox="0 0 22 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M1 2.17431C1 1.53706 1.51659 1.02046 2.15385 1.02046H8.30769C8.94494 1.02046 9.46154 1.53706 9.46154 2.17431V6.02046C9.46154 6.65771 8.94494 7.17431 8.30769 7.17431H2.15385C1.51659 7.17431 1 6.65771 1 6.02046V2.17431Z"
-              stroke="#7398D5"
+      {!user?.isGoogleAuth && (
+        <DesignedButton
+          path={'/profile/change-password'}
+          label={'Đổi mật khẩu'}
+          svg={
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
               stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M13.3077 3.71277C13.3077 3.07552 13.8243 2.55892 14.4615 2.55892H19.8462C20.4834 2.55892 21 3.07552 21 3.71277V12.1743C21 12.8116 20.4834 13.3282 19.8462 13.3282H14.4615C13.8243 13.3282 13.3077 12.8116 13.3077 12.1743V3.71277Z"
               stroke="#7398D5"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M2.53846 11.4051C2.53846 10.7678 3.05506 10.2512 3.69231 10.2512H9.07692C9.71417 10.2512 10.2308 10.7678 10.2308 11.4051V13.7128C10.2308 14.35 9.71417 14.8666 9.07692 14.8666H3.69231C3.05506 14.8666 2.53846 14.35 2.53846 13.7128V11.4051Z"
-              stroke="#7398D5"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        }
-      />
+              class="h-6 w-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z"
+              />
+            </svg>
+          }
+        />
+      )}
       <DesignedButton
         label={'Chuyến đi'}
         path={'/profile/trips'}

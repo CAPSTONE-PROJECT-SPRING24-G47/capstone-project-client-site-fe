@@ -14,6 +14,13 @@ import { useContext, useEffect } from 'react';
 import { fetchUserFromLocalStorage } from './utils/fetchUserFromLocalStorage';
 import { UserContext } from './Contexts/UserContext';
 import ProfileLayout from './layouts/ProfileLayout';
+import ChangePassword from './pages/ChangePassword';
+import Blog from './pages/Blog';
+import UpdateBlog from './components/Blog/UpdateBlog';
+import CreateBlog from './components/Blog/CreateBlog';
+import BlogList from './components/Blog/BlogList';
+import BlogIndividualList from './components/Blog/BlogIndividualList';
+import BlogDetail from './components/Blog/BlogDetail';
 import RestaurantDetail from './pages/DataDetailPage/RestaurantDetail';
 import LocationReview from './pages/LocationReview';
 import UpdateReview from './pages/UpdateReview';
@@ -40,6 +47,18 @@ function App() {
         {/* trang mới thêm vào đây */}
         <Route index element={<HomePage />} />
         {user && (
+          <Route path="profile" element={<ProfileLayout />}>
+            <Route path="information" element={<UserProfile />} />
+            {!user.isGoogleAuth && (
+              <Route path="change-password" element={<ChangePassword />} />
+            )}
+          </Route>
+        )}
+        <Route path={`blog/:blogId`} element={<BlogDetail />} />
+        <Route path="blog-individual" element={<BlogIndividualList />} />
+        <Route path="blog" element={<BlogList />} />
+        <Route path="blog-update/:blogId" element={<UpdateBlog />} />
+        <Route path="blog-create" element={<CreateBlog />} />
           <>
             <Route path="profile" element={<ProfileLayout />}>
               <Route path="information" element={<UserProfile />} />
