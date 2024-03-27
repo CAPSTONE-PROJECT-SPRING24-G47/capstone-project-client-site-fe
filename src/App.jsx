@@ -27,6 +27,7 @@ import UpdateReview from './pages/UpdateReview';
 import AccommodationDetail from './pages/DataDetailPage/AccommodationDetail';
 import TouristAttractionDetail from './pages/DataDetailPage/TouristAttractionDetail';
 import GGMapContainter from './components/Map/GGMapContainter';
+import TripSelfList from './pages/TripSelfList';
 
 function App() {
   const { setUser, user } = useContext(UserContext);
@@ -84,6 +85,7 @@ function App() {
               path="/updateTouristAttractionReview/:id/:commentId"
               element={<UpdateReview />}
             />
+            <Route path="/self-trips" element={<TripSelfList />} />
           </>
         )}
         <Route

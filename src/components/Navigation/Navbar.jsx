@@ -36,7 +36,7 @@ const Navbar = () => {
 
   return (
     <div
-      className={`${isHomePagePath && isTrigged ? 'bg-bg-color text-text-color' : 'text-bg-color'} ${isHomePagePath ? 'fixed left-0 right-0' : 'sticky top-0 bg-bg-color text-text-color'} top-0 z-[90] flex items-center justify-between px-5 py-2 shadow-sm`}
+      className={`${isHomePagePath && isTrigged ? 'bg-bg-color text-text-color' : 'text-bg-color'} ${isHomePagePath ? 'fixed left-0 right-0' : 'sticky top-0 bg-bg-color text-text-color'} top-0 z-[90] flex items-center justify-between gap-2 px-5 py-2 shadow-sm sm:gap-10`}
     >
       {/* Logo */}
       <Link
@@ -45,15 +45,15 @@ const Navbar = () => {
       >
         <LogoIcon />
         <span
-          className={`${isHomePagePath && isTrigged && 'text-accent-color'} ${!isHomePagePath && 'text-accent-color'} text-xl`}
+          className={`${isHomePagePath && isTrigged && 'text-accent-color'} ${!isHomePagePath && 'text-accent-color'} hidden text-base sm:block md:text-lg lg:text-xl`}
         >
           VJITradvisor
         </span>
       </Link>
 
-      <div className="flex gap-14">
+      <div className="flex gap-5 sm:gap-7 md:gap-10 lg:gap-14">
         {/* Nút chuyển page */}
-        <div className="text-md flex items-center justify-center gap-14 font-semibold ">
+        <div className="flex items-center justify-center gap-10 text-sm font-semibold md:gap-14 md:text-base ">
           {buttonsInfor.map((button, index) => (
             <div key={index}>
               <Link to={button.path}>{button.title}</Link>
