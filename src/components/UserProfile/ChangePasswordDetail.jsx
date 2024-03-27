@@ -5,7 +5,7 @@ import { EyeOpenIcon } from '../Auth';
 import { FormContext } from '../../Contexts/FormContext';
 import { motion } from 'framer-motion';
 import Loading from '../Loading';
-import { changePassword } from '../../api/service/profile';
+import { changePassword } from '../../api/services/profile';
 
 const ChangePasswordDetail = () => {
   const { isError, isLoading, setIsLoading } = useContext(FormContext);

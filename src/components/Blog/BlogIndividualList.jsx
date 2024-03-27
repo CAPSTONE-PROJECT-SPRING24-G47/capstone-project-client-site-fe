@@ -4,7 +4,7 @@ import ClockIcon from '../Icons/ClockIcon';
 import { Link } from 'react-router-dom';
 import RightArrowIcon from '../Icons/RightArrowIcon';
 import FilterIcon from '../Icons/FilterIcon';
-import { getListBlogs } from '../../api/service/blog';
+import { getListBlogs } from '../../api/services/blog';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
 import FormattedDate from '../FormattedDate';
 import FindIcon from '../Icons/FindIcon';
@@ -82,7 +82,7 @@ const BlogIndividualList = () => {
                 {/* <div className="h-44 w-1/4 rounded-xl bg-blogBackground"></div> */}
                 <div className="h-44 w-1/3 rounded-xl">
                   <img
-                    src={blog.blogPhotos[0].photoURL}
+                    src={blog.photo}
                     alt="Cover_image"
                     className="h-full w-full rounded-lg object-cover"
                     // height={100}

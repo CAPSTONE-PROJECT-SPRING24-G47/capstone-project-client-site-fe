@@ -8,7 +8,7 @@ import {
   deleteBlog,
   getBlog,
   getListBlogCategories,
-} from '../../api/service/blog';
+} from '../../api/services/blog';
 import ActionPopUp from './ActionPopUp';
 import FormattedTime from './FormattedTime';
 import SuccessIconBig from '../Auth/Icons/SuccessIconBig';

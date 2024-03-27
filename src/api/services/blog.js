@@ -5,6 +5,7 @@ import {
   getABlog,
   getBlogCategories,
   getBlogs,
+  getListRelatedBlogs,
 } from '..';
 
 export const addBlog = async (data) => {
@@ -52,12 +53,24 @@ export const getBlog = async (blogId) => {
     return res.data;
   } catch (error) {
     console.error(
-      'Create blog failed:',
+      'Get blog failed:',
       error.response ? error.response.data : error.message
     );
   }
 };
 
+export const getRelatedBlogs = async (blogId) => {
+  try {
+    const res = await getListRelatedBlogs(blogId);
+    console.log(res);
+    return res.data;
+  } catch (error) {
+    console.error(
+      'Get related blog failed:',
+      error.response ? error.response.data : error.message
+    );
+  }
+};
 export const deleteBlog = async (blogId) => {
   try {
     const res = await deleteABlog(blogId);

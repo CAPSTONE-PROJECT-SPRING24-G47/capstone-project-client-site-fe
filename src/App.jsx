@@ -58,34 +58,30 @@ function App() {
         <Route path="blog" element={<BlogList />} />
         <Route path="blog-update/:blogId" element={<UpdateBlog />} />
         <Route path="blog-create" element={<CreateBlog />} />
-          <>
-            <Route path="profile" element={<ProfileLayout />}>
-              <Route path="information" element={<UserProfile />} />
-              <Route path="change-password" element={<UserProfile />} />
-            </Route>
-            <Route path="/restaurantReview/:id" element={<LocationReview />} />
-            <Route
-              path="/accommodationReview/:id"
-              element={<LocationReview />}
-            />
-            <Route
-              path="/touristAttractionReview/:id"
-              element={<LocationReview />}
-            />
-            <Route
-              path="/updateRestaurantReview/:id/:commentId"
-              element={<UpdateReview />}
-            />
-            <Route
-              path="/updateAccommodationReview/:id/:commentId"
-              element={<UpdateReview />}
-            />
-            <Route
-              path="/updateTouristAttractionReview/:id/:commentId"
-              element={<UpdateReview />}
-            />
-          </>
-        )}
+        <>
+          <Route path="profile" element={<ProfileLayout />}>
+            <Route path="information" element={<UserProfile />} />
+            <Route path="change-password" element={<UserProfile />} />
+          </Route>
+          <Route path="/restaurantReview/:id" element={<LocationReview />} />
+          <Route path="/accommodationReview/:id" element={<LocationReview />} />
+          <Route
+            path="/touristAttractionReview/:id"
+            element={<LocationReview />}
+          />
+          <Route
+            path="/updateRestaurantReview/:id/:commentId"
+            element={<UpdateReview />}
+          />
+          <Route
+            path="/updateAccommodationReview/:id/:commentId"
+            element={<UpdateReview />}
+          />
+          <Route
+            path="/updateTouristAttractionReview/:id/:commentId"
+            element={<UpdateReview />}
+          />
+        </>
         <Route
           path="RestaurantDetail/:id"
           element={<RestaurantDetail />}

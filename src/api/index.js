@@ -30,6 +30,8 @@ export const getBlogs = () => API.get('/blogs');
 export const getABlog = (blogId) => API.get(`/blogs/${blogId}`);
 export const deleteABlog = (blogId) => API.delete(`/blogs/${blogId}`);
 export const getBlogCategories = () => API.get('/blog-category');
+export const getListRelatedBlogs = (blogId) =>
+  API.get(`blogs/${blogId}/get-related-blogs`);
 
 //blog comment
 export const createBlogComment = (data) => API.post(`/blog-comment`, data);

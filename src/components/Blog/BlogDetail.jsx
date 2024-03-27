@@ -5,7 +5,11 @@ import RightArrowIcon from '../Icons/RightArrowIcon';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
 import WrenchIcon from '../Icons/WrenchIcon';
 import { Link, useParams } from 'react-router-dom';
-import { getBlog, getListBlogs } from '../../api/service/blog';
+import {
+  getBlog,
+  getListBlogs,
+  getRelatedBlogs,
+} from '../../api/services/blog';
 import FormattedDate from '../FormattedDate';
 import { useContext } from 'react';
 import { BlogContext } from '../../Contexts/BlogContext';
@@ -15,8 +19,8 @@ import {
   getListBlogComments,
   getListBlogCommentsByBlogId,
   updateBlogComment,
-} from '../../api/service/comment';
-import { getUser } from '../../api/service/user';
+} from '../../api/services/comment';
+import { getUser } from '../../api/services/user';
 import SuccessIconBig from '../Auth/Icons/SuccessIconBig';
 import { getUsers } from '../../api';
 import { AlertContext } from '../../Contexts/AlertContext';
@@ -44,7 +48,7 @@ const BlogDetail = () => {
   const [isUpdateComment, setIsUpdateComment] = useState(false);
   const [updateCommentContent, setUpdateCommentContent] = useState('');
   const [updateComment, setUpdateComment] = useState(null);
-
+  const [relateBlogs, setRelateBlogs] = useState([]);
   // console.log(blog);
   const handleCommentContentChange = (e) => {
     setCommentContent(e.target.value);
@@ -173,6 +177,17 @@ const BlogDetail = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    async function fetchData() {
+      const response = await getRelatedBlogs(blogId);
+      console.log(response);
+      // if (response) {
+      //   setRelateBlogs(response.data);
+      // }
+    }
+    fetchData();
+  }, [blogId]);
+  // console.log(relateBlogs);
   function getUserFullName(userId) {
     if (!listUsers) return ''; // Tránh lỗi khi listUsers chưa được cập nhật từ API
 

@@ -4,17 +4,12 @@ import { BackIcon } from '../Auth';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
-import { addBlog, getListBlogCategories } from '../../api/service/blog';
+import { addBlog, getListBlogCategories } from '../../api/services/blog';
 
 import defaultImage from '../../assets/fuji.jpg';
 import SuccessIconBig from '../Auth/Icons/SuccessIconBig';
 import { MultiSelect } from 'react-multi-select-component';
 
-const optionsTest = [
-  { label: 'Grapes 🍇', value: 'grapes' },
-  { label: 'Mango 🥭', value: 'mango' },
-  { label: 'Strawberry 🍓', value: 'strawberry', disabled: true },
-];
 const CreateBlog = () => {
   const toolbarOptions = [
     ['bold', 'italic', 'underline', 'strike'], // toggled buttons
@@ -45,9 +40,8 @@ const CreateBlog = () => {
   const [listCategories, setListCategories] = useState([]);
   // const [options, setOptions] = useState([]);
   const [blogData, setBlogData] = useState(null);
-  const [response, setResponse] = useState();
-  const [coverImage, setCoverImage] = useState(defaultImage);
-  // const [imageFile, setImageFile] = useState(null);
+  const [thumbnail, setThumbnail] = useState(defaultImage);
+  const [imageFile, setImageFile] = useState(null);
   // const [errors, setErrors] = useState({});
   const [isSuccess, setIsSuccess] = useState(false);
   const [options, setOptions] = useState([]);
@@ -58,22 +52,22 @@ const CreateBlog = () => {
       let imageFile = e.target.files[0];
       const reader = new FileReader();
       reader.onload = (x) => {
-        const image = x.target.result;
-        // setImageFile(imageFile);
-        setCoverImage(image);
+        setImageFile(imageFile);
+        setThumbnail(x.target.result);
       };
       reader.readAsDataURL(imageFile);
     } else {
       setImageFile(null);
-      setCoverImage(defaultImage);
+      setThumbnail(defaultImage);
     }
   };
 
-  // console.log(coverImage);
-  // console.log(coverImage);
+  // console.log(thumbnail);
+  // console.log(thumbnail);
 
   const handleBlogCategoryChange = (e) => {
-    setBlogCategoryId(e.target.value);
+    const id = selected.map((obj) => obj.value);
+    setBlogCategory(id.toString());
   };
 
   const handleTitleChange = (e) => {
@@ -85,50 +79,26 @@ const CreateBlog = () => {
 
   const handleCreateBlog = async () => {
     try {
-      // const stringPhoto = {
-      //   blogId: 1,
-      //   photoURL: coverImage,
-      // };
-      // console.log([stringPhoto]);
-
       const formData = new FormData();
       formData.append('userId', user?.userId);
       formData.append('title', title);
       formData.append('blogContent', blogContent);
+      formData.append('photo', imageFile);
+      formData.append('b_BCatagories', blogCategory);
 
-      // coverImage.forEach((file) => {
-      formData.append(`blogPhotos`, coverImage);
-      // });
-      // console.log(coverImage);
+      // console.log(formData.get('photo'));
 
-      formData.append('blog_BlogCatagories', [{ blogCategoryId }]);
-
-      // console.log(formData.get('blogPhotos'));
       const response = await addBlog(formData);
       console.log(response);
       if (response) {
-        setResponse(res);
-        setIsSuccess(true);
+        if (response.isSuccess == true) {
+          setIsSuccess(true);
+        }
       }
     } catch (error) {
       console.error('Error while creating user:', error);
     }
   };
-
-  // const handleSubmitBlogData = () => {
-  //   setBlogData({
-  //     userId: user?.userId,
-  //     title,
-  //     blogContent,
-  //     blogPhotos: [
-  //       {
-  //         photoURL: coverImage,
-  //       },
-  //     ],
-  //     blog_BlogCatagories: [{ blogCategoryId }],
-  //   });
-  // };
-  // console.log(blogData?.blogContent);
 
   useEffect(() => {
     const userLS = fetchUserFromLocalStorage();
@@ -136,6 +106,10 @@ const CreateBlog = () => {
       setUser(userLS);
     }
   }, []);
+
+  useEffect(() => {
+    handleBlogCategoryChange();
+  }, [selected]);
 
   useEffect(() => {
     async function fetchData() {
@@ -168,28 +142,10 @@ const CreateBlog = () => {
       value: category.blogCategoryId,
       label: category.blogCategoryName,
     }));
-    console.log(listCategories);
     // setSelected(blogCategory);
     setOptions(updatedOptions);
   }, [listCategories]);
-
-  // value={formData.restaurant_RestaurantCategories.map(
-  //   (category) => ({
-  //     value: category.restaurantCategoryId,
-  //     label: category.restaurantCategoryName,
-  //   })
-  // )}
-
-  console.log(options);
-
-  // const options = [
-  //   listCategories?.map((category) => {
-  //     return {
-  //       label: category.blogCategoryName,
-  //       value: category.blogCategoryId,
-  //     };
-  //   }),
-  // ];
+  // console.log(options);
 
   // console.log(blogCategoryId);
   // console.log(blogContent.replace(/<[^>]*>/g, ''));
@@ -258,8 +214,8 @@ const CreateBlog = () => {
               disabled={
                 !title ||
                 !blogContent ||
-                blogCategoryId == 0 ||
-                coverImage == defaultImage
+                !blogCategory ||
+                thumbnail == defaultImage
               }
               onClick={handleCreateBlog}
               className="mt-4 rounded-xl bg-secondary-color px-2 py-1 text-xl font-bold text-bg-color hover:bg-gradient-to-b hover:from-secondary-color hover:to-accent-color disabled:bg-secondary-color/70 disabled:hover:bg-none"
@@ -298,7 +254,7 @@ const CreateBlog = () => {
             </div>
             <div className="max-h-4/5 flex h-[112px] w-[192px] items-center justify-center bg-bg-color">
               <img
-                src={coverImage}
+                src={thumbnail}
                 alt="Cover_image"
                 className="h-full w-full rounded-lg object-cover"
                 // height={100}

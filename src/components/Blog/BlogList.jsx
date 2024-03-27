@@ -3,7 +3,7 @@ import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage
 import ClockIcon from '../Icons/ClockIcon';
 import SolidUserIcon from '../Icons/SolidUserIcon';
 import HeadingBlogList from './HeadingBlogList';
-import { getListBlogs } from '../../api/service/blog';
+import { getListBlogs } from '../../api/services/blog';
 import { Link } from 'react-router-dom';
 import FormattedDate from '../FormattedDate';
 import { BlogContext } from '../../Contexts/BlogContext';
@@ -102,7 +102,7 @@ const BlogList = () => {
                 {/* <img src="../../assets/2_rx7.jpg" alt="abc" /> */}
                 <div className="max-h-4/5 flex h-44 w-full items-center justify-center bg-bg-color">
                   <img
-                    src={blog.blogPhotos[0].photoURL}
+                    src={blog.photo}
                     alt="Cover_image"
                     className="h-full w-full rounded-lg object-cover"
                     // height={100}
