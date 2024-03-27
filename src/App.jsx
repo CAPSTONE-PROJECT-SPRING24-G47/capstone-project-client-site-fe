@@ -47,23 +47,15 @@ function App() {
         {/* trang mới thêm vào đây */}
         <Route index element={<HomePage />} />
         {user && (
-          <Route path="profile" element={<ProfileLayout />}>
-            <Route path="information" element={<UserProfile />} />
-            {!user.isGoogleAuth && (
-              <Route path="change-password" element={<ChangePassword />} />
-            )}
-          </Route>
-        )}
-        <Route path={`blog/:blogId`} element={<BlogDetail />} />
-        <Route path="blog-individual" element={<BlogIndividualList />} />
-        <Route path="blog" element={<BlogList />} />
-        <Route path="blog-update/:blogId" element={<UpdateBlog />} />
-        <Route path="blog-create" element={<CreateBlog />} />
           <>
             <Route path="profile" element={<ProfileLayout />}>
               <Route path="information" element={<UserProfile />} />
-              <Route path="change-password" element={<UserProfile />} />
+              <Route path="information" element={<UserProfile />} />
+              {!user.isGoogleAuth && (
+                <Route path="change-password" element={<ChangePassword />} />
+              )}
             </Route>
+
             <Route path="/restaurantReview/:id" element={<LocationReview />} />
             <Route
               path="/accommodationReview/:id"
@@ -86,8 +78,20 @@ function App() {
               element={<UpdateReview />}
             />
             <Route path="/self-trips" element={<TripSelfList />} />
+            <Route path="trip/:id" element={<TripDetail />} />
+            <Route path="/trip-builder" element={<TripBuilder />} />
+            <Route
+              path="/trip-builder-manual"
+              element={<TripBuilderManual />}
+            />
           </>
         )}
+        <Route path={`blog/:blogId`} element={<BlogDetail />} />
+        <Route path="blog-individual" element={<BlogIndividualList />} />
+        <Route path="blog" element={<BlogList />} />
+        <Route path="blog-update/:blogId" element={<UpdateBlog />} />
+        <Route path="blog-create" element={<CreateBlog />} />
+
         <Route
           path="RestaurantDetail/:id"
           element={<RestaurantDetail />}
@@ -102,12 +106,9 @@ function App() {
         ></Route>
         <Route path="trip-plan" element={<TripPlan />} />
         <Route path="explore" element={<Explore />} />
-        <Route path="trip/:id" element={<TripDetail />} />
         <Route path="*" element={<NotFound404 />} />
       </Route>
       <Route path="map" element={<GGMapContainter />} />
-      <Route path="/trip-builder" element={<TripBuilder />} />
-      <Route path="/trip-builder-manual" element={<TripBuilderManual />} />
     </Routes>
   );
 }
