@@ -1,6 +1,6 @@
 import ArrowDownMiniIcon from '../UserProfile/Icons/ArrowDownMiniIcon';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import UserMenuDropDown from './UserMenuDropDown';
 
@@ -10,6 +10,7 @@ const buttonAnimate = {
 };
 
 const UserInfo = () => {
+  const dropMenupRef = useRef(null);
   const [isDropMenu, setIsDropMenu] = useState(false);
   const user = fetchUserFromLocalStorage();
   const name = `${user.firstName} ${user.lastName}`;
@@ -19,8 +20,22 @@ const UserInfo = () => {
     setIsDropMenu((state) => !state);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!dropMenupRef.current.contains(e.target)) {
+        setIsDropMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [dropMenupRef]);
+
   return (
-    <div className="relative">
+    <div className="relative" ref={dropMenupRef}>
       <motion.div
         animate={isDropMenu ? 'open' : 'closed'}
         variants={buttonAnimate}

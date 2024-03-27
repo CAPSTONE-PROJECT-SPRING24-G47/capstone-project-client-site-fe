@@ -26,7 +26,6 @@ import LocationReview from './pages/LocationReview';
 import UpdateReview from './pages/UpdateReview';
 import AccommodationDetail from './pages/DataDetailPage/AccommodationDetail';
 import TouristAttractionDetail from './pages/DataDetailPage/TouristAttractionDetail';
-import GGMapContainter from './components/Map/GGMapContainter';
 import TripSelfList from './pages/TripSelfList';
 
 function App() {
@@ -79,13 +78,9 @@ function App() {
             />
             <Route path="/self-trips" element={<TripSelfList />} />
             <Route path="trip/:id" element={<TripDetail />} />
-            <Route path="/trip-builder" element={<TripBuilder />} />
-            <Route
-              path="/trip-builder-manual"
-              element={<TripBuilderManual />}
-            />
           </>
         )}
+
         <Route path={`blog/:blogId`} element={<BlogDetail />} />
         <Route path="blog-individual" element={<BlogIndividualList />} />
         <Route path="blog" element={<BlogList />} />
@@ -108,7 +103,12 @@ function App() {
         <Route path="explore" element={<Explore />} />
         <Route path="*" element={<NotFound404 />} />
       </Route>
-      <Route path="map" element={<GGMapContainter />} />
+      {user && (
+        <>
+          <Route path="/trip-builder" element={<TripBuilder />} />
+          <Route path="/trip-builder-manual" element={<TripBuilderManual />} />
+        </>
+      )}
     </Routes>
   );
 }

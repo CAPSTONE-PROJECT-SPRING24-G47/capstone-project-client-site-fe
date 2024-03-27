@@ -7,7 +7,6 @@ const TripItem = () => {
   const optionPopupRef = useRef(null);
 
   useEffect(() => {
-    console.log(optionPopupRef);
     const handleClickOutside = (e) => {
       if (!optionPopupRef.current.contains(e.target)) {
         setIsOptionPopup(false);
