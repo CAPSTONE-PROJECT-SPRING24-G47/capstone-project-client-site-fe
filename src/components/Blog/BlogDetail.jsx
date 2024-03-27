@@ -5,19 +5,24 @@ import RightArrowIcon from '../Icons/RightArrowIcon';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
 import WrenchIcon from '../Icons/WrenchIcon';
 import { Link, useParams } from 'react-router-dom';
-import { getBlog } from '../../api/service/blog';
+import { getBlog, getListBlogs } from '../../api/service/blog';
 import FormattedDate from '../FormattedDate';
 import { useContext } from 'react';
 import { BlogContext } from '../../Contexts/BlogContext';
 import {
   addBlogComment,
+  deleteBlogComment,
   getListBlogComments,
   getListBlogCommentsByBlogId,
+  updateBlogComment,
 } from '../../api/service/comment';
 import { getUser } from '../../api/service/user';
+import SuccessIconBig from '../Auth/Icons/SuccessIconBig';
+import { getUsers } from '../../api';
+import { AlertContext } from '../../Contexts/AlertContext';
 
 const BlogDetail = () => {
-  // const { limitBlog } = useContext(BlogContext);
+  const { setIsShow, setAlertData } = useContext(AlertContext);
 
   const { blogId } = useParams();
 
@@ -25,34 +30,46 @@ const BlogDetail = () => {
   // console.log(limitBlog);
 
   const [user, setUser] = useState(null);
-  const [commentedUser, setCommentedUser] = useState(null);
-  const [commentByBlogId, setCommentByBlogId] = useState(null);
-  const [blogAuthor, setBlogAuthor] = useState(null);
+  const [listUsers, setListUsers] = useState([]);
   const [blog, setBlog] = useState(null);
   const [commentContent, setCommentContent] = useState('');
   const [comment, setComment] = useState(null);
   const [listComments, setListComments] = useState([]);
-  const [blogLink, setBlogLink] = useState('');
+  const [isConfirm, setIsConfirm] = useState(false);
+  const [isPopUp, setIsPopUp] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [commentId, setCommentId] = useState(-1);
+  const [toggleAddComment, setToggleAddComment] = useState(false);
+  const [toggleUpdateComment, setToggleUpdateComment] = useState(false);
+  const [isUpdateComment, setIsUpdateComment] = useState(false);
+  const [updateCommentContent, setUpdateCommentContent] = useState('');
+  const [updateComment, setUpdateComment] = useState(null);
+
   // console.log(blog);
   const handleCommentContentChange = (e) => {
     setCommentContent(e.target.value);
   };
 
-  // {
-  //   "userId": 5,
-  //   "blogId": 2,
-  //   "commentContentContent": "string"
-  // }
+  const handleUpdateCommentContentChange = (e) => {
+    setUpdateCommentContent(e.target.value);
+  };
 
   const handleSubmitData = (e) => {
     setComment({
       userId: user?.userId,
       blogId,
-      // stars: 5,
       commentContent,
     });
   };
 
+  const handleSubmitUpdateComment = (e) => {
+    setUpdateComment({
+      userId: user?.userId,
+      blogId,
+      commentContent: updateCommentContent,
+    });
+  };
+  console.log(updateComment);
   useEffect(() => {
     const userLS = fetchUserFromLocalStorage();
     if (userLS) {
@@ -76,7 +93,17 @@ const BlogDetail = () => {
       if (user) {
         if (comment) {
           const res = await addBlogComment(comment);
-          console.log('>>>response: ', res);
+          // console.log('>>>response: ', res);
+          if (res) {
+            setIsShow(true);
+            setAlertData({
+              message: 'Thêm bình luận thành công',
+              textColor: 'text-white',
+              backGroundColor: 'bg-primary-color',
+            });
+            setToggleAddComment((state) => !state);
+            setCommentContent('');
+          }
         }
       } else {
         console.log('Đăng nhập đã');
@@ -87,31 +114,32 @@ const BlogDetail = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await getUser(blog?.userId);
-      setBlogAuthor(res?.data?.data[0]);
+      if (updateComment) {
+        const res = await updateBlogComment(commentId, updateComment);
+        console.log('>>>response: ', res);
+        if (res) {
+          setIsShow(true);
+          setAlertData({
+            message: 'Sửa bình luận thành công',
+            textColor: 'text-white',
+            backGroundColor: 'bg-primary-color',
+          });
+          setToggleUpdateComment((state) => !state);
+          setIsUpdateComment(false);
+        }
+      }
     }
     fetchData();
-  }, [blog]);
-  // console.log(blogAuthor);
-  console.log(blog?.blogId);
+  }, [updateComment]);
 
   useEffect(() => {
     async function fetchData() {
       const res = await getListBlogCommentsByBlogId(blogId);
-      // console.log(res);
       setListComments(res);
     }
     fetchData();
-  }, []);
+  }, [toggleAddComment, toggleUpdateComment]);
   // console.log(listComments);
-
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const res = await getUser(blog?.userId);
-  //     setBlogAuthor(res?.data?.data[0]);
-  //   }
-  //   fetchData();
-  // }, []);
 
   useEffect(() => {
     var htmlString = blog?.blogContent;
@@ -135,11 +163,137 @@ const BlogDetail = () => {
   }, [blog]);
 
   useEffect(() => {
+    async function fetchData() {
+      const response = await getUsers();
+      // console.log(response.data);
+      if (response) {
+        setListUsers(response.data);
+      }
+    }
+    fetchData();
+  }, []);
+
+  function getUserFullName(userId) {
+    if (!listUsers) return ''; // Tránh lỗi khi listUsers chưa được cập nhật từ API
+
+    const user = listUsers.find((user) => user.userId === userId);
+    return user ? user.firstName + ' ' + user.lastName : ''; // Trả về tên đầy đủ của người dùng hoặc chuỗi rỗng nếu không tìm thấy
+  }
+
+  function getUserPicture(userId) {
+    if (!listUsers) return ''; // Tránh lỗi khi listUsers chưa được cập nhật từ API
+
+    const user = listUsers.find((user) => user.userId === userId);
+    return user?.pictureProfile; // Trả về tên đầy đủ của người dùng hoặc chuỗi rỗng nếu không tìm thấy
+  }
+
+  useEffect(() => {
+    async function fetchData() {
+      if (isConfirm && commentId != -1) {
+        const response = await deleteBlogComment(commentId);
+        console.log(response);
+        setIsSuccess(true);
+      }
+    }
+    fetchData();
+  }, [isConfirm]);
+
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, [blogId]);
 
   return (
     <div className="relative h-full bg-bg-color px-10 py-7">
+      {isUpdateComment && (
+        <div className="fixed inset-0 z-[99] flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-[#03121A] opacity-50 backdrop-blur-[20px]"
+            onClick={() => setIsUpdateComment(false)}
+          />
+          <div className="z-[99] flex w-1/2 flex-col rounded-xl bg-bg-secondary-color p-7">
+            <h5 className="mb-7 text-3xl font-semibold">Sửa bình luận</h5>
+            <textarea
+              name=""
+              id="commentContent"
+              value={updateCommentContent}
+              onChange={handleUpdateCommentContentChange}
+              // cols="30"
+              // rows="10"
+              placeholder="...."
+              className={`mb-5 h-16 w-full resize-none border-[0.5px] border-text-color/30 bg-bg-color p-1 outline-none`}
+            ></textarea>
+            <div className="flex items-center justify-end gap-5 text-2xl font-medium">
+              <button
+                className="w-1/5 rounded-xl bg-accent-color px-1 py-px text-center text-bg-color"
+                onClick={(e) => {
+                  // e.preventDefault();
+                  handleSubmitUpdateComment();
+                }}
+              >
+                Sửa
+              </button>
+              <button
+                className="w-1/6 rounded-xl bg-bg-color py-px text-accent-color"
+                onClick={() => setIsUpdateComment(false)}
+              >
+                Hủy
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {isPopUp && (
+        <div className="fixed inset-0 z-[99] flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-[#03121A] opacity-50 backdrop-blur-[20px]"
+            onClick={() => setIsPopUp(false)}
+          />
+          {!isSuccess && (
+            <div className="z-[99] flex flex-col gap-10 rounded-xl bg-bg-secondary-color p-9">
+              <h5 className="text-3xl font-semibold">
+                Bạn có chắc muốn xóa Blog này không?
+              </h5>
+              <div className="flex items-center justify-end gap-5 text-2xl font-medium">
+                <button
+                  className="w-1/5 rounded-xl bg-accent-color px-1 py-px text-center text-bg-color"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsConfirm(true);
+                    // setIsPopUp(false);
+                  }}
+                >
+                  Xác nhận
+                </button>
+                <button
+                  className="w-1/6 rounded-xl bg-bg-color py-px text-accent-color"
+                  onClick={() => setIsPopUp(false)}
+                >
+                  Hủy
+                </button>
+              </div>
+            </div>
+          )}
+          {isSuccess && (
+            <div className="z-50 flex h-[360px] w-96 flex-col items-center justify-center gap-10 rounded-xl bg-bg-color">
+              <>
+                <SuccessIconBig />
+              </>
+              <h2 className="mt-3 text-2xl font-semibold">
+                Chúc mừng bạn đã thành công!
+              </h2>
+              <button
+                type="submit"
+                onClick={() => {
+                  window.location.reload(true);
+                }}
+                className="flex h-11 w-1/2 items-center justify-center rounded-2xl bg-secondary-color font-semibold text-bg-color hover:bg-gradient-to-b hover:from-secondary-color hover:to-accent-color"
+              >
+                Tiếp tục
+              </button>
+            </div>
+          )}
+        </div>
+      )}
       <div className="absolute right-8 top-14 rounded-full bg-primary-color p-1 font-semibold">
         Hoạt động
       </div>
@@ -232,22 +386,35 @@ const BlogDetail = () => {
                   <div className="flex gap-5">
                     <img
                       className="h-[45px] w-[45px] rounded-full"
-                      src={`${commentedUser?.pictureProfile ? commentedUser?.pictureProfile : 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'}`}
+                      src={`${getUserPicture(comment.userId) ? getUserPicture(comment.userId) : 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'}`}
                     ></img>
                     <div
                       className={`0 mb-11 h-fit w-full whitespace-pre-line break-all border-b-[1px] border-text-color/20 pb-[2px] pl-0 ${user?.userId === blog?.userId ? 'bg-bg-secondary-color' : 'bg-bg-color'} px-2`}
                     >
                       <div className="flex justify-between">
                         <div className="text-xl font-semibold">
-                          {commentedUser?.lastName +
-                            ' ' +
-                            commentedUser?.firstName}
+                          {getUserFullName(comment.userId)}
                         </div>
                         {user?.userId === comment?.userId && (
                           <div className="flex gap-1">
-                            <button className="text-primary-color">Sửa</button>
+                            <button
+                              onClick={() => {
+                                setCommentId(comment.blogCommentId);
+                                setUpdateCommentContent(comment.commentContent);
+                                setIsUpdateComment(true);
+                              }}
+                              className="text-primary-color"
+                            >
+                              Sửa
+                            </button>
                             <div>|</div>
-                            <button onClick={''} className="text-sub-color">
+                            <button
+                              onClick={() => {
+                                setCommentId(comment.blogCommentId);
+                                setIsPopUp(true);
+                              }}
+                              className="text-sub-color"
+                            >
                               Xóa
                             </button>
                           </div>

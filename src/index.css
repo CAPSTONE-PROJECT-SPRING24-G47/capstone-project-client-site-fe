@@ -33,3 +33,18 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+.rmsc .dropdown-container:focus-within {
+  border: none;
+  outline: none;
+}
+.rmsc .dropdown-container {
+  border: none !important;
+  outline: none !important;
+}
+.dropdown-heading {
+  background-color: #8dcadc;
+  border-radius: 0.25rem;
+}
+.gray {
+  color: white !important;
+}

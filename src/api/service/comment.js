@@ -1,9 +1,10 @@
 import {
   createBlogComment,
-  deleteBlogComment,
+  deleteBlgComment,
   getBlogComments,
   getCommentByBlogId,
   getCommentsByBlogId,
+  updateBlgComment,
 } from '..';
 
 export const getListBlogComments = async () => {
@@ -58,14 +59,27 @@ export const addBlogComment = async (data) => {
   }
 };
 
-export const deleteComment = async (commentId) => {
+export const deleteBlogComment = async (commentId) => {
   try {
-    const res = await deleteBlogComment(commentId);
+    const res = await deleteBlgComment(commentId);
     console.log(res);
     return res;
   } catch (error) {
     console.error(
       'Delete blog comment failed:',
+      error.response ? error.response.data : error.message
+    );
+  }
+};
+
+export const updateBlogComment = async (commentId, data) => {
+  try {
+    const res = await updateBlgComment(commentId, data);
+    console.log(res);
+    return res;
+  } catch (error) {
+    console.error(
+      'Update blog comment failed:',
       error.response ? error.response.data : error.message
     );
   }

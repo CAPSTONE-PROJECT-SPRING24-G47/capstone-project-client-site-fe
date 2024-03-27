@@ -8,7 +8,13 @@ import { addBlog, getListBlogCategories } from '../../api/service/blog';
 
 import defaultImage from '../../assets/fuji.jpg';
 import SuccessIconBig from '../Auth/Icons/SuccessIconBig';
+import { MultiSelect } from 'react-multi-select-component';
 
+const optionsTest = [
+  { label: 'Grapes 🍇', value: 'grapes' },
+  { label: 'Mango 🥭', value: 'mango' },
+  { label: 'Strawberry 🍓', value: 'strawberry', disabled: true },
+];
 const CreateBlog = () => {
   const toolbarOptions = [
     ['bold', 'italic', 'underline', 'strike'], // toggled buttons
@@ -35,7 +41,7 @@ const CreateBlog = () => {
   const [title, setTitle] = useState('');
   const [blogContent, setBlogContent] = useState('');
   const [user, setUser] = useState(null);
-  const [blogCategoryId, setBlogCategoryId] = useState();
+  const [blogCategory, setBlogCategory] = useState();
   const [listCategories, setListCategories] = useState([]);
   // const [options, setOptions] = useState([]);
   const [blogData, setBlogData] = useState(null);
@@ -44,6 +50,8 @@ const CreateBlog = () => {
   // const [imageFile, setImageFile] = useState(null);
   // const [errors, setErrors] = useState({});
   const [isSuccess, setIsSuccess] = useState(false);
+  const [options, setOptions] = useState([]);
+  const [selected, setSelected] = useState([]);
 
   const handleImageFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -64,7 +72,7 @@ const CreateBlog = () => {
   // console.log(coverImage);
   // console.log(coverImage);
 
-  const handleBlogCategoryIdChange = (e) => {
+  const handleBlogCategoryChange = (e) => {
     setBlogCategoryId(e.target.value);
   };
 
@@ -75,47 +83,52 @@ const CreateBlog = () => {
     setBlogContent(content);
   };
 
-  // const handleCreateBlog = async () => {
-  //   try {
-  //     const stringPhoto = {
-  //       blogId: 1,
-  //       photoURL: coverImage,
-  //     };
-  //     console.log([stringPhoto]);
+  const handleCreateBlog = async () => {
+    try {
+      // const stringPhoto = {
+      //   blogId: 1,
+      //   photoURL: coverImage,
+      // };
+      // console.log([stringPhoto]);
 
-  //     const formData = new FormData();
-  //     formData.append('userId', user?.userId);
-  //     formData.append('title', title);
-  //     formData.append('blogContent', blogContent);
-  //     formData.append('blogPhotos', [JSON.stringify(stringPhoto)]);
-  //     formData.append('blog_BlogCatagories', [{ blogCategoryId }]);
+      const formData = new FormData();
+      formData.append('userId', user?.userId);
+      formData.append('title', title);
+      formData.append('blogContent', blogContent);
 
-  //     // console.log(formData.get('blogPhotos'));
-  //     const response = await addBlog(formData);
-  //     console.log(response);
-  //     if (response) {
-  //       setResponse(res);
-  //       setIsSuccess(true);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error while creating user:', error);
-  //   }
-  // };
+      // coverImage.forEach((file) => {
+      formData.append(`blogPhotos`, coverImage);
+      // });
+      // console.log(coverImage);
 
-  const handleSubmitBlogData = () => {
-    setBlogData({
-      userId: user?.userId,
-      title,
-      blogContent,
-      blogPhotos: [
-        {
-          photoURL: coverImage,
-        },
-      ],
-      blog_BlogCatagories: [{ blogCategoryId }],
-    });
+      formData.append('blog_BlogCatagories', [{ blogCategoryId }]);
+
+      // console.log(formData.get('blogPhotos'));
+      const response = await addBlog(formData);
+      console.log(response);
+      if (response) {
+        setResponse(res);
+        setIsSuccess(true);
+      }
+    } catch (error) {
+      console.error('Error while creating user:', error);
+    }
   };
-  console.log(blogData?.blogContent);
+
+  // const handleSubmitBlogData = () => {
+  //   setBlogData({
+  //     userId: user?.userId,
+  //     title,
+  //     blogContent,
+  //     blogPhotos: [
+  //       {
+  //         photoURL: coverImage,
+  //       },
+  //     ],
+  //     blog_BlogCatagories: [{ blogCategoryId }],
+  //   });
+  // };
+  // console.log(blogData?.blogContent);
 
   useEffect(() => {
     const userLS = fetchUserFromLocalStorage();
@@ -124,20 +137,20 @@ const CreateBlog = () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     if (blogData) {
-  //       const res = await addBlog(blogData);
-  //       console.log('>>>response: ', res);
-  //       setResponse(res);
-  //       setIsSuccess(true);
-  //       // if (response) {
-  //       //   // setIsChangeSuccess(true);
-  //       // }
-  //     }
-  //   }
-  //   fetchData();
-  // }, [blogData]);
+  useEffect(() => {
+    async function fetchData() {
+      if (blogData) {
+        const res = await addBlog(blogData);
+        console.log('>>>response: ', res);
+        setResponse(res);
+        setIsSuccess(true);
+        // if (response) {
+        //   // setIsChangeSuccess(true);
+        // }
+      }
+    }
+    fetchData();
+  }, [blogData]);
 
   useEffect(() => {
     async function fetchData() {
@@ -149,6 +162,35 @@ const CreateBlog = () => {
     }
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const updatedOptions = listCategories?.map((category) => ({
+      value: category.blogCategoryId,
+      label: category.blogCategoryName,
+    }));
+    console.log(listCategories);
+    // setSelected(blogCategory);
+    setOptions(updatedOptions);
+  }, [listCategories]);
+
+  // value={formData.restaurant_RestaurantCategories.map(
+  //   (category) => ({
+  //     value: category.restaurantCategoryId,
+  //     label: category.restaurantCategoryName,
+  //   })
+  // )}
+
+  console.log(options);
+
+  // const options = [
+  //   listCategories?.map((category) => {
+  //     return {
+  //       label: category.blogCategoryName,
+  //       value: category.blogCategoryId,
+  //     };
+  //   }),
+  // ];
+
   // console.log(blogCategoryId);
   // console.log(blogContent.replace(/<[^>]*>/g, ''));
   // console.log(blogContent);
@@ -219,7 +261,7 @@ const CreateBlog = () => {
                 blogCategoryId == 0 ||
                 coverImage == defaultImage
               }
-              onClick={handleSubmitBlogData}
+              onClick={handleCreateBlog}
               className="mt-4 rounded-xl bg-secondary-color px-2 py-1 text-xl font-bold text-bg-color hover:bg-gradient-to-b hover:from-secondary-color hover:to-accent-color disabled:bg-secondary-color/70 disabled:hover:bg-none"
             >
               Đăng
@@ -241,22 +283,13 @@ const CreateBlog = () => {
           <div className="mb-14 w-full">
             <h1 className="mb-7 text-xl font-bold">Danh mục</h1>
 
-            <select
-              name=""
-              id="blogCategoryId"
-              value={blogCategoryId}
-              onChange={handleBlogCategoryIdChange}
-              className="w-full rounded-lg bg-secondary-color px-1 py-2 opacity-90"
-            >
-              <option value={0}>Chọn</option>
-              {listCategories.map((category) => {
-                return (
-                  <option value={category.blogCategoryId}>
-                    {`${category.blogCategoryName}`}
-                  </option>
-                );
-              })}
-            </select>
+            <MultiSelect
+              options={options}
+              value={selected}
+              onChange={setSelected}
+              labelledBy="Chọn"
+              className="w-full rounded-lg stroke-secondary-color px-1 py-2"
+            />
           </div>
           {/* picture */}
           <div className="flex w-full flex-col items-center">
