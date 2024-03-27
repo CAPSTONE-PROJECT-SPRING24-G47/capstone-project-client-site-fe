@@ -31,10 +31,10 @@ const UserInfo = () => {
         className="flex cursor-pointer select-none items-center justify-center gap-4 rounded-3xl px-2 py-1 hover:bg-[#0000000d]"
       >
         <img
-          className="h-[45px] w-[45px] rounded-full"
+          className="h-auto max-w-[45px] rounded-full"
           src={`${user.signedUrl ? user.signedUrl : 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'}`}
         ></img>
-        <div className="flex items-center justify-center gap-2">
+        <div className="hidden items-center justify-center gap-2 md:flex">
           <p className="text-md text-center font-bold">{nameTruncated}</p>
           <ArrowDownMiniIcon
             variants={{

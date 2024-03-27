@@ -12,7 +12,7 @@ const UserMenuDropDown = () => {
       animate={{ opacity: 1, translateY: 0 }}
       exit={{ opacity: 0, translateY: -10 }}
       transition={{ ease: 'linear', duration: 0.1 }}
-      className="absolute -bottom-40 right-0 z-[99] flex w-[200px] flex-col items-center justify-start overflow-hidden rounded-lg bg-bg-color font-semibold text-text-color shadow-md"
+      className="absolute -bottom-40 right-0 z-[99] flex w-[190px] flex-col items-center justify-start overflow-hidden rounded-lg bg-bg-color font-semibold text-text-color shadow-md sm:w-[200px]"
     >
       <UserMenuDropDownItem
         text={'Thông tin cá nhân'}

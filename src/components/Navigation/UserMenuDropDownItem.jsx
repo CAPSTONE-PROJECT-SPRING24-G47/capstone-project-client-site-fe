@@ -17,7 +17,7 @@ const UserMenuDropDownItem = ({ text, svg, path, isLogOut = false }) => {
         navigate(path);
         if (isLogOut) handleSignOut();
       }}
-      className="flex w-full cursor-pointer justify-end gap-3 p-3 hover:bg-[#E8F3E3]"
+      className="flex w-full cursor-pointer justify-end gap-3 p-3 text-sm hover:bg-[#E8F3E3] sm:text-base"
     >
       <div>{text}</div>
       <div>{svg}</div>
