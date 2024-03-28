@@ -195,8 +195,10 @@ const RestaurantDetail = () => {
   useEffect(() => {
     if (restaurantData && restaurantData?.restaurantPhotos) {
       const photoUrls = restaurantData?.restaurantPhotos.map((photo) => ({
-        original: photo.signedUrl, // Đường dẫn ảnh gốc
-        thumbnail: photo.signedUrl, // Đường dẫn ảnh thumbnail
+        original:
+          photo.savedFileName !== null ? photo.signedUrl : photo.photoURL, // Đường dẫn ảnh gốc
+        thumbnail:
+          photo.savedFileName !== null ? photo.signedUrl : photo.photoURL,
       }));
       setImages(photoUrls);
     }
