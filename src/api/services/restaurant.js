@@ -5,6 +5,8 @@ import {
   getRestaurantCategories,
   getRestaurantCategoryDetail,
   getRestaurantComment,
+  getRestaurantCommentBy2Id,
+  getRestaurantCommentNumber,
   getRestaurantComments,
   getRestaurants,
   updateRestaurantComment,
@@ -70,9 +72,9 @@ export const getRestaurantCommentDetail = async (id) => {
   }
 };
 
-export const getListRestaurantComment = async (id) => {
+export const getListRestaurantComment = async (id, page) => {
   try {
-    const res = await getRestaurantComments(id);
+    const res = await getRestaurantComments(id, page);
     return res.data;
   } catch (error) {
     console.error(
@@ -115,6 +117,31 @@ export const updateRestaurantCommentDetail = async (id, data) => {
   } catch (error) {
     console.error(
       'Add restaurant failed:',
+      error.response ? error.response.data : error.message
+    );
+  }
+};
+
+export const getRestaurantCommentNumberById = async (id) => {
+  try {
+    const res = await getRestaurantCommentNumber(id);
+    return res.data;
+  } catch (error) {
+    console.error(
+      'Get Restaurant comment failed:',
+      error.response ? error.response.data : error.message
+    );
+  }
+};
+
+//Lấy comment xem user đã đánh giá chưa
+export const getRestaurantCommentDetailBy2Id = async (data) => {
+  try {
+    const res = await getRestaurantCommentBy2Id(data);
+    return res.data;
+  } catch (error) {
+    console.error(
+      'Get restaurant comment failed:',
       error.response ? error.response.data : error.message
     );
   }

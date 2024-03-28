@@ -4,19 +4,28 @@ import ReactStars from 'react-rating-stars-component';
 import { useEffect } from 'react';
 import {
   addRestaurantComment,
+  getRestaurantCommentDetailBy2Id,
   getRestaurantDetail,
 } from '../api/services/restaurant';
 import {
   addAccommodationComment,
+  getAccommodationCommentDetailBy2Id,
   getAccommodationDetail,
 } from '../api/services/accommodation';
 import {
   addTouristAttractionComment,
+  getTACommentDetailBy2Id,
   getTouristAttractionDetail,
 } from '../api/services/touristAttraction';
+import { useContext } from 'react';
+import { AlertContext } from '../Contexts/AlertContext';
+import ImageUploader from 'react-images-upload';
+import { FaStar } from 'react-icons/fa';
 
 const LocationReview = () => {
   const userData = JSON.parse(localStorage.getItem('user'));
+  const [rating, setRating] = useState(null);
+  const [hover, setHover] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -27,6 +36,8 @@ const LocationReview = () => {
   const [restaurantData, setRestaurantData] = useState(null);
   const [accommodationData, setAccommodationData] = useState(null);
   const [touristAttractionData, setTouristAttractionData] = useState(null);
+  const { setIsShow, setAlertData } = useContext(AlertContext);
+  const [userReviewed, setUserReviewed] = useState(false);
   const handleBack = () => {
     if (locationTypeReview === 'restaurantReview') {
       navigate(`/RestaurantDetail/${id}`);
@@ -38,6 +49,7 @@ const LocationReview = () => {
       navigate(`/TouristAttractionDetail/${id}`);
     }
   };
+
   //Get data (restaurant, accommodation, TA)
   useEffect(() => {
     if (locationTypeReview === 'restaurantReview') {
@@ -88,19 +100,20 @@ const LocationReview = () => {
         phone: restaurantData?.restaurantPhone ?? null,
         website: restaurantData?.restaurantWebsite ?? '',
         price: restaurantData?.priceRange,
+        photo: restaurantData?.restaurantPhotos[0].signedUrl,
       });
-      console.log(detailData);
     }
     if (locationTypeReview === 'accommodationReview') {
       setDetailData({
+        id: accommodationData?.accommodationId,
         name: accommodationData?.accommodationName ?? '',
         description: accommodationData?.accommodationDescription ?? '',
         address: accommodationData?.accommodationAddress ?? '',
         phone: accommodationData?.accommodationPhone ?? null,
         website: accommodationData?.accommodationWebsite ?? '',
         price: accommodationData?.priceRange,
+        photo: accommodationData?.accommodationPhotos[0].signedUrl,
       });
-      console.log(detailData);
     }
     if (locationTypeReview === 'touristAttractionReview') {
       setDetailData({
@@ -110,13 +123,14 @@ const LocationReview = () => {
         phone: touristAttractionData?.touristAttractionPhone ?? null,
         website: touristAttractionData?.touristAttractionWebsite ?? '',
         price: touristAttractionData?.priceRange,
+        photo: touristAttractionData?.touristAttractionPhotos[0].signedUrl,
       });
-      console.log(detailData);
     }
   }, [restaurantData, accommodationData, touristAttractionData]);
   const [formdata, setFormdata] = useState({
     stars: 0,
     commentContent: null,
+    photos: [],
     userId: userData.userId,
     restaurantId: id,
     accommodationId: id,
@@ -127,51 +141,219 @@ const LocationReview = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleAddComment = async (event) => {
-    event.preventDefault();
+  //Kiểm tra xem user đã gửi đánh giá chưa
+
+  useEffect(() => {
+    // Gọi API để kiểm tra xem người dùng đã gửi đánh giá cho địa điểm hiện tại chưa
+    // Ví dụ: gọi API để lấy thông tin đánh giá của người dùng cho địa điểm với id là `id`
+
     if (locationTypeReview === 'restaurantReview') {
       try {
-        const response = await addRestaurantComment(formdata);
-        if (response.isSuccess) {
-          navigate(`/RestaurantDetail/${id}`);
+        async function fetchData() {
+          const data = new FormData();
+          data.append('restaurantId', id);
+          data.append('userId', userData.userId);
+          const response = await getRestaurantCommentDetailBy2Id(data);
+          if (response.data.length !== 0) {
+            setUserReviewed(true);
+            setUserCommentId(response.data[0].restaurantCommentId);
+          }
         }
-        console.log(response);
+        fetchData();
       } catch (error) {
-        console.error('Error while adding comment:', error);
+        console.error('Error checking user review:', error);
       }
     }
     if (locationTypeReview === 'accommodationReview') {
       try {
-        const response = await addAccommodationComment(formdata);
-        if (response.isSuccess) {
-          navigate(`/AccommodationDetail/${id}`);
+        async function fetchData() {
+          const data = new FormData();
+          data.append('accommodationId', id);
+          data.append('userId', userData.userId);
+          const response = await getAccommodationCommentDetailBy2Id(data);
+          if (response.data.length !== 0) {
+            setUserReviewed(true);
+          }
         }
-        console.log(response);
+        fetchData();
       } catch (error) {
-        console.error('Error while adding comment:', error);
+        console.error('Error checking user review:', error);
       }
     }
     if (locationTypeReview === 'touristAttractionReview') {
       try {
-        const response = await addTouristAttractionComment(formdata);
-        if (response.isSuccess) {
-          navigate(`/TouristAttractionDetail/${id}`);
+        async function fetchData() {
+          const data = new FormData();
+          data.append('touristAttractionId', id);
+          data.append('userId', userData.userId);
+          const response = await getTACommentDetailBy2Id(data);
+          if (response.data.length !== 0) {
+            setUserReviewed(true);
+          }
         }
-        console.log(response);
+        fetchData();
       } catch (error) {
-        console.error('Error while adding comment:', error);
+        console.error('Error checking user review:', error);
       }
     }
-    console.log(formdata);
+  }, []);
+
+  useEffect(() => {
+    if (userReviewed) {
+      // Điều hướng người dùng đến trang chi tiết của địa điểm
+      if (locationTypeReview === 'restaurantReview') {
+        setIsShow(true);
+        setAlertData({
+          message: 'Bạn đã đánh giá địa điểm này rồi',
+          textColor: 'text-white',
+          backGroundColor: 'bg-sub-color',
+        });
+        navigate(`/RestaurantDetail/${id}`);
+        setUserReviewed(false);
+      }
+      if (locationTypeReview === 'accommodationReview') {
+        setIsShow(true);
+        setAlertData({
+          message: 'Bạn đã đánh giá địa điểm này rồi',
+          textColor: 'text-white',
+          backGroundColor: 'bg-sub-color',
+        });
+        navigate(`/AccommodationDetail/${id}`);
+        setUserReviewed(false);
+      }
+      if (locationTypeReview === 'touristAttractionReview') {
+        setIsShow(true);
+        setAlertData({
+          message: 'Bạn đã đánh giá địa điểm này rồi',
+          textColor: 'text-white',
+          backGroundColor: 'bg-sub-color',
+        });
+        navigate(`/TouristAttractionDetail/${id}`);
+        setUserReviewed(false);
+      }
+    }
+  }, [userReviewed]);
+
+  //Upload ảnh
+  const handleImageUpload = (pictureFiles) => {
+    console.log(pictureFiles);
+    setFormdata((prevFormData) => ({
+      ...prevFormData,
+      photos: pictureFiles,
+    }));
   };
 
-  const ratingChanged = (newRating) => {
-    setFormdata({
-      ...formdata,
-      stars: Number(newRating),
-    });
-    console.log(newRating);
+  const handleAddComment = async (event) => {
+    event.preventDefault();
+
+    if (rating === 0) {
+      // Nếu chưa chọn đánh giá, hiển thị thông báo cho người dùng
+      setIsShow(true);
+      setAlertData({
+        message: 'Vui lòng đánh giá địa điểm này',
+        textColor: 'text-white',
+        backGroundColor: 'bg-sub-color',
+      });
+    } else {
+      if (locationTypeReview === 'restaurantReview') {
+        try {
+          console.log(formdata);
+          const newReview = new FormData();
+          newReview.append('UserId', formdata.userId);
+          newReview.append('RestaurantId', formdata.restaurantId);
+          newReview.append('Stars', rating);
+          if (
+            formdata.commentContent !== null &&
+            formdata.commentContent !== undefined &&
+            formdata.commentContent.trim() !== ''
+          ) {
+            newReview.append('CommentContent', formdata.commentContent);
+          }
+          formdata.photos.forEach((photo) => {
+            newReview.append('Photos', photo);
+          });
+          const response = await addRestaurantComment(newReview);
+          if (response.isSuccess) {
+            setIsShow(true);
+            setAlertData({
+              message: 'Đánh giá thành công',
+              textColor: 'text-white',
+              backGroundColor: 'bg-primary-color',
+            });
+            navigate(`/RestaurantDetail/${id}`);
+          }
+          console.log(response);
+        } catch (error) {
+          console.error('Error while adding comment:', error);
+        }
+      }
+      if (locationTypeReview === 'accommodationReview') {
+        try {
+          const newReview = new FormData();
+          newReview.append('UserId', formdata.userId);
+          newReview.append('AccommodationId', formdata.accommodationId);
+          newReview.append('Stars', rating);
+          if (
+            formdata.commentContent !== null &&
+            formdata.commentContent !== undefined &&
+            formdata.commentContent.trim() !== ''
+          ) {
+            newReview.append('CommentContent', formdata.commentContent);
+          }
+          formdata.photos.forEach((photo) => {
+            newReview.append('Photos', photo);
+          });
+          console.log(formdata);
+          const response = await addAccommodationComment(newReview);
+
+          if (response.isSuccess) {
+            setIsShow(true);
+            setAlertData({
+              message: 'Đánh giá thành công',
+              textColor: 'text-white',
+              backGroundColor: 'bg-primary-color',
+            });
+            navigate(`/AccommodationDetail/${id}`);
+          }
+          console.log(response);
+        } catch (error) {
+          console.error('Error while adding comment:', error);
+        }
+      }
+      if (locationTypeReview === 'touristAttractionReview') {
+        try {
+          const newReview = new FormData();
+          newReview.append('userId', formdata.userId);
+          newReview.append('touristAttractionId', formdata.touristAttractionId);
+          newReview.append('stars', rating);
+          if (
+            formdata.commentContent !== null &&
+            formdata.commentContent !== undefined &&
+            formdata.commentContent.trim() !== ''
+          ) {
+            newReview.append('commentContent', formdata.commentContent);
+          }
+          formdata.photos.forEach((photo) => {
+            newReview.append('photos', photo);
+          });
+          const response = await addTouristAttractionComment(newReview);
+          if (response.isSuccess) {
+            setIsShow(true);
+            setAlertData({
+              message: 'Đánh giá thành công',
+              textColor: 'text-white',
+              backGroundColor: 'bg-primary-color',
+            });
+            navigate(`/TouristAttractionDetail/${id}`);
+          }
+          console.log(response);
+        } catch (error) {
+          console.error('Error while adding comment:', error);
+        }
+      }
+    }
   };
+
   return (
     <div className=" bg-bg-color">
       <div className="pl-4 pt-4">
@@ -197,27 +379,43 @@ const LocationReview = () => {
 
       <div className="mt-12 flex flex-row">
         <div className="flex w-[50%] flex-col items-center justify-start gap-3">
-          {/* <img src="" alt="" /> */}
-          <div className="h-[250px] w-[250px] bg-white"></div>
+          <img src={detailData.photo} alt="" className="h-[250px] w-[250px]" />
           <p className="text-3xl font-bold">{detailData.name}</p>
           <p className="font-bold">{detailData.address}</p>
         </div>
         <div className=" w-[35%] items-center justify-items-center">
           <p className="text-2xl font-bold">Đánh giá trải nghiệm của bạn</p>
-          <ReactStars
-            count={5}
-            onChange={ratingChanged}
-            color="#8DCADC"
-            size={50}
-            a11y={true}
-            emptyIcon={<i className="far fa-star"></i>}
-            fullIcon={<i className="fa fa-star"></i>}
-            activeColor="#48C75E"
-          />
+          <div className="flex flex-row">
+            {[...Array(5)].map((star, index) => {
+              const currentRating = index + 1;
+              return (
+                <label key={index}>
+                  <input
+                    type="radio"
+                    name="rating"
+                    value={currentRating}
+                    onClick={() => setRating(currentRating)}
+                    className="hidden"
+                  />
+                  <FaStar
+                    size={50}
+                    className="cursor-pointer"
+                    color={
+                      currentRating <= (hover || rating)
+                        ? '#48C75E'
+                        : 'rgba(141, 202, 220, 0.3)'
+                    }
+                    onMouseEnter={() => setHover(currentRating)}
+                    onMouseLeave={() => setHover(null)}
+                  />
+                </label>
+              );
+            })}
+          </div>
           <p className="mb-4 text-2xl font-bold">Chia sẻ trải nghiệm của bạn</p>
           <textarea
             required
-            className="h-[200px] w-full rounded-[10px] bg-[#c8d8ca] px-4 py-2 text-2xl"
+            className="h-[200px] w-full rounded-[10px] bg-[#e8f3ea] px-4 py-2 text-2xl"
             onChange={(e) =>
               setFormdata({
                 ...formdata,
@@ -227,18 +425,19 @@ const LocationReview = () => {
           ></textarea>
 
           <p className="mb-4 text-2xl font-bold">Thêm ảnh</p>
-          <div className="mb-12 flex h-[200px] w-[100%] items-center justify-center rounded-[10px] bg-[#c8d8ca]">
-            <label
-              for="fileInput"
-              className="custom-file-upload rounded-[10px] bg-white px-4 py-2 text-2xl font-bold"
-            >
-              Thêm +
-            </label>
-            <input
-              id="fileInput"
-              type="file"
-              className="hidden"
-              accept="image/*"
+          <div className="mb-12 flex h-auto w-[100%] items-center justify-center rounded-[10px]">
+            <ImageUploader
+              withIcon={true}
+              onChange={handleImageUpload}
+              imgExtension={['.jpg', '.gif', '.png', '.gif']}
+              maxFileSize={5242880}
+              label="Chọn ảnh"
+              className=" h-fit w-full font-bold"
+              buttonText="Thêm ảnh"
+              withPreview={true}
+              fileContainerStyle={{
+                background: '#F1FBF3',
+              }}
             />
           </div>
           <div className="flex w-full items-center justify-center pb-4">

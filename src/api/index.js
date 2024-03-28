@@ -35,8 +35,20 @@ export const getAccommodationCategoryDetail = (id) =>
 export const createAccommodationComment = (data) =>
   API.post('/accommodation-comment', data);
 
-export const getAccommodationComments = (id) =>
-  API.get(`/accommodation-comment/${id}/get-comment-by-accommodationId`);
+export const getAccommodationCommentNumber = (id) =>
+  API.get(
+    `/accommodation-comment/${id}/get-number-of-comment-by-accommodationId`
+  );
+
+export const getAccommodationComments = (id, page) =>
+  API.get(
+    `/accommodation-comment/${id}/get-comment-by-accommodationId?pageIndex=${page}`
+  );
+
+export const getAccommodationCommentBy2Id = (data) =>
+  API.get(
+    `/accommodation-comment/get-comment-by-userId-and-accId?userId=${data.getAll('userId')}&accommodationId=${data.getAll('accommodationId')}`
+  );
 
 export const getAccommodationComment = (id) =>
   API.get(`/accommodation-comment/${id}`);
@@ -62,8 +74,13 @@ export const getRestaurantCategoryDetail = (id) =>
 export const getRestaurantComment = (id) =>
   API.get(`/restaurant-comment/${id}`);
 
-export const getRestaurantComments = (id) =>
-  API.get(`/restaurant-comment/${id}/get-comment-by-restaurantId`);
+export const getRestaurantComments = (id, page) =>
+  API.get(
+    `/restaurant-comment/${id}/get-comment-by-restaurantId?pageIndex=${page}`
+  );
+
+export const getRestaurantCommentNumber = (id) =>
+  API.get(`/restaurant-comment/${id}/get-number-of-comment-by-restaurantId`);
 
 export const createRestaurantComment = (data) =>
   API.post('/restaurant-comment', data);
@@ -73,6 +90,11 @@ export const deleteRestaurantComment = (id) =>
 
 export const updateRestaurantComment = (id, data) =>
   API.put(`/restaurant-comment/${id}`, data);
+
+export const getRestaurantCommentBy2Id = (data) =>
+  API.get(
+    `/restaurant-comment/get-comment-by-userId-and-resId?userId=${data.getAll('userId')}&restaurantId=${data.getAll('restaurantId')}`
+  );
 
 //tourist attraction
 export const getTouristAttractionCategories = () =>
@@ -89,9 +111,9 @@ export const getTouristAttraction = (id) =>
 export const createTouristAttraction = (data) =>
   API.post('/tourist-attractions', data);
 
-export const getTouristAttractionComments = (id) =>
+export const getTouristAttractionComments = (id, page) =>
   API.get(
-    `/touristattraction-comment/${id}/get-comment-by-touristAttractionId`
+    `/touristattraction-comment/${id}/get-comment-by-touristAttractionId?pageIndex=${page}`
   );
 
 export const getTouristAttractionComment = (id) =>
@@ -106,11 +128,23 @@ export const updateTouristAttractionComment = (id, data) =>
 export const deleteTAComment = (id) =>
   API.delete(`/touristattraction-comment/${id}`);
 
+export const getTACommentNumber = (id) =>
+  API.get(
+    `/touristattraction-comment/${id}/get-number-of-comment-by-touristAttractionId`
+  );
+
+export const getTACommentBy2Id = (data) =>
+  API.get(
+    `/touristattraction-comment/get-comment-by-userId-and-taId?userId=${data.getAll('userId')}&touristAttractionId=${data.getAll('touristAttractionId')}`
+  );
+
 //user
 export const updateUser = (id, data) =>
   API.put(`/users/${id}/update-profile`, data);
 
 export const getUsers = () => API.get('/users');
+
+export const getUser = (id) => API.get(`/users/${id}`);
 
 //search
 export const search = (searchData) => API.post(`/search`, searchData);

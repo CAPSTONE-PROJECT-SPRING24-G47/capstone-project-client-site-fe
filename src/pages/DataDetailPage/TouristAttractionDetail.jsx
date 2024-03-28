@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import avatarImage from '../../assets/trip_builder_manual_1.jpeg';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import ImageGallery from 'react-image-gallery';
 import ReactPaginate from 'react-paginate';
 import { useState } from 'react';
@@ -13,8 +13,13 @@ import {
   deleteTACommentDetail,
   getListTouristAttractionCategoryDetail,
   getListTouristAttractionComment,
+  getTACommentDetailBy2Id,
+  getTACommentNumberById,
   getTouristAttractionDetail,
 } from '../../api/services/touristAttraction';
+import { AlertContext } from '../../Contexts/AlertContext';
+import Paginate from '../../components/Paginate';
+import Slider from 'react-slick';
 
 const TouristAttractionDetail = () => {
   const { id } = useParams();
@@ -28,6 +33,9 @@ const TouristAttractionDetail = () => {
     setIsConfirm,
   } = useContext(CommentContext);
   const [detailData, setDetailData] = useState([]);
+  const { setIsShow, setAlertData } = useContext(AlertContext);
+  const [showMorePhotos, setShowMorePhotos] = useState(false);
+  const [remainingPhotos, setRemainingPhotos] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
   const [listCategoryDetail, setListCategoryDetail] = useState([]);
   const [touristAttractionData, setTouristAttractionData] = useState(null);
@@ -35,9 +43,42 @@ const TouristAttractionDetail = () => {
   const [listUsers, setListUsers] = useState(null);
   const [toggleDelete, setToggleDelete] = useState(false);
   const [images, setImages] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [count, setCount] = useState(0);
+  const [userReviewed, setUserReviewed] = useState(false);
+  const [userCommentId, setUserCommentId] = useState(null);
+  const navigate = useNavigate();
+
+  if (detailData.status === 'Rejected' || detailData.status === 'Processing') {
+    navigate('/*');
+  }
 
   const handleClick = () => {
     setIsChecked(!isChecked);
+  };
+
+  const handleShowMorePhotos = (remainingPhotos) => {
+    setRemainingPhotos(remainingPhotos);
+    setShowMorePhotos(true);
+  };
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await getTACommentNumberById(id);
+      if (response) {
+        setCount(response);
+      }
+    }
+    fetchData();
+  }, []);
+
+  const handleCloseModal = () => {
+    setShowMorePhotos(false);
+    setRemainingPhotos([]);
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
   };
 
   //Lấy user
@@ -72,16 +113,15 @@ const TouristAttractionDetail = () => {
   //Get comment
   useEffect(() => {
     async function fetchData() {
-      const response = await getListTouristAttractionComment(id);
-      const comment = response.data.reverse();
-      console.log(response);
+      const response = await getListTouristAttractionComment(id, currentPage);
+      const comment = response.data;
       if (response) {
         setCommentData(comment);
       }
       setIsConfirm(false);
     }
     fetchData();
-  }, [id, toggleDelete]);
+  }, [id, toggleDelete, currentPage]);
 
   //Set form data để hiện detail
   useEffect(() => {
@@ -92,16 +132,14 @@ const TouristAttractionDetail = () => {
       phone: touristAttractionData?.touristAttractionPhone ?? null,
       website: touristAttractionData?.touristAttractionWebsite ?? '',
       price: touristAttractionData?.priceRange,
+      status: touristAttractionData?.status,
     });
   }, [touristAttractionData]);
-
-  console.log(touristAttractionData);
 
   //Get category
   useEffect(() => {
     async function fetchData() {
       const response = await getListTouristAttractionCategoryDetail(id);
-      console.log(response);
       if (response) {
         setListCategoryDetail(
           response.data.map((category) => ({
@@ -140,123 +178,20 @@ const TouristAttractionDetail = () => {
     }
   }, [touristAttractionData]);
 
-  const [itemOffset, setItemOffset] = useState(0);
-
-  const itemsPerPage = 5;
-
-  // Simulate fetching items from another resources.
-  // (This could be items from props; or items loaded in a local state
-  // from an API endpoint with useEffect and useState)
-  const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
-  const currentItems = commentData.reverse().slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(commentData.length / itemsPerPage);
-
-  // Invoke when user click to request another page.
-  const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % commentData.length;
-    setItemOffset(newOffset);
-  };
-
-  function Comment({ currentItems }) {
-    return (
-      <div className="w-[80%]">
-        {currentItems &&
-          currentItems.map((item) => (
-            <div className="mt-12 flex w-[100%] flex-row border-b-2 border-dotted border-black/25 pb-4">
-              <img
-                src={avatarImage}
-                className="ml-[12%] h-[100px] w-[100px] rounded-full"
-              ></img>
-              <div className="pl-4">
-                <div className="flex flex-row justify-between">
-                  <p className="text-3xl font-bold">
-                    {getUserFullName(item.userId)}
-                  </p>
-                  {userData.userId == item.userId && (
-                    <div className="mr-[12%] flex flex-row gap-2">
-                      <Link
-                        to={`/updateTouristAttractionReview/${id}/${item.touristAttractionCommentId}`}
-                      >
-                        <button className="border-r-2 border-primary-color pr-2 text-primary-color">
-                          Sửa
-                        </button>
-                      </Link>
-
-                      <button
-                        className="pb-3 text-sub-color"
-                        onClick={() => {
-                          setIsDeletePopUp(true);
-                          setDataId(item.touristAttractionCommentId);
-                        }}
-                      >
-                        Xóa
-                      </button>
-                    </div>
-                  )}
-                </div>
-                <div className="flex flex-row">
-                  <ReactStars
-                    count={5}
-                    value={item.stars} // Giá trị của rating
-                    edit={false} // Không cho phép chỉnh sửa
-                    color="#F1FBF3"
-                    size={20}
-                    a11y={true}
-                    emptyIcon={<i className="far fa-star"></i>}
-                    fullIcon={<i className="fa fa-star"></i>}
-                    activeColor="#48C75E"
-                    classNames="border-r-2 border-black/25"
-                  />
-                  <div className="flex flex-row pl-2 pt-1">
-                    <svg
-                      width="10"
-                      height="11"
-                      viewBox="0 0 10 11"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="mr-1 mt-2"
-                    >
-                      <path
-                        d="M5 3V5.5H6.875M8.75 5.5C8.75 7.57107 7.07107 9.25 5 9.25C2.92893 9.25 1.25 7.57107 1.25 5.5C1.25 3.42893 2.92893 1.75 5 1.75C7.07107 1.75 8.75 3.42893 8.75 5.5Z"
-                        stroke="#0F172A"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                    <p>{FormatDate(item.createdAt)}</p>
-                  </div>
-                </div>
-                <p className="w-[full] min-w-[960px] break-all font-bold">
-                  {item.commentContent}
-                </p>
-
-                <div className="flex w-[full] flex-row gap-4 rounded-tr-lg">
-                  <div className=" h-[150px] w-[25%]  bg-gray-300 text-center ">
-                    <p className="py-auto">Ảnh</p>
-                  </div>
-                  <div className=" h-[150px] w-[25%] bg-gray-300 text-center">
-                    <p className="py-auto">Ảnh</p>
-                  </div>
-                  <div className=" h-[150px] w-[25%] bg-gray-300 text-center">
-                    <p className="py-auto">Ảnh</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-      </div>
-    );
-  }
-
   const handleDeleteComment = async () => {
     let response;
     try {
       if (isConfirm) {
         response = await deleteTACommentDetail(dataId);
         if (response.isSuccess) {
+          setIsShow(true);
+          setAlertData({
+            message: 'Xóa đánh giá thành công',
+            textColor: 'text-white',
+            backGroundColor: 'bg-primary-color',
+          });
           setToggleDelete((state) => !state);
+          setUserReviewed(false);
         }
         console.log(response);
       }
@@ -264,6 +199,26 @@ const TouristAttractionDetail = () => {
       console.error('Error update status:', error);
     }
   };
+
+  //Check xem user đã đánh giá chưa
+  useEffect(() => {
+    try {
+      async function fetchData() {
+        const data = new FormData();
+        data.append('touristAttractionId', id);
+        data.append('userId', userData.userId);
+        const response = await getTACommentDetailBy2Id(data);
+        console.log(response);
+        if (response.data.length !== 0) {
+          setUserReviewed(true);
+          setUserCommentId(response.data[0].touristAttractionCommentId);
+        }
+      }
+      fetchData();
+    } catch (error) {
+      console.error('Error checking user review:', error);
+    }
+  }, []);
 
   useEffect(() => {
     handleDeleteComment();
@@ -344,18 +299,7 @@ const TouristAttractionDetail = () => {
             Mô tả địa điểm
           </p>
           <div className="h-[auto] w-[80%] text-left">
-            <p className=" pl-2 text-2xl font-bold">{detailData.description}</p>
-
-            {detailData.menu && (
-              <p className=" pl-2 pt-5 font-bold">
-                Thực đơn: {detailData.menu}
-              </p>
-            )}
-            {detailData.price && (
-              <p className="pl-2 pt-5 font-bold">
-                Mức giá: {detailData.price}VND
-              </p>
-            )}
+            <p className=" pl-2 text-2xl">{detailData.description}</p>
 
             <div className="flex flex-row gap-3 pl-2 pt-4">
               {listCategoryDetail.slice(0, 7).map((category) => (
@@ -475,34 +419,168 @@ const TouristAttractionDetail = () => {
               <p className="font-bold">Sắp xếp theo</p>
             </div>
 
-            <Link to={`/touristAttractionReview/${id}`}>
-              <button className="absolute right-[10%] top-0 rounded-[15px] bg-primary-color p-2 text-2xl font-bold text-white hover:bg-gray-100 hover:text-primary-color">
-                Viết đánh giá
-              </button>
-            </Link>
+            {userData && !userReviewed ? (
+              <Link to={`/touristAttractionReview/${id}`}>
+                <button className="absolute right-[10%] top-0 rounded-[15px] bg-primary-color p-2 text-2xl font-bold text-white hover:bg-gray-100 hover:text-primary-color">
+                  Viết đánh giá
+                </button>
+              </Link>
+            ) : (
+              <Link
+                to={`/updateTouristAttractionReview/${id}/${userCommentId}`}
+              >
+                <button className="absolute right-[10%] top-0 rounded-[15px] bg-primary-color p-2 text-2xl font-bold text-white hover:bg-gray-100 hover:text-primary-color">
+                  Sửa đánh giá
+                </button>
+              </Link>
+            )}
           </div>
 
-          <Comment currentItems={currentItems} />
-          <ReactPaginate
-            breakLabel="..."
-            nextLabel=">"
-            onPageChange={handlePageClick}
-            pageRangeDisplayed={5}
-            pageCount={pageCount}
-            previousLabel="<"
-            renderOnZeroPageCount={null}
-            className="mt-12 flex flex-row gap-6"
-            containerClassName="flex"
-            previousLinkClassName="px-4 bg-secondary-color text-white rounded"
-            nextLinkClassName="px-4 bg-secondary-color text-white rounded"
-            breakLinkClassName="text-gray-500"
-            pageLinkClassName=" px-4 border-2 border-secondary-color font-bold text-gray-800 rounded transition-colors duration-300 ease-in-out hover:bg-secondary-color hover:text-white"
-            activeClassName="bg-secondary-color text-white"
+          <div className="w-[80%]">
+            {commentData &&
+              commentData.map((item) => (
+                <div className="mt-12 flex w-[100%] flex-row border-b-2 border-dotted border-black/25 pb-4">
+                  <img
+                    src={avatarImage}
+                    className="ml-[12%] h-[100px] w-[100px] rounded-full"
+                  ></img>
+                  <div className="pl-4">
+                    <div className="flex flex-row justify-between">
+                      <p className="text-3xl font-bold">
+                        {getUserFullName(item.userId)}
+                      </p>
+                      {userData.userId == item.userId && (
+                        <div className="mr-[12%] flex flex-row gap-2">
+                          <Link
+                            to={`/updateTouristAttractionReview/${id}/${item.touristAttractionCommentId}`}
+                          >
+                            <button className="border-r-2 border-primary-color pr-2 text-primary-color">
+                              Sửa
+                            </button>
+                          </Link>
+                          <button
+                            className="pb-3 text-sub-color"
+                            onClick={() => {
+                              setIsDeletePopUp(true);
+                              setDataId(item.touristAttractionCommentId);
+                            }}
+                          >
+                            Xóa
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex flex-row">
+                      <ReactStars
+                        count={5}
+                        value={item.stars} // Giá trị của rating
+                        edit={false} // Không cho phép chỉnh sửa
+                        color="#F1FBF3"
+                        size={20}
+                        a11y={true}
+                        emptyIcon={<i className="far fa-star"></i>}
+                        fullIcon={<i className="fa fa-star"></i>}
+                        activeColor="#48C75E"
+                        classNames="border-r-2 border-black/25"
+                      />
+
+                      <div className="flex flex-row pl-2 pt-1">
+                        <svg
+                          width="10"
+                          height="11"
+                          viewBox="0 0 10 11"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="mr-1 mt-2"
+                        >
+                          <path
+                            d="M5 3V5.5H6.875M8.75 5.5C8.75 7.57107 7.07107 9.25 5 9.25C2.92893 9.25 1.25 7.57107 1.25 5.5C1.25 3.42893 2.92893 1.75 5 1.75C7.07107 1.75 8.75 3.42893 8.75 5.5Z"
+                            stroke="#0F172A"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                        <p>{FormatDate(item.createdAt)}</p>
+                      </div>
+                    </div>
+                    <p className="w-[full] min-w-[960px] break-all font-bold">
+                      {item.commentContent}
+                    </p>
+                    {item.touristAttractionCommentPhotos.length > 0 && (
+                      <div className="flex w-[full] flex-row gap-4 rounded-tr-lg">
+                        {item.touristAttractionCommentPhotos
+                          .slice(0, 3)
+                          .map((photo, index) => (
+                            <img
+                              key={index}
+                              src={photo.signedUrl} // Thay đổi "url" thành trường chứa URL của ảnh trong đối tượng "photo"
+                              className="h-[150px] w-[25%] rounded object-cover"
+                              alt={`Photo ${index + 1}`}
+                            />
+                          ))}
+                        {item.touristAttractionCommentPhotos.length > 3 && (
+                          <div
+                            className="flex h-[150px] w-[25%] cursor-pointer items-center justify-center bg-gray-300 text-center"
+                            onClick={() =>
+                              handleShowMorePhotos(
+                                item.touristAttractionCommentPhotos.slice(3)
+                              )
+                            }
+                          >
+                            <p className="py-auto">
+                              Xem thêm (
+                              {item.touristAttractionCommentPhotos.length - 3})
+                              ảnh
+                            </p>
+                          </div>
+                        )}
+                        {showMorePhotos && (
+                          <div className="fixed left-0 top-0 z-[99] flex h-full w-full items-center justify-center bg-black bg-opacity-50">
+                            <div className="relative h-[80%] w-[80%]">
+                              <Slider {...sliderSettings}>
+                                {remainingPhotos.map((photo, index) => (
+                                  <div key={index}>
+                                    <img
+                                      src={photo.signedUrl}
+                                      className="h-full w-full object-contain"
+                                      alt={`Photo ${index + 1}`}
+                                    />
+                                  </div>
+                                ))}
+                              </Slider>
+                              <button
+                                onClick={handleCloseModal}
+                                className="absolute right-4 top-4 h-[40px] w-[40px] rounded bg-sub-color text-xl text-white"
+                              >
+                                &times;
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+          </div>
+          <Paginate
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+            totalPages={Math.ceil(count / 10)}
           />
         </div>
       </div>
     </>
   );
+};
+
+const sliderSettings = {
+  dots: true, // Hiển thị chấm chuyển đổi
+  infinite: true, // Vô hạn lăp lại
+  speed: 500, // Tốc độ chuyển đổi
+  slidesToShow: 1, // Số lượng ảnh hiển thị trên mỗi slide
+  slidesToScroll: 1, // Số lượng ảnh chuyển đổi khi điều hướng
 };
 
 export default TouristAttractionDetail;

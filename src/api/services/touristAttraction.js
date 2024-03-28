@@ -1,6 +1,8 @@
 import {
   createTouristAttractionComment,
   deleteTAComment,
+  getTACommentBy2Id,
+  getTACommentNumber,
   getTouristAttraction,
   getTouristAttractionCategories,
   getTouristAttractionCategoryDetail,
@@ -58,9 +60,9 @@ export const getTouristAttractionDetail = async (id) => {
   }
 };
 
-export const getListTouristAttractionComment = async (id) => {
+export const getListTouristAttractionComment = async (id, page) => {
   try {
-    const res = await getTouristAttractionComments(id);
+    const res = await getTouristAttractionComments(id, page);
     return res.data;
   } catch (error) {
     console.error(
@@ -111,6 +113,31 @@ export const updateTACommentDetail = async (id, data) => {
 export const getTACommentDetail = async (id) => {
   try {
     const res = await getTouristAttractionComment(id);
+    return res.data;
+  } catch (error) {
+    console.error(
+      'Get TA comment failed:',
+      error.response ? error.response.data : error.message
+    );
+  }
+};
+
+export const getTACommentNumberById = async (id) => {
+  try {
+    const res = await getTACommentNumber(id);
+    return res.data;
+  } catch (error) {
+    console.error(
+      'Get TA comment failed:',
+      error.response ? error.response.data : error.message
+    );
+  }
+};
+
+//Lấy comment xem user đã đánh giá chưa
+export const getTACommentDetailBy2Id = async (data) => {
+  try {
+    const res = await getTACommentBy2Id(data);
     return res.data;
   } catch (error) {
     console.error(

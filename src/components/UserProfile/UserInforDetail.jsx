@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import { fetchUserFromLocalStorage } from '../../utils/fetchUserFromLocalStorage';
-import { updateUserDetail } from '../../api/services/user';
+import { getUserDetail, updateUserDetail } from '../../api/services/user';
+import { useContext } from 'react';
+import { AlertContext } from '../../Contexts/AlertContext';
 
 const UserProfileDetail = () => {
   const user = fetchUserFromLocalStorage();
-  // const [user, setUser] = useState(null);
+  const [userDetail, setUserDetail] = useState(null);
   const [imgSrc, setImgSrc] = useState(null);
   const [imgSrc2, setImgSrc2] = useState(null);
   const [isUpdate, setIsUpdate] = useState(false);
+  const { setIsShow, setAlertData } = useContext(AlertContext);
   const [updateUser, setUpdateUser] = useState({
     signedUrl: user?.signedUrl,
     firstName: user?.firstName,
@@ -50,6 +53,26 @@ const UserProfileDetail = () => {
     });
   }, [imgSrc]);
 
+  //Lấy user
+  useEffect(() => {
+    async function fetchData() {
+      const response = await getUserDetail(user.userId);
+      console.log(response);
+      if (response) {
+        setUserDetail(response.data[0]);
+      }
+    }
+    fetchData();
+  }, [isUpdate]);
+
+  console.log(userDetail);
+
+  useEffect(() => {
+    if (userDetail) {
+      localStorage.setItem('user', JSON.stringify(userDetail));
+    }
+  }, [userDetail]);
+
   const handleUpdateUser = async () => {
     console.log(updateUser);
 
@@ -60,9 +83,14 @@ const UserProfileDetail = () => {
       formData.append('firstName', updateUser.firstName);
       formData.append('photo', imgSrc);
       const response = await updateUserDetail(user.userId, formData);
-      console.log(formData.get('photo'));
       if (response) {
         setIsUpdate(false);
+        setIsShow(true);
+        setAlertData({
+          message: 'Cập nhật thông tin thành công',
+          textColor: 'text-white',
+          backGroundColor: 'bg-primary-color',
+        });
       }
     } catch (error) {
       console.error('Error while updating user:', error);
@@ -94,7 +122,9 @@ const UserProfileDetail = () => {
               src={
                 imgSrc2
                   ? imgSrc2
-                  : 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'
+                  : user?.signedUrl
+                    ? user?.signedUrl
+                    : 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg'
               }
             />
             <div className="absolute -right-2 -top-2 rounded-full bg-white p-1">

@@ -5,11 +5,14 @@ import {
   getAccommodationCategories,
   getAccommodationCategoryDetail,
   getAccommodationComment,
+  getAccommodationCommentBy2Id,
+  getAccommodationCommentNumber,
   getAccommodationComments,
   getAccommodations,
   updateAccommodationComment,
 } from '..';
 
+//Lấy list category
 export const getListAccommodationCategories = async () => {
   try {
     const res = await getAccommodationCategories();
@@ -22,6 +25,7 @@ export const getListAccommodationCategories = async () => {
   }
 };
 
+//lấy các accommodation
 export const getListAccommodation = async () => {
   try {
     const res = await getAccommodations();
@@ -34,6 +38,7 @@ export const getListAccommodation = async () => {
   }
 };
 
+//lấy thông tin chi tiết accommodation
 export const getAccommodationDetail = async (id) => {
   try {
     const res = await getAccommodation(id);
@@ -46,6 +51,7 @@ export const getAccommodationDetail = async (id) => {
   }
 };
 
+//Lấy thông tin chi tiết category
 export const getListAccommodationCategoryDetail = async (id) => {
   try {
     const res = await getAccommodationCategoryDetail(id);
@@ -58,9 +64,21 @@ export const getListAccommodationCategoryDetail = async (id) => {
   }
 };
 
-export const getListAccommodationComment = async (id) => {
+export const getListAccommodationComment = async (id, page) => {
   try {
-    const res = await getAccommodationComments(id);
+    const res = await getAccommodationComments(id, page);
+    return res.data;
+  } catch (error) {
+    console.error(
+      'Get accommodation comment failed:',
+      error.response ? error.response.data : error.message
+    );
+  }
+};
+
+export const getAccommodationCommentNumberById = async (id) => {
+  try {
+    const res = await getAccommodationCommentNumber(id);
     return res.data;
   } catch (error) {
     console.error(
@@ -111,6 +129,19 @@ export const updateAccommodationCommentDetail = async (id, data) => {
 export const getAccommodationCommentDetail = async (id) => {
   try {
     const res = await getAccommodationComment(id);
+    return res.data;
+  } catch (error) {
+    console.error(
+      'Get Accommodation comment failed:',
+      error.response ? error.response.data : error.message
+    );
+  }
+};
+
+//Lấy comment xem user đã đánh giá chưa
+export const getAccommodationCommentDetailBy2Id = async (data) => {
+  try {
+    const res = await getAccommodationCommentBy2Id(data);
     return res.data;
   } catch (error) {
     console.error(

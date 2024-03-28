@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   addRestaurantComment,
@@ -19,26 +19,36 @@ import {
   updateTACommentDetail,
 } from '../api/services/touristAttraction';
 import ReactStars from 'react-rating-stars-component';
+import ImageUploader from 'react-images-upload';
+import { AlertContext } from '../Contexts/AlertContext';
+import StarRatings from 'react-star-ratings';
+import { FaStar } from 'react-icons/fa';
 
 const UpdateReview = () => {
   const userData = JSON.parse(localStorage.getItem('user'));
+  const { setIsShow, setAlertData } = useContext(AlertContext);
   const { id, commentId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = location;
   const parts = pathname.split('/');
   const locationTypeReview = parts[1];
+  const [deletePhotoIds, setDeletePhotoIds] = useState([]);
+  const [photoStatus, setPhotoStatus] = useState({});
   const [detailData, setDetailData] = useState([]);
   const [restaurantData, setRestaurantData] = useState(null);
   const [accommodationData, setAccommodationData] = useState(null);
   const [touristAttractionData, setTouristAttractionData] = useState(null);
+  const [rating, setRating] = useState(null);
+  const [hover, setHover] = useState(null);
   const [formdata, setFormdata] = useState({
-    stars: 0,
-    commentContent: null,
+    stars: rating ?? 0,
+    commentContent: '',
     userId: userData.userId,
     restaurantId: id,
     accommodationId: id,
     touristAttractionId: id,
+    photos: [],
   });
   const handleBack = () => {
     if (locationTypeReview === 'updateRestaurantReview') {
@@ -51,6 +61,7 @@ const UpdateReview = () => {
       navigate(`/TouristAttractionDetail/${id}`);
     }
   };
+
   //Get data (restaurant, accommodation, TA)
   useEffect(() => {
     if (locationTypeReview === 'updateRestaurantReview') {
@@ -141,7 +152,10 @@ const UpdateReview = () => {
             commentContent: comment.commentContent,
             userId: userData.userId,
             restaurantId: comment.restaurantId,
+            restaurantCommentPhotos: comment.restaurantCommentPhotos,
+            photos: comment.restaurantCommentPhotos,
           });
+          setRating(comment.stars);
         }
       }
       fetchData();
@@ -158,7 +172,10 @@ const UpdateReview = () => {
             commentContent: comment.commentContent,
             userId: userData.userId,
             accommodationId: comment.accommodationId,
+            accommodationCommentPhotos: comment.accommodationCommentPhotos,
+            photos: comment.accommodationCommentPhotos,
           });
+          setRating(comment.stars);
         }
       }
       fetchData();
@@ -175,7 +192,11 @@ const UpdateReview = () => {
             commentContent: comment.commentContent,
             userId: userData.userId,
             touristAttractionId: comment.touristAttractionId,
+            touristAttractionCommentPhotos:
+              comment.touristAttractionCommentPhotos,
+            photos: comment.touristAttractionCommentPhotos,
           });
+          setRating(comment.stars);
         }
       }
       fetchData();
@@ -184,14 +205,35 @@ const UpdateReview = () => {
 
   //Hàm update
   const handleUpdateComment = async () => {
+    const updateComment = new FormData();
     if (locationTypeReview === 'updateRestaurantReview') {
       try {
+        updateComment.append('userId', formdata.userId);
+        updateComment.append('restaurantId', formdata.restaurantId);
+        updateComment.append('stars', rating);
+        if (
+          formdata.commentContent !== null &&
+          formdata.commentContent !== undefined &&
+          formdata.commentContent.trim() !== ''
+        ) {
+          updateComment.append('commentContent', formdata.commentContent);
+        }
+        updateComment.append('deletePhotos', deletePhotoIds);
+        formdata.photos.forEach((file) => {
+          updateComment.append(`photos`, file);
+        });
         const response = await updateRestaurantCommentDetail(
           commentId,
-          formdata
+          updateComment
         );
         console.log(response);
-        if (response) {
+        if (response.isSuccess) {
+          setIsShow(true);
+          setAlertData({
+            message: 'Cập nhật đánh giá thành công',
+            textColor: 'text-white',
+            backGroundColor: 'bg-primary-color',
+          });
           navigate(`/RestaurantDetail/${id}`);
         }
         console.log(response);
@@ -201,11 +243,31 @@ const UpdateReview = () => {
     }
     if (locationTypeReview === 'updateAccommodationReview') {
       try {
+        updateComment.append('userId', formdata.userId);
+        updateComment.append('accommodationId', formdata.accommodationId);
+        updateComment.append('stars', rating);
+        if (
+          formdata.commentContent !== null &&
+          formdata.commentContent !== undefined &&
+          formdata.commentContent.trim() !== ''
+        ) {
+          updateComment.append('commentContent', formdata.commentContent);
+        }
+        updateComment.append('deletePhotos', deletePhotoIds);
+        formdata.photos.forEach((file) => {
+          updateComment.append(`photos`, file);
+        });
         const response = await updateAccommodationCommentDetail(
           commentId,
-          formdata
+          updateComment
         );
-        if (response) {
+        if (response.isSuccess) {
+          setIsShow(true);
+          setAlertData({
+            message: 'Cập nhật đánh giá thành công',
+            textColor: 'text-white',
+            backGroundColor: 'bg-primary-color',
+          });
           navigate(`/AccommodationDetail/${id}`);
         }
         console.log(response);
@@ -215,8 +277,31 @@ const UpdateReview = () => {
     }
     if (locationTypeReview === 'updateTouristAttractionReview') {
       try {
-        const response = await updateTACommentDetail(commentId, formdata);
-        if (response) {
+        updateComment.append('userId', formdata.userId);
+        updateComment.append(
+          'touristAttractionId',
+          formdata.touristAttractionId
+        );
+        updateComment.append('stars', rating);
+        if (
+          formdata.commentContent !== null &&
+          formdata.commentContent !== undefined &&
+          formdata.commentContent.trim() !== ''
+        ) {
+          updateComment.append('commentContent', formdata.commentContent);
+        }
+        updateComment.append('deletePhotos', deletePhotoIds);
+        formdata.photos.forEach((file) => {
+          updateComment.append(`photos`, file);
+        });
+        const response = await updateTACommentDetail(commentId, updateComment);
+        if (response.isSuccess) {
+          setIsShow(true);
+          setAlertData({
+            message: 'Cập nhật đánh giá thành công',
+            textColor: 'text-white',
+            backGroundColor: 'bg-primary-color',
+          });
           navigate(`/TouristAttractionDetail/${id}`);
         }
         console.log(response);
@@ -227,11 +312,34 @@ const UpdateReview = () => {
     console.log(formdata);
   };
 
-  const ratingChanged = (newRating) => {
-    setFormdata((prevFormdata) => ({
-      ...prevFormdata,
-      stars: newRating,
-    }));
+  const toggleDeletePhoto = (photoId) => {
+    // Kiểm tra xem photoId đã tồn tại trong mảng deletePhotoIds chưa
+    const index = deletePhotoIds.indexOf(photoId);
+    console.log(photoId);
+    if (index === -1) {
+      // Nếu chưa tồn tại, thêm photoId vào mảng
+      setDeletePhotoIds([...deletePhotoIds, photoId]);
+      // Cập nhật trạng thái của ảnh, đánh dấu ảnh đã được chọn
+      setPhotoStatus((prevState) => ({
+        ...prevState,
+        [photoId]: true,
+      }));
+    } else {
+      // Nếu đã tồn tại, xóa photoId khỏi mảng
+      const newDeletePhotoIds = [...deletePhotoIds];
+      newDeletePhotoIds.splice(index, 1);
+      setDeletePhotoIds(newDeletePhotoIds);
+      // Cập nhật trạng thái của ảnh, đánh dấu ảnh không được chọn
+      setPhotoStatus((prevState) => ({
+        ...prevState,
+        [photoId]: false,
+      }));
+    }
+  };
+
+  const handleImageUpload = (pictureFiles) => {
+    console.log(pictureFiles);
+    setFormdata({ ...formdata, photos: pictureFiles });
   };
 
   return (
@@ -259,24 +367,40 @@ const UpdateReview = () => {
 
       <div className="mt-12 flex flex-row">
         <div className="flex w-[50%] flex-col items-center justify-start gap-3">
-          {/* <img src="" alt="" /> */}
-          <div className="h-[250px] w-[250px] bg-white"></div>
+          <img src={detailData.photo} alt="" className="h-[250px] w-[250px]" />
           <p className="text-3xl font-bold">{detailData.name}</p>
           <p className="font-bold">{detailData.address}</p>
         </div>
         <div className=" w-[35%] items-center justify-items-center">
           <p className="text-2xl font-bold">Đánh giá trải nghiệm của bạn</p>
-          <ReactStars
-            count={5}
-            onChange={ratingChanged}
-            color="#8DCADC"
-            size={50}
-            a11y={true}
-            value={formdata?.stars}
-            emptyIcon={<i className="far fa-star"></i>}
-            fullIcon={<i className="fa fa-star"></i>}
-            activeColor="#48C75E"
-          />
+          <div className="flex flex-row">
+            {[...Array(5)].map((star, index) => {
+              const currentRating = index + 1;
+              return (
+                <label key={index}>
+                  <input
+                    type="radio"
+                    name="rating"
+                    value={currentRating}
+                    onClick={() => setRating(currentRating)}
+                    className="hidden"
+                  />
+                  <FaStar
+                    size={50}
+                    className="cursor-pointer"
+                    color={
+                      currentRating <= (hover || rating)
+                        ? '#48C75E'
+                        : 'rgba(141, 202, 220, 0.3)'
+                    }
+                    onMouseEnter={() => setHover(currentRating)}
+                    onMouseLeave={() => setHover(null)}
+                  />
+                </label>
+              );
+            })}
+          </div>
+
           <p className="mb-4 text-2xl font-bold">Chia sẻ trải nghiệm của bạn</p>
           <textarea
             required
@@ -284,21 +408,60 @@ const UpdateReview = () => {
             onChange={(e) =>
               setFormdata({
                 ...formdata,
-                commentContent: e.target.value,
+                commentContent: e.target.value !== null ? e.target.value : null,
               })
             }
-            value={formdata.commentContent}
+            value={formdata.commentContent ?? null}
           ></textarea>
 
           <p className="mb-4 text-2xl font-bold">Thêm ảnh</p>
-          <div className="mb-12 flex h-[200px] w-[100%] items-center justify-center rounded-[10px] bg-[#c8d8ca]">
-            <label
-              for="fileInput"
-              className="custom-file-upload rounded-[10px] bg-white px-4 py-2 text-2xl font-bold"
-            >
-              Thêm +
-            </label>
-            <input id="fileInput" type="file" className="hidden" />
+          <div className="mb-12 flex h-auto w-[100%] flex-col items-center justify-center rounded-[10px]">
+            <div className="grid grid-cols-2">
+              {formdata.accommodationCommentPhotos ? (
+                formdata.accommodationCommentPhotos.map((photo) => (
+                  <img
+                    src={photo.signedUrl}
+                    onClick={() => toggleDeletePhoto(photo.id)}
+                    className={`cursor-pointer ${photoStatus[photo.id] ? 'opacity-50' : ''} p-[10px]`}
+                    alt={`Photo ${photo.id}`}
+                  />
+                ))
+              ) : formdata.restaurantCommentPhotos ? (
+                formdata.restaurantCommentPhotos.map((photo) => (
+                  <img
+                    src={photo.signedUrl}
+                    onClick={() => toggleDeletePhoto(photo.id)}
+                    className={`cursor-pointer ${photoStatus[photo.id] ? 'opacity-50' : ''} p-[10px]`}
+                    alt={`Photo ${photo.id}`}
+                  />
+                ))
+              ) : formdata.touristAttractionCommentPhotos ? (
+                formdata.touristAttractionCommentPhotos.map((photo) => (
+                  <img
+                    src={photo.signedUrl}
+                    onClick={() => toggleDeletePhoto(photo.id)}
+                    className={`cursor-pointer ${photoStatus[photo.id] ? 'opacity-50' : ''} p-[10px]`}
+                    alt={`Photo ${photo.id}`}
+                  />
+                ))
+              ) : (
+                <div></div>
+              )}
+            </div>
+            <ImageUploader
+              withIcon={false}
+              onChange={handleImageUpload}
+              imgExtension={['.jpg', '.gif', '.png', '.gif']}
+              maxFileSize={5242880}
+              label="Chọn ảnh"
+              className=" h-fit font-bold"
+              buttonText="Thêm ảnh"
+              withPreview={true}
+              fileContainerStyle={{
+                background: '#F1FBF3',
+              }}
+              withLabel={false}
+            />
           </div>
           <div className="flex w-full items-center justify-center pb-4">
             <button

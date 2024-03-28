@@ -16,7 +16,7 @@ const DeleteCommentPopUp = ({ setIsConfirm }) => {
         </h5>
         <div className="flex items-center justify-end gap-5 text-2xl font-medium">
           <button
-            className="w-1/6 rounded-xl bg-accent-color py-px text-bg-color"
+            className="w-2/6 rounded-xl bg-accent-color py-px text-bg-color"
             onClick={() => {
               setIsConfirm(true);
               setIsDeletePopUp(false);

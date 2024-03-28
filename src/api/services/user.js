@@ -1,8 +1,20 @@
-import { getUsers, updateUser } from '..';
+import { getUser, getUsers, updateUser } from '..';
 
 export const getListUsers = async () => {
   try {
     const res = await getUsers();
+    return res.data;
+  } catch (error) {
+    console.error(
+      'Get user failed:',
+      error.response ? error.response.data : error.message
+    );
+  }
+};
+
+export const getUserDetail = async (id) => {
+  try {
+    const res = await getUser(id);
     return res.data;
   } catch (error) {
     console.error(
